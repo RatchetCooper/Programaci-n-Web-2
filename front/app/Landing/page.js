@@ -2,15 +2,13 @@
 import { Box, Typography } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
-import { ThemeProvider } from '@mui/material/styles'; //Contexto
-import theme from "../Theme";
 
 export default function Landing(){
     const data = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]
    
     return(
         <div>
-            <ThemeProvider theme={ theme }>
+           
          
         
             <Box sx={{ 
@@ -35,7 +33,7 @@ export default function Landing(){
                 </Box>
             </Box>
             <LandingCampaigns campaignData={ data } ></LandingCampaigns>
-            </ThemeProvider>
+            
         </div>
     );
 }
