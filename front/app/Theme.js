@@ -7,7 +7,7 @@ const secondaryColor = '#232627';
 const cardColor = '#272640';
 const cardText = '#ffffff';
 const cardFilterColor = '#141718';
-
+const inputBackground = '#ffffff';
 const theme = createTheme({
     palette: {
         text: {secondary: cardText},
@@ -15,7 +15,8 @@ const theme = createTheme({
         secondary: {main: secondaryColor},
         cardBg: {main: cardColor},
         cardText: {main: cardText},
-        cardFilterColor: {main: cardFilterColor}
+        cardFilterColor: {main: cardFilterColor},
+        inputBackground: {main: inputBackground}
     }
 }); 
 
