@@ -8,9 +8,6 @@ export default function Landing(){
    
     return(
         <div>
-           
-         
-        
             <Box sx={{ 
                 width: "100vw",
                 height: "60vh",

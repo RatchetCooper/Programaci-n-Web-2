@@ -1,7 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from '@mui/material/styles'; //Contexto
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import theme from "../app/Theme.js";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,9 +17,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
        
       <body className={inter.className}>
+     
+      <GoogleOAuthProvider clientId="862893519032-2oupdld0qpkck0fk4rp29otd6gf3v7jq.apps.googleusercontent.com">
         <ThemeProvider theme={ theme }>
           {children}
         </ThemeProvider>
+      </GoogleOAuthProvider>
+      
+     
       </body>
     </html>
   );

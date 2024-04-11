@@ -14,18 +14,30 @@ import Container from '@mui/material/Container';
 import { createTheme } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useRouter } from 'next/navigation'
 
 export default function Login(){
     const theme = useTheme();
     const [ UserName, setUserName] = useState("")
     const [ Password, setPassword] = useState("")
-
+    const router = useRouter()
     const UserNameChange = (e) => setUserName(e.target.value)
     const PasswordChange = (e) => setPassword(e.target.value)
+    
     const SubmitLogin = ()=> {
         console.log("username" + UserName)
         console.log("password" + Password)
     }
+
+    const responseMessage = (response) => {
+      //base de datos
+      router.push('/Landing', { scroll: false })
+      console.log(response);
+    };
+    const errorMessage = (error) => {
+        console.log(error);
+    };
     return(
         
       <Container component="main" maxWidth="xs">
@@ -77,6 +89,7 @@ export default function Login(){
             >
               Iniciar sesión
             </Button>
+            <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
