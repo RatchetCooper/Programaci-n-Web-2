@@ -1,9 +1,10 @@
+"use client"
 import { Card,Button, InputLabel,RadioGroup, Radio, FormControlLabel, Select,MenuItem, Grid,Box,TextField, Stack, Badge, Avatar, IconButton, VisuallyHiddenInput} from "@mui/material";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import { DatePicker } from '@mui/x-date-pickers/';
+import { TimePicker } from '@mui/x-date-pickers';
 export default function CreateCampaigns(){
     return(
         <div>
@@ -44,9 +45,10 @@ export default function CreateCampaigns(){
                                         
                                         autoFocus
                                         />
-                                        
-                                    
-                                        
+                                        <h4>Fecha</h4>
+                                        <DatePicker />
+                                        <h4>Horario</h4>
+                                        <TimePicker label="Basic time picker" />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -71,17 +73,19 @@ export default function CreateCampaigns(){
                                         
                                         autoFocus
                                         />
-                                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">Número de estrellas</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             
-                                            label="Age"
+                                            label="Número de estrellas"
                                            
                                             >
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
                                         </Select>
 
                                         <RadioGroup
@@ -113,13 +117,19 @@ export default function CreateCampaigns(){
                         </Stack>
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
                             <Grid container spacing={2}>
-                                <Grid item xs={4}>
-                                    
+                        
+                                <Grid item xs={6}>
+                                    <h1>Descripción de la campaña</h1>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Multiline"
+                                        multiline
+                                        rows={4}
+                                      
+                                        //defaultValue="Default Value"
+                                    />
                                 </Grid>
-                                <Grid item xs={4}>
-                                <h1>Descripción de la campaña</h1>
-                                </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={6}>
                                 <h1>Vincula un personaje a esta campaña</h1>
                                 <Select
                                             labelId="demo-simple-select-label"
@@ -132,9 +142,12 @@ export default function CreateCampaigns(){
                                             <MenuItem value={20}>Twenty</MenuItem>
                                             <MenuItem value={30}>Thirty</MenuItem>
                                         </Select>
-
+                                        
                                 </Grid>
                             </Grid>
+                        </Stack>
+                        <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
+                        <Button variant="contained" sx={{mb: 4}}>Crear</Button>
                         </Stack>
             </Stack>
         </div>
