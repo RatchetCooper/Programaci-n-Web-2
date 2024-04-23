@@ -8,6 +8,7 @@ const cardColor = '#272640';
 const cardText = '#ffffff';
 const cardFilterColor = '#141718';
 const inputBackground = '#ffffff';
+
 const theme = createTheme({
     palette: {
         text: {secondary: cardText},
@@ -20,4 +21,4 @@ const theme = createTheme({
     }
 }); 
 
-export default theme //exporto el objeto tema
+export default theme; //exporto el objeto tema
