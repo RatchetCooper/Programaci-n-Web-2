@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from '@mui/material/styles'; //Contexto
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import theme from "../app/Theme.js";
+import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import GeneralProviders from "./components/GeneralProviders";
 
 const inter = Inter({ subsets: ["latin"] });

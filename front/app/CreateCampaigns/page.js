@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers';
 export default function CreateCampaigns(){
+    
     return(
         <div>
             <h1>Crear campaña</h1>
