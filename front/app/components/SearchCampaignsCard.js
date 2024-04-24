@@ -31,6 +31,54 @@ export default function SearchCampaignsCard({searchCampaignData}){
                 </Grid>
                 <Grid item xs={6}>
                 <h2>Palabra</h2>
+                <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
                 </Grid>
             </Grid>
         </Card>

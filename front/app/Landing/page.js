@@ -1,17 +1,17 @@
 "use client"
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
-
+import imagen from '../img/LandingImgs/portadatono.png'
 export default function Landing(){
-    const data = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]
-   
+    const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
+
     return(
         <div>
             <Box sx={{ 
                 width: "100vw",
                 height: "60vh",
-                backgroundImage: 'url(https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg)',
+                backgroundImage: 'url("./LandingImgs/portadatono.png")',
                 backgroundSize: 'cover',
                 display: "flex",
                 justifyContent: "center",
@@ -30,7 +30,19 @@ export default function Landing(){
                 </Box>
             </Box>
             <LandingCampaigns campaignData={ data } ></LandingCampaigns>
-            
+
+            <Stack sx={{  display: "flex",  alignItems: "center",}} >
+            <h1>Crea tus personajes</h1> 
+                    <Typography variant="body1" sx={{
+                        textAlign: "center",
+                        
+                    }}>Comienza con la creación de personajes para unirte a las aventuras que tenemos para ti</Typography>
+               
+              
+          
+            <Button variant="contained" sx={{mt: 4}}>Crear personaje</Button>            
+            </Stack>
+                
         </div>
     );
 }

@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import styles from "./page.module.css";
 import Landing from "./pages/Landing";
@@ -8,12 +9,13 @@ import SearchCampaigns from "./pages/SearchCampaigns";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import UserCampaigns from "./components/UserCampaigns";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
       <div> 
         <ThemeProvider theme={ theme }>
-          <UserCampaigns></UserCampaigns>
+          <Navbar></Navbar>
         </ThemeProvider>
       </div>
   );

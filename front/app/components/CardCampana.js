@@ -34,7 +34,7 @@ export default function CardCampana( {item}){
                     <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
                     <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
                 </AvatarGroup>
-                <Typography color={theme.palette.cardText.main} variant="body">Texto pequeño</Typography>
+                <Typography color={theme.palette.cardText.main} variant="body">Jugadores en esta campaña</Typography>
                 <PanoramaFishEyeIcon></PanoramaFishEyeIcon>
             </Stack>
             

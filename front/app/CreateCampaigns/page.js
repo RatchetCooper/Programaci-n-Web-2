@@ -5,8 +5,24 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers';
+import { useState } from 'react';
+import dayjs from 'dayjs';
+
+import { format } from 'date-fns';
+
 export default function CreateCampaigns(){
+    const [nameCampaign, setNameCampaign] = useState("")
+    const [linkDiscord, setLinkDiscord] = useState("")
     
+    const nameCampaignChange = (e) => setNameCampaign(e.target.value)
+    const nameDiscordChange = (e) => setLinkDiscord(e.target.value)
+   
+    
+   
+    const SubmitCampaign = ()=> {
+        console.log("name campaign" + nameCampaign)   
+    
+    }
     return(
         <div>
             <h1>Crear campaña</h1>
@@ -21,33 +37,28 @@ export default function CreateCampaigns(){
                                         required
                                         fullWidth
                                         id="email"
-                                        label="Email Address"
-                                        name="email"
+                                        label="Nombre de la campaña"
+                                        name="nameCampaign"
                                         autoComplete="email"
                                         autoFocus
+                                        onChange={ nameCampaignChange }
                                         />
                                         <TextField
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="discordLink"
+                                        id="linkDiscord"
                                         label="Link discord"
                                         name="discord"
-                                        
+                                        onChange={ nameDiscordChange }
                                         autoFocus
                                         />
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        id="discordLink"
-                                        label="Link discord"
-                                        name="discord"
-                                        
-                                        autoFocus
-                                        />
+                                    
                                         <h4>Fecha</h4>
-                                        <DatePicker />
+                                        <DatePicker 
+                                      
+                                        >
+                                        </DatePicker>    
                                         <h4>Horario</h4>
                                         <TimePicker label="Basic time picker" />
                                     </Box>
@@ -148,7 +159,7 @@ export default function CreateCampaigns(){
                             </Grid>
                         </Stack>
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
-                        <Button variant="contained" sx={{mb: 4}}>Crear</Button>
+                        <Button variant="contained" sx={{mb: 4}}  onClick={ SubmitCampaign}>Crear</Button>
                         </Stack>
             </Stack>
         </div>
