@@ -2,7 +2,8 @@
 import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
-import imagen from '../img/LandingImgs/portadatono.png'
+
+
 export default function Landing(){
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
 
