@@ -2,11 +2,16 @@
 import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
-
+import { useRouter } from 'next/navigation'
 
 export default function Landing(){
+    const router = useRouter()
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
-
+    const cambiarPagina = () => {
+        //base de datos
+        router.push('/CreateCampaigns', { scroll: false })
+        
+      };
     return(
         <div>
             <Box sx={{ 
@@ -41,7 +46,7 @@ export default function Landing(){
                
               
           
-            <Button variant="contained" sx={{mt: 4}}>Crear personaje</Button>            
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPagina}>Crear personaje</Button>            
             </Stack>
                 
         </div>

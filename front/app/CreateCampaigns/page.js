@@ -7,21 +7,45 @@ import { DatePicker } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import {createCampaign} from '../services/reviewServices'
 
 import { format } from 'date-fns';
 
 export default function CreateCampaigns(){
     const [nameCampaign, setNameCampaign] = useState("")
     const [linkDiscord, setLinkDiscord] = useState("")
-    
+    const [numJugadores, setNumJugadores] = useState("")
+    const [numEstrellas, setNumEstrellas] = useState("")
+    const [desCampaign, setDesCampaign] = useState("")
+    const [image, setImage] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+
+   
+   
     const nameCampaignChange = (e) => setNameCampaign(e.target.value)
     const nameDiscordChange = (e) => setLinkDiscord(e.target.value)
-   
+    const numJugadoresChange = (e) => setNumJugadores(e.target.value)
+    const numEstrellasChange = (e) => setNumEstrellas(e.target.value)
+    const imageChange = (e) => setImage(e.target.files[0])
     
-   
+    const dateChange = (date) => {
+        setSelectedDate(date)
+        console.log(date)
+    }
+
+    const timeChange = (time) => {
+        setSelectedTime(time)
+        console.log(time)
+    }
+
     const SubmitCampaign = ()=> {
-        console.log("name campaign" + nameCampaign)   
-    
+        console.log("name campaign" + nameCampaign) 
+          
+        const CreateCampaignData = {nameCampaign, linkDiscord, numJugadores, numEstrellas, image, selectedDate, selectedTime}
+        createCampaign(CreateCampaignData)
+        console.log(CreateCampaignData)
+        
     }
     return(
         <div>
@@ -56,11 +80,15 @@ export default function CreateCampaigns(){
                                     
                                         <h4>Fecha</h4>
                                         <DatePicker 
-                                      
+                                        value={selectedDate}
+                                        onChange={dateChange}
+                                        
                                         >
                                         </DatePicker>    
                                         <h4>Horario</h4>
-                                        <TimePicker label="Basic time picker" />
+                                        <TimePicker 
+                                        onChange={timeChange}
+                                        label="Basic time picker" />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -72,20 +100,20 @@ export default function CreateCampaigns(){
                                         id="discordLink"
                                         label="Numero de jugadores"
                                         name="discord"
-                                        
+                                        onChange={numJugadoresChange}
                                         autoFocus
                                         />
                                         <TextField
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="discordLink"
-                                        label="Nombre de la campaña"
-                                        name="discord"
-                                        
+                                        id="MinNumEstrellas"
+                                        label="Mínimo de estrellas"
+                                        name="estrellas"
+                                        onChange={ numEstrellasChange}
                                         autoFocus
                                         />
-                                        <InputLabel id="demo-simple-select-label">Número de estrellas</InputLabel>
+                                      {/*   <InputLabel id="demo-simple-select-label">Número de estrellas</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -98,7 +126,7 @@ export default function CreateCampaigns(){
                                             <MenuItem value={3}>3</MenuItem>
                                             <MenuItem value={4}>4</MenuItem>
                                             <MenuItem value={5}>5</MenuItem>
-                                        </Select>
+                                        </Select> */}
 
                                         <RadioGroup
                                             aria-labelledby="demo-radio-buttons-group-label"
@@ -118,13 +146,19 @@ export default function CreateCampaigns(){
                                 id="raised-button-file"
                                 multiple
                                 type="file"
+                                onChange={imageChange}
                                 />
                                     <label htmlFor="raised-button-file">
                                     <Button variant="raised" component="span">
                                     Upload
                                     </Button>
-</label> 
+</label>                         <Avatar
+                                    sx={{ width: '200px', height: '200px' }}
+                                    alt="Imagen de campaña"
+                                    src={image ? URL.createObjectURL(image) : "https://via.placeholder.com/200"} // Mostrar la imagen seleccionada si está presente, de lo contrario, mostrar una imagen de marcador de posición
+                                />
                                 </Grid>
+                               
                             </Grid>
                         </Stack>
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
