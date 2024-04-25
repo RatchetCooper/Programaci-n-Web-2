@@ -1,5 +1,6 @@
 "use client"
 import Avatar from '@mui/material/Avatar';
+var mysql = require("mysql");
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -38,6 +39,10 @@ export default function Login(){
     const errorMessage = (error) => {
         console.log(error);
     };
+
+   
+   
+    
     return(
         
       <Container component="main" maxWidth="xs">
@@ -55,7 +60,7 @@ export default function Login(){
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Iniciar sesión
+            Iniciar sesión 
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
