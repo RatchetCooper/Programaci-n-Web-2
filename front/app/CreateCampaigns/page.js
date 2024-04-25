@@ -8,10 +8,11 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import {createCampaign} from '../services/reviewServices'
-
+import { useRouter } from 'next/navigation'
 import { format } from 'date-fns';
 
 export default function CreateCampaigns(){
+    const router = useRouter()
     const [nameCampaign, setNameCampaign] = useState("")
     const [linkDiscord, setLinkDiscord] = useState("")
     const [numJugadores, setNumJugadores] = useState("")
@@ -20,15 +21,18 @@ export default function CreateCampaigns(){
     const [image, setImage] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
-
-   
+    const [selectedCharacter, setSelectedCharacter] = useState(null);
+    const [selectedHistory, setSelectedHistory] = useState('')
    
     const nameCampaignChange = (e) => setNameCampaign(e.target.value)
     const nameDiscordChange = (e) => setLinkDiscord(e.target.value)
     const numJugadoresChange = (e) => setNumJugadores(e.target.value)
     const numEstrellasChange = (e) => setNumEstrellas(e.target.value)
+    const desCampaignChange = (e) => setDesCampaign(e.target.value)
     const imageChange = (e) => setImage(e.target.files[0])
-    
+    const SelectCharacterChange = (e) => setSelectedCharacter(e.target.value)
+    const handleRadioChange = (event) => setSelectedHistory(event.target.value)
+
     const dateChange = (date) => {
         setSelectedDate(date)
         console.log(date)
@@ -42,10 +46,10 @@ export default function CreateCampaigns(){
     const SubmitCampaign = ()=> {
         console.log("name campaign" + nameCampaign) 
           
-        const CreateCampaignData = {nameCampaign, linkDiscord, numJugadores, numEstrellas, image, selectedDate, selectedTime}
+        const CreateCampaignData = {nameCampaign, linkDiscord, numJugadores, numEstrellas, image, desCampaign, selectedDate, selectedTime, selectedCharacter, selectedHistory }
         createCampaign(CreateCampaignData)
         console.log(CreateCampaignData)
-        
+        router.push('/UserCampaigns', { scroll: false })
     }
     return(
         <div>
@@ -132,6 +136,7 @@ export default function CreateCampaigns(){
                                             aria-labelledby="demo-radio-buttons-group-label"
                                             defaultValue="female"
                                             name="radio-buttons-group"
+                                            onChange={handleRadioChange}
                                         >
                                             <FormControlLabel value="Usar modulo" control={<Radio />} label="Usar modulo" />
                                             <FormControlLabel value="Usar historia original" control={<Radio />} label="Usar historia original" />
@@ -167,19 +172,19 @@ export default function CreateCampaigns(){
                                 <Grid item xs={6}>
                                     <h1>Descripción de la campaña</h1>
                                     <TextField
-                                        id="outlined-multiline-static"
+                                        id="outlined-multiline-static-desc"
                                         label="Multiline"
                                         multiline
                                         rows={4}
-                                      
+                                        onChange={desCampaignChange}
                                         //defaultValue="Default Value"
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
                                 <h1>Vincula un personaje a esta campaña</h1>
-                                <Select
+                                <Select onChange={SelectCharacterChange}
                                             labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
+                                            id="demo-simple-select-character"
                                             
                                             label="Age"
                                            

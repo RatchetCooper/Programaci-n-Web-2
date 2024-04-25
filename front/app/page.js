@@ -15,7 +15,7 @@ export default function Home() {
   return (
       <div> 
         <ThemeProvider theme={ theme }>
-          <Navbar></Navbar>
+          <Characters></Characters>
         </ThemeProvider>
       </div>
   );

@@ -22,3 +22,15 @@ export async function createCampaign(Campaign){
         console.log("error")
     }
 }
+
+
+export async function createFilter(Filter){
+    try{
+        console.log("Entrando al servicio filtros")
+        const response = axios.post("/SearchCampaign", Filter)
+        console.log("servicio" + Filter)
+        return response.data
+    }catch{
+        console.log("error")
+    }
+}

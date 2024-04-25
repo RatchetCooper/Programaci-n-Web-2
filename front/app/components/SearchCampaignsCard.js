@@ -1,8 +1,14 @@
+"use client"
+import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
+import FiltersCampaigns from "../components/FiltersCampaigns";
+import { Box, Typography, Button, Stack, Card, Grid, CardMedia, Item, TextField } from "@mui/material";
+import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
-export default function SearchCampaignsCard({searchCampaignData}){
+export default function SearchCampaignsCard({item}){
     const theme = useTheme();
+
     return(
-        <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main}}>
+        <Card sx={{ p: 4, m:5, backgroundColor: theme.palette.cardBg.main}}>
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center", pt: 4, pb: 4}} >

@@ -9,7 +9,12 @@ export default function Landing(){
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
     const cambiarPagina = () => {
         //base de datos
-        router.push('/CreateCampaigns', { scroll: false })
+        router.push('/CreateCampaigns', { scroll: false })//Poner el URL  de crear personaje
+        
+      };
+      const cambiarPaginaBusqueda = () => {
+        //base de datos
+        router.push('/SearchCampaign', { scroll: false }) 
         
       };
     return(
@@ -35,7 +40,20 @@ export default function Landing(){
                     }}>Busca campañas por todo el mundo y unete a las mejores aventuras</Typography>
                 </Box>
             </Box>
+
             <LandingCampaigns campaignData={ data } ></LandingCampaigns>
+
+            <Stack sx={{  display: "flex",  alignItems: "center",}} >
+            <h1>Busca campañas</h1> 
+                    <Typography variant="body1" sx={{
+                        textAlign: "center",
+                        
+                    }}>Nuevas busquedas, nuevos amigos</Typography>
+               
+              
+          
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPaginaBusqueda}>Buscar campañas</Button>            
+            </Stack>
 
             <Stack sx={{  display: "flex",  alignItems: "center",}} >
             <h1>Crea tus personajes</h1> 
