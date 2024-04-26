@@ -1,6 +1,6 @@
 "use client"
 import Avatar from '@mui/material/Avatar';
-var mysql = require("mysql");
+/*var mysql = require("mysql");*/
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -20,6 +20,8 @@ import { useRouter } from 'next/navigation'
 
 export default function Login(){
     const theme = useTheme();
+    
+    
     const [ UserName, setUserName] = useState("")
     const [ Password, setPassword] = useState("")
     const router = useRouter()

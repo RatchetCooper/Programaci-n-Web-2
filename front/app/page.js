@@ -8,7 +8,7 @@ import SearchCampaigns from "./pages/SearchCampaigns";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import UserCampaigns from "./components/UserCampaigns";
-var a;
+/*var a;
 
 var mysql = require("mysql");
 var conexion = mysql.createConnection({
@@ -33,7 +33,7 @@ resultado.forEach(resultado => {
 console.log(resultado);
 a = resultado;
 });
-});
+});*/
 
 export default function Home() {
   return (
