@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import styles from "./page.module.css";
 import Landing from "./pages/Landing";
@@ -37,9 +38,9 @@ a = resultado;
 
 export default function Home() {
   return (
-      <div> 
+      <div>
         <ThemeProvider theme={ theme }>
-          <UserCampaigns></UserCampaigns>
+          <Characters></Characters>
         </ThemeProvider>
         resultado
       </div>

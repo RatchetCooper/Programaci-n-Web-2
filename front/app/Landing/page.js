@@ -1,17 +1,28 @@
 "use client"
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
+import { useRouter } from 'next/navigation'
 
 export default function Landing(){
-    const data = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]
-   
+    const router = useRouter()
+    const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
+    const cambiarPagina = () => {
+        //base de datos
+        router.push('/CreateCampaigns', { scroll: false })//Poner el URL  de crear personaje
+        
+      };
+      const cambiarPaginaBusqueda = () => {
+        //base de datos
+        router.push('/SearchCampaign', { scroll: false }) 
+        
+      };
     return(
         <div>
             <Box sx={{ 
                 width: "100vw",
                 height: "60vh",
-                backgroundImage: 'url(https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg)',
+                backgroundImage: 'url("./LandingImgs/portadatono.png")',
                 backgroundSize: 'cover',
                 display: "flex",
                 justifyContent: "center",
@@ -29,8 +40,33 @@ export default function Landing(){
                     }}>Busca campañas por todo el mundo y unete a las mejores aventuras</Typography>
                 </Box>
             </Box>
+
             <LandingCampaigns campaignData={ data } ></LandingCampaigns>
-            
+
+            <Stack sx={{  display: "flex",  alignItems: "center",}} >
+            <h1>Busca campañas</h1> 
+                    <Typography variant="body1" sx={{
+                        textAlign: "center",
+                        
+                    }}>Nuevas busquedas, nuevos amigos</Typography>
+               
+              
+          
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPaginaBusqueda}>Buscar campañas</Button>            
+            </Stack>
+
+            <Stack sx={{  display: "flex",  alignItems: "center",}} >
+            <h1>Crea tus personajes</h1> 
+                    <Typography variant="body1" sx={{
+                        textAlign: "center",
+                        
+                    }}>Comienza con la creación de personajes para unirte a las aventuras que tenemos para ti</Typography>
+               
+              
+          
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPagina}>Crear personaje</Button>            
+            </Stack>
+                
         </div>
     );
 }

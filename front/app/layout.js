@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
        
-      <body className={inter.className}>
+      <body style={{ margin: 0 }} className={inter.className}>
       <GeneralProviders children={children}></GeneralProviders>
    {/*    <GoogleOAuthProvider clientId="862893519032-2oupdld0qpkck0fk4rp29otd6gf3v7jq.apps.googleusercontent.com">
         <ThemeProvider theme={ theme }>

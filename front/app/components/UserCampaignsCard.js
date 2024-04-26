@@ -3,13 +3,31 @@ import { Box,Button, Card, Stack, CardMedia, Grid, Typography, TextField } from 
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import UserCampaignsItemParticipants from "./UserCampaignsItemParticipants";
+import { useRouter } from 'next/navigation'
+
 
 export default function UserCampaignsCard({userCampaignData}){
     const theme = useTheme();
-    const userItemParticipant = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]
+    const router = useRouter();
+
+    const userItemParticipant = [{"username": "Erika",  "campaignName": "Test 1", "ID":"1"}, {"username": "Juan", "campaignName": "Test 2", "ID":"2"}]
     
+    const editCampaign = () => {
+        console.log("Editando campaña")
+        router.push('/CreateCampaigns', { scroll: false }); // Cambia la URL a '/Reviews'
+       
+    };
     return(
-        <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main}}>
+
+        <Box sx={{ 
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 5,
+            flexDirection: "column"
+        }}>
+
+<Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main,  width: '100vh'}}>
             <Stack>
             <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -54,23 +72,80 @@ export default function UserCampaignsCard({userCampaignData}){
                     </Stack>
                 </Grid>
                 <Grid item xs={6}>
-                <Button variant="contained" sx={{mb: 4}}>Editar campaña</Button>
+                <Button variant="contained" onClick={editCampaign} sx={{mb: 4}}>Editar campaña</Button>
                 <Button variant="contained" sx={{mb: 4}}>Borrar campaña</Button>
                     
                 <h2>Palabra</h2>
+                <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                 <TextField
+                    id="outlined-read-only-input"
+                    label="Read Only"
+                    defaultValue="Hello World"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
                 </Grid>
             </Grid>
-            <h2>Abajo</h2>
+            
             <Card sx={{ p: 4, backgroundColor: theme.palette.cardFilterColor.main}}>
-            <h2>Participantes</h2>
+            <Box sx={{ 
+            pb: 3 
+            }}>
+
+            <Typography color={theme.palette.cardText.main} variant="body"  sx={{  pt: 4, pb: 4}}>Participantes</Typography>
+            </Box>
+
             
             {
             userItemParticipant.map((itemParticipant,index) =>( 
-                <UserCampaignsItemParticipants userItemParticipant={itemParticipant}></UserCampaignsItemParticipants>
+                <UserCampaignsItemParticipants key={itemParticipant.ID} userItemParticipant={itemParticipant} ></UserCampaignsItemParticipants>
+                
             ))
             }
             </Card>
             </Stack>
         </Card>
+        </Box>
+        
     )
 }

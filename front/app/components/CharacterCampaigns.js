@@ -11,7 +11,9 @@ export default function CharacterCampaigns({charactercampaignData}){
         <Box sx={{ 
             p: 5,
             flexDirection: "column",
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: theme.palette.secondary.main,
+            width: '80vh',
+            m:4
         }}>
             <Typography color="textSecondary" variant="h4">Campañas</Typography>
             {

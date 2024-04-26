@@ -36,6 +36,7 @@ export default function Login(){
       console.log("comentario" + ReviewUser )
       const ReviewData = { rating, ReviewUser}
       createReview(ReviewData)
+      console.log(ReviewData)
   }
     return(
       <>
