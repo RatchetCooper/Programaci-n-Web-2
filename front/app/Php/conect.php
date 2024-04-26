@@ -10,9 +10,9 @@
 		public function __construct()
 		{
 			$this->host = 'localhost:3306';
-			$this->db = 'keepaneye';
+			$this->db = 'MisionBoard';
 			$this->user = 'root';
-			$this->password = 'Maag201200.';
+			$this->password = '';
 
 		}
 
