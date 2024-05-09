@@ -12,6 +12,11 @@ export default function CharacterCard(){
     return(
         <div>
              <Button variant="contained" sx={{mb: 4}}>Crear personaje</Button>
+
+
+
+
+             
                     <Typography variant="h4">Tus personajes</Typography>
                         
 
