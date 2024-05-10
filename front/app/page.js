@@ -8,7 +8,7 @@ import SearchCampaigns from "./pages/SearchCampaigns";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import UserCampaigns from "./components/UserCampaigns";
-/*var a;
+var a=[];
 
 var mysql = require("mysql");
 var conexion = mysql.createConnection({
@@ -16,7 +16,7 @@ var conexion = mysql.createConnection({
     host:'localhost',
     database:'prueba',
     user:'root',
-    password:'password'
+    password:'Maag201200.'
 });
 conexion.connect(function(err){
 if(err)
@@ -32,8 +32,9 @@ conexion.query('Select * from usuario', function (error, resultado, field){
 resultado.forEach(resultado => {
 console.log(resultado);
 a = resultado;
+console.log("segundo log : "+a.user);
 });
-});*/
+});
 
 export default function Home() {
   return (
