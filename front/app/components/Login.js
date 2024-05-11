@@ -1,93 +1,53 @@
+// Login.js
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
 export default function Login() {
-  const theme = useTheme();
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleUserNameChange = (e) => setUserName(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
+  const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:8000/login', {
+      const response = await fetch('/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ username: userName, password: password })
       });
+      const data = await response.json();
+      console.log(data);
       if (response.ok) {
-        console.log('Login successful');
-        // Handle successful login (e.g., redirect to another page)
+        // Redirect to the landing page on successful login
+        router.push('/Landing', { scroll: false });
       } else {
-        console.error('Login failed');
-        // Handle failed login (e.g., display error message)
+        // Handle error messages
+        console.error(data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error logging in:', error.message);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Iniciar sesión
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Iniciar sesión
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"¿No tienes cuenta? Registrate"}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+    <div>
+      <input
+        type="text"
+        placeholder="Username"
+        value={userName}
+        onChange={handleUserNameChange}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={handlePasswordChange}
+      />
+      <button onClick={handleSubmit}>Login</button>
+    </div>
   );
 }
