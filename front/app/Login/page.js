@@ -1,4 +1,8 @@
-"use client"
+"use client";
+import { useState, useEffect } from 'react';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 /*var mysql = require("mysql");*/
 import Button from '@mui/material/Button';
@@ -33,14 +37,9 @@ export default function Login(){
         console.log("password" + Password)
     }
 
-    const responseMessage = (response) => {
-      //base de datos
-      router.push('/Landing', { scroll: false })
-      console.log(response);
-    };
-    const errorMessage = (error) => {
-        console.log(error);
-    };
+  useEffect(() => {
+    
+  }, []);
 
    
    
