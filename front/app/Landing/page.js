@@ -4,6 +4,11 @@ import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { useRouter } from 'next/navigation'
 
+
+
+
+  
+
 export default function Landing(){
     const router = useRouter()
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]

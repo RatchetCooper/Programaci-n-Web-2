@@ -5,51 +5,96 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import {createCampaign} from '../services/reviewServices'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns';
 
+var Fecha1 = new Date();
+var Fecha2 = new Date();
+var Hora = new Date();
+
 export default function CreateCampaigns(){
-    const router = useRouter()
-    const [nameCampaign, setNameCampaign] = useState("")
-    const [linkDiscord, setLinkDiscord] = useState("")
-    const [numJugadores, setNumJugadores] = useState("")
-    const [numEstrellas, setNumEstrellas] = useState("")
-    const [desCampaign, setDesCampaign] = useState("")
+    const router = useRouter();
+    const [nameCampaign, setNameCampaign] = useState("");
+    const [linkDiscord, setLinkDiscord] = useState("");
+    const [numJugadores, setNumJugadores] = useState(""); 
+    const [numEstrellas, setNumEstrellas] = useState("");
+    const [desCampaign, setDesCampaign] = useState("");
     const [image, setImage] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
-    const [selectedHistory, setSelectedHistory] = useState('')
+    const [selectedHistory, setSelectedHistory] = useState('');
    
-    const nameCampaignChange = (e) => setNameCampaign(e.target.value)
-    const nameDiscordChange = (e) => setLinkDiscord(e.target.value)
-    const numJugadoresChange = (e) => setNumJugadores(e.target.value)
-    const numEstrellasChange = (e) => setNumEstrellas(e.target.value)
-    const desCampaignChange = (e) => setDesCampaign(e.target.value)
-    const imageChange = (e) => setImage(e.target.files[0])
-    const SelectCharacterChange = (e) => setSelectedCharacter(e.target.value)
-    const handleRadioChange = (event) => setSelectedHistory(event.target.value)
+    
+    const nameDiscordChange = (e) => setLinkDiscord(e.target.value);
+    const numJugadoresChange = (e) => setNumJugadores(e.target.value);
+    const numEstrellasChange = (e) => setNumEstrellas(e.target.value);
+    const desCampaignChange = (e) => setDesCampaign(e.target.value);
+    const imageChange = (e) => setImage(e.target.files[0]);
+    const SelectCharacterChange = (e) => setSelectedCharacter(e.target.value);
+    const handleRadioChange = (event) => setSelectedHistory(event.target.value);
+
 
     const dateChange = (date) => {
+        
         setSelectedDate(date)
         console.log(date)
+        Fecha1 = date.toDate()
+        Fecha2 = Fecha1.getFullYear()+'-' + (Fecha1.getMonth()+1)+'-' + Fecha1.getDate()
+        
+        console.log(Fecha2)
     }
 
     const timeChange = (time) => {
-        setSelectedTime(time)
-        console.log(time)
+        
+
+        Fecha1 = time.toDate()
+        Hora = Fecha1.getHours()+':'+Fecha1.getMinutes()+':'+Fecha1.getSeconds()
+        setSelectedTime(Hora)
+        console.log(Hora)
     }
 
-    const SubmitCampaign = ()=> {
+    const SubmitCampaign = async ()=> {
+        try{
+            /*var y = btoa(image);
+            console.log(atob(y));
+            var x = atob(y);*/
+            const response = await fetch('http://localhost:8000/createcampaigns',{
+                method: 'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({nameCampaign: nameCampaign, desCampaign: desCampaign, numJugadores: numJugadores,currentPlayer: setSelectedCharacter, numEstrellas: numEstrellas,
+                linkDiscord: linkDiscord, selectedTime: selectedTime, selectedDate: Fecha2, imagen: btoa(image)})
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+              // Redirect to the landing page on successful login
+              window.location.href = '/Landing'; // Redirect using window.location
+            } else {
+              // Handle error messages
+              console.error(data.message);
+            }
+        }
+        catch(error){
+            console.error('Error crear campaña: ',error.message);
+        }
+  useEffect(() => {
+    SubmitCampaign(); // Submit login on component mount
+  }, []);
+
+        //codigo anterior
+        /*
         console.log("name campaign" + nameCampaign) 
           
         const CreateCampaignData = {nameCampaign, linkDiscord, numJugadores, numEstrellas, image, desCampaign, selectedDate, selectedTime, selectedCharacter, selectedHistory }
         createCampaign(CreateCampaignData)
         console.log(CreateCampaignData)
-        router.push('/UserCampaigns', { scroll: false })
+        router.push('/UserCampaigns', { scroll: false })*/
     }
     return(
         <div>
@@ -64,12 +109,12 @@ export default function CreateCampaigns(){
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="email"
+                                        id="nameCampaign"
                                         label="Nombre de la campaña"
                                         name="nameCampaign"
-                                        autoComplete="email"
+                                        autoComplete="nameCampaign"
                                         autoFocus
-                                        onChange={ nameCampaignChange }
+                                        onChange={(e)=> setNameCampaign(e.target.value) }
                                         />
                                         <TextField
                                         margin="normal"
@@ -198,7 +243,7 @@ export default function CreateCampaigns(){
                             </Grid>
                         </Stack>
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
-                        <Button variant="contained" sx={{mb: 4}}  onClick={ SubmitCampaign}>Crear</Button>
+                        <Button variant="contained" sx={{mb: 4}}  onClick={SubmitCampaign}>Crear</Button>
                         </Stack>
             </Stack>
         </div>
