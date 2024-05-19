@@ -702,7 +702,36 @@ INSERT INTO Dados (NumeroCaras) VALUES
 (12),
 (20);
 
+-- clases
+insert into Clase (idClase,Nombre, descripcion,Vida) values
+(1,"Pelador","Un capaz guerrero maestro de todo tipo de arma con la habilidad de empujarse fuera de los limites de lo posible",6),
+(2,"Mago","Un genio de lo arcano, un mago es aquel que estudia la tela de la magia y logra cosas imposibles con ella",4);
+-- raza
+insert into raza (Nombre,Descripcion) values("Humano","<p><strong>Aumento de puntuación de habilidad.</strong> Dos puntuaciones de habilidad distintas de tu elección aumentan en 1.</p>
+<p><strong>Proficiencias.</strong> Obtienes proficiencia en una habilidad de tu elección.</p>
+<p><strong>Feat.</strong> Obtienes un Feat de tu elección.</p>
+<p><strong>Edad.</strong> Los humanos alcanzan la adultez a finales de la adolescencia y viven menos de un siglo.</p>
+<p><strong>Alineamiento.</strong> Los humanos tienden a no tener un alineamiento particular. Lo mejor y lo peor se encuentran entre ellos.</p>
+<p><strong>Tamaño.</strong> Los humanos varían ampliamente en altura y constitución, desde apenas 5 pies hasta más de 6 pies de altura. Independientemente de tu posición en ese rango, tu tamaño es Mediano.</p>
+<p><strong>Velocidad.</strong> Tu velocidad base de movimiento es de 30 pies.</p>
+<p><strong>Idiomas.</strong> Puedes hablar, leer y escribir Común y un idioma adicional de tu elección. </p>
+")
+,("Elfo","<strong>Aumento de puntuación de habilidad:</strong> Tu puntuación de Destreza aumenta en 2. <strong>Edad:</strong>  100 años y pueden vivir hasta los 750 años. <strong>Alineamiento:</strong>tienden hacia los aspectos más suaves del caos. <strong>Tamaño:</strong> Van desde menos de 5 hasta más de 6 pies de altura, tamaño Mediano. <strong>Velocidad:</strong> Su velocidad base de movimiento es de 30 pies. <strong>Visión en la oscuridad:</strong> Pueden ver en penumbra en un radio de 60 pies como si fuera luz brillante, y en oscuridad como si fuera penumbra, sin poder discernir colores en la oscuridad, <strong>Linaje feérico:</strong> Tienen ventaja en las tiradas de salvación contra estar encantados, y la magia no puede hacerlos dormir. <strong>Trance:</strong> No duermen, en su lugar meditan profundamente, descansando solo 4 horas. <strong>Sentidos agudos:</strong> Tienen competencia en la habilidad de Percepción. <strong>Idiomas:</strong> Pueden hablar, leer y escribir Común y Élfico.
+");
+
+insert into trasfondo(Nombre,Descripcion) values ("Atleta","<p><strong>proficiencias:</strong> Acrobacias, Atletismo</p>
+<p><strong>Idiomas:</strong> Uno de tu elección</p>
+<p><strong>Proficiencia en herramientas:</strong> Vehículos (Terrestres)</p>
+<p><strong>Equipo:</strong> Un disco de bronce o una bola de cuero, un amuleto de la suerte o un trofeo pasado, un conjunto de ropa de viajero y una bolsa que contiene 10 piezas de oro</p>"),("Heroe del pueblo"," <p><strong>Competencias de habilidad:</strong> Trato con animales, Supervivencia</p>
+<p><strong>Competencias con herramientas:</strong> Un tipo de herramientas de artesano, vehículos (terrestres)</p>
+<p><strong>Idiomas:</strong> Ninguno</p>
+<p><strong>Equipo:</strong> Un juego de herramientas de artesano (uno de tu elección), una pala, una olla de hierro, un conjunto de ropa común y una bolsa que contiene 10 piezas de oro</p>
+");
+insert into ataque(nombre,aimmod,dmgmod,porficiencia,NDados,Dados_IdDados,TipoDaño_IdTipoDaño,Stat_idStat)values("Espada Larga",0,0,true,1,1,2,1),("Magia",0,0,true,3,2,3,4);
+insert into hechizo(Nombre,Nivel,Descripcion,Stat_idStat,Ataque_idAtaque)values("Torcion Testicular!!!",2,"EL LEGENDARIO ATAQUE PROHIBIDO causa Xcantidad de daño",1,3);
+insert into objeto (idObjeto,Nombre,Descripcion,Ataque_idAtaque)values(1,"Espada larga","Un arma de 1 mano",1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+Alter User 'root'@'localhost' identified with mysql_native_password by 'root'
