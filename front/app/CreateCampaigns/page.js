@@ -22,7 +22,7 @@ export default function CreateCampaigns(){
     const [numJugadores, setNumJugadores] = useState(""); 
     const [numEstrellas, setNumEstrellas] = useState("");
     const [desCampaign, setDesCampaign] = useState("");
-    const [image, setImage] = useState(null);
+
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -37,6 +37,57 @@ export default function CreateCampaigns(){
     const SelectCharacterChange = (e) => setSelectedCharacter(e.target.value);
     const handleRadioChange = (event) => setSelectedHistory(event.target.value);
 
+    const [image, setImage] = useState(null);
+    const [imageURL, setImageURL] = useState('');
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setImage(file);
+          setImageURL(URL.createObjectURL(file));
+        }
+      };
+      const SubmitRegister = async (e) => {
+        e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+        const formData = new FormData();
+        /*
+        nameCampaign: nameCampaign, 
+        nameCampaign: desCampaign, 
+        numJugadores: numJugadores,
+        currentPlayer: setSelectedCharacter, numEstrellas: numEstrellas,
+                    linkDiscord: linkDiscord, selectedTime: selectedTime, selectedDate: Fecha2, imagen: image
+        */
+        formData.append('nameCampaign', nameCampaign);
+        formData.append('desCampaign', desCampaign);
+        formData.append('numJugadores', numJugadores);
+        formData.append('currentPlayer', setSelectedCharacter);
+        formData.append('numEstrellas', numEstrellas);
+        formData.append('linkDiscord', linkDiscord);
+        formData.append('selectedTime', selectedTime);
+        formData.append('selectedDate', Fecha2);
+        console.log(image);
+        if (image) {
+          formData.append('image', image);
+        }
+    
+        try {
+          const response = await fetch('http://localhost:8000/createcampaign', {
+            method: 'POST',
+            body: formData
+          });
+          const data = await response.json();
+          console.log(data);
+          if (response.ok) {
+            // Redirect to the landing page on successful registration
+            window.location.href = '/Landing'; // Redirect using window.location
+          } else {
+            // Handle error messages
+            console.error(data.message);
+          }
+        } catch (error) {
+          console.error('Error registering:', error.message);
+        }
+      };
 
     const dateChange = (date) => {
         
@@ -46,6 +97,7 @@ export default function CreateCampaigns(){
         Fecha2 = Fecha1.getFullYear()+'-' + (Fecha1.getMonth()+1)+'-' + Fecha1.getDate()
         
         console.log(Fecha2)
+        
     }
 
     const timeChange = (time) => {
@@ -57,18 +109,35 @@ export default function CreateCampaigns(){
         console.log(Hora)
     }
 
-    const SubmitCampaign = async ()=> {
+    const SubmitCampaign = async ()=>{ 
+        const formData = new FormData();
+        /*
+        nameCampaign: nameCampaign, 
+        nameCampaign: desCampaign, 
+        numJugadores: numJugadores,
+        currentPlayer: setSelectedCharacter, numEstrellas: numEstrellas,
+                    linkDiscord: linkDiscord, selectedTime: selectedTime, selectedDate: Fecha2, imagen: image
+        */
+        formData.append('nameCampaign', nameCampaign);
+        formData.append('desCampaign', desCampaign);
+        formData.append('numJugadores', numJugadores);
+        formData.append('currentPlayer', setSelectedCharacter);
+        formData.append('numEstrellas', numEstrellas);
+        formData.append('linkDiscord', linkDiscord);
+        formData.append('selectedTime', selectedTime);
+        formData.append('Fecha2', Fecha2);
+        console.log(image);
+        if (image) {
+          formData.append('image', image);
+        }
         try{
             /*var y = btoa(image);
             console.log(atob(y));
             var x = atob(y);*/
             const response = await fetch('http://localhost:8000/createcampaigns',{
                 method: 'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({nameCampaign: nameCampaign, desCampaign: desCampaign, numJugadores: numJugadores,currentPlayer: setSelectedCharacter, numEstrellas: numEstrellas,
-                linkDiscord: linkDiscord, selectedTime: selectedTime, selectedDate: Fecha2, imagen: btoa(image)})
+                body: formData
+
             });
             const data = await response.json();
             console.log(data);
@@ -86,7 +155,7 @@ export default function CreateCampaigns(){
   useEffect(() => {
     SubmitCampaign(); // Submit login on component mount
   }, []);
-
+  
         //codigo anterior
         /*
         console.log("name campaign" + nameCampaign) 
@@ -96,6 +165,7 @@ export default function CreateCampaigns(){
         console.log(CreateCampaignData)
         router.push('/UserCampaigns', { scroll: false })*/
     }
+    
     return(
         <div>
             <h1>Crear campaña</h1>
@@ -196,7 +266,7 @@ export default function CreateCampaigns(){
                                 id="raised-button-file"
                                 multiple
                                 type="file"
-                                onChange={imageChange}
+                                onChange={handleImageChange}
                                 />
                                     <label htmlFor="raised-button-file">
                                     <Button variant="raised" component="span">

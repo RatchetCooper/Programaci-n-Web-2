@@ -4,22 +4,19 @@ const mysql = require('mysql2/promise');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-<<<<<<< HEAD
 const { Description } = require('@mui/icons-material');
 
 
 
-=======
 const path = require('path');
 const fs = require('fs');
 
 const upload = multer({ dest: 'uploads/' });
->>>>>>> 5e3e4a46965b84906bb07a559a6e22c942cf98d2
 
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'Maag201200.',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,
@@ -100,30 +97,32 @@ app.post('/login', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 //campañas
-app.post('/createcampaigns', async (req, res) => {
-  const { nameCampaign,desCampaign, numJugadores, currentPlayer,numEstrellas, linkDiscord, selectedTime, selectedDate,imagen } = req.body;
-  
+app.post('/createcampaigns',upload.single('image'), async (req, res) => {
+  const { nameCampaign,desCampaign, numJugadores, currentPlayer,numEstrellas, linkDiscord, selectedTime, Fecha2 } = req.body;
+  const image = req.file; 
   console.log('informacion recivida de campaña y son los siguientes:');
   console.log('titulo:',nameCampaign);
   console.log('desc: '+desCampaign);
   console.log('numero de jugadores: '+numJugadores);
   console.log('currentplayers: '+currentPlayer);
   console.log('destrellas: '+numEstrellas);
-  console.log('link: '+linkDiscord);
-  console.log('time: '+selectedTime);
-  console.log('hrario:  '+ selectedDate);
-  console.log('imagen: '+imagen);
+  console.log('link: '+ linkDiscord);
+  console.log('hora: '+ selectedTime);
+  console.log('fecha:  '+ Fecha2);
+  console.log('imagen: '+ image);
 const fecha = new Date();
 
   try {
     const connection = await pool.getConnection();
     console.log('Database connection established');
 
+    const imageData = fs.readFileSync(image.path);
+    console.log('Received registration request for image:', image);
+
     // Query the database to get user details based on username
     console.log("continuamos antes");
-    const rows = await connection.execute('insert into campaña (Titulo,Descripcion,MaxPlayers,CurrentPlayers,Estrellas,Link,Fecha,Horario,Imagen) Values (?,?,?,?,?,?,?,?,?)',[nameCampaign,desCampaign,numJugadores,numJugadores/*cambiar por nombre de usuario*/,numEstrellas,linkDiscord,selectedDate,selectedTime,imagen]);
+    const rows = await connection.execute('insert into campaña (Titulo,Descripcion,MaxPlayers,CurrentPlayers,Estrellas,Link,Fecha,Horario,Imagen) Values (?,?,?,?,?,?,?,?,?)',[nameCampaign,desCampaign,numJugadores,numJugadores/*cambiar por nombre de usuario*/,numEstrellas,linkDiscord,Fecha2,selectedTime,imageData]);
    
     
 
@@ -145,20 +144,18 @@ const fecha = new Date();
  
 
 });
-=======
+
+
+
+
+
+
+
 // Serve images from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
->>>>>>> 5e3e4a46965b84906bb07a559a6e22c942cf98d2
 
 // Start the server
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
-<<<<<<< HEAD
 });
 
-
-
-
-=======
-});
->>>>>>> 5e3e4a46965b84906bb07a559a6e22c942cf98d2
