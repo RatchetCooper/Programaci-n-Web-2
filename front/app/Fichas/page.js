@@ -8,6 +8,134 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Colapsable from './Colapsable';
 
+
+const SpellcastingSection = () => {
+  const [spellcastingInfo, setSpellcastingInfo] = useState({
+    class: '',
+    ability: '',
+    saveDC: '',
+    attackBonus: ''
+  });
+  const [spells, setSpells] = useState({
+    cantrips: [''],
+    level1: [''],
+    level2: [''],
+    level3: [''],
+    level4: [''],
+    level5: [''],
+    level6: [''],
+    level7: [''],
+    level8: [''],
+    level9: ['']
+  });
+
+  const handleSpellcastingInfoChange = (e) => {
+    const { name, value } = e.target;
+    setSpellcastingInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value
+    }));
+  };
+
+  const handleSpellChange = (level, index, value) => {
+    const updatedSpells = { ...spells };
+    updatedSpells[level][index] = value;
+    setSpells(updatedSpells);
+  };
+
+  const addSpell = (level) => {
+    const updatedSpells = { ...spells };
+    updatedSpells[level].push('');
+    setSpells(updatedSpells);
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '5px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    fontSize: '14px',
+    marginBottom: '10px'
+  };
+
+  const renderSpellLevel = (level, label) => {
+    return (
+      <Box key={level} sx={{ marginBottom: '20px', padding: '20px', backgroundColor: '#e0f7fa', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+        <h3 style={{ textAlign: 'center', margin: '10px 0' }}>{label}</h3>
+        {spells[level].map((spell, index) => (
+          <input
+            key={index}
+            type="text"
+            value={spell}
+            onChange={(e) => handleSpellChange(level, index, e.target.value)}
+            placeholder="Nombre del Hechizo"
+            style={inputStyle}
+          />
+        ))}
+        <button onClick={() => addSpell(level)} style={{ marginBottom: '10px', padding: '5px 10px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#fff' }}>Agregar Hechizo</button>
+      </Box>
+    );
+  };
+
+  return (
+    <Container maxWidth={false}>
+      <Box sx={{ bgcolor: '#cfe8fc', borderRadius: '20px', padding: '20px' }}>
+        <h2 style={{ textAlign: 'center' }}>Spellcasting</h2>
+        <Grid container spacing={2}>
+          {['class', 'ability', 'saveDC', 'attackBonus'].map((field) => (
+            <Grid item xs={12} sm={6} md={3} key={field}>
+              <input
+                type="text"
+                name={field}
+                value={spellcastingInfo[field]}
+                onChange={handleSpellcastingInfoChange}
+                placeholder={field.replace(/([A-Z])/g, ' $1').trim()}
+                style={inputStyle}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('cantrips', 'Level 0 (Cantrips)')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level1', 'Level 1')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level2', 'Level 2')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level3', 'Level 3')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level4', 'Level 4')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level5', 'Level 5')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level6', 'Level 6')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level7', 'Level 7')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level8', 'Level 8')}
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            {renderSpellLevel('level9', 'Level 9')}
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
+  );
+};
+
+
+
+
+
 function BasePage({ children }) {
   const [customBackground, setCustomBackground] = useState('');
   const [selectedRace, setSelectedRace] = useState('');
@@ -30,6 +158,9 @@ function BasePage({ children }) {
     modCarisma: ''
   });
   const [ataques, setAtaques] = useState([{ nombre: '', bonAtaque: '', danio: '', tipo: '' }]);
+  const [proficiencias, setProficiencias] = useState([{ nombre: '' }]);
+  const [equipamiento, setEquipamiento] = useState({ cp: '', sp: '', gp: '', ep: '', pp: '', items: [''] });
+  const [historia, setHistoria] = useState('');
   const [savingThrows, setSavingThrows] = useState({
     fortaleza: '',
     destreza: '',
@@ -131,6 +262,39 @@ function BasePage({ children }) {
 
   const agregarAtaque = () => {
     setAtaques([...ataques, { nombre: '', bonAtaque: '', danio: '', tipo: '' }]);
+  };
+
+  const handleProficienciaChange = (index, value) => {
+    const nuevasProficiencias = [...proficiencias];
+    nuevasProficiencias[index].nombre = value;
+    setProficiencias(nuevasProficiencias);
+  };
+
+  const agregarProficiencia = () => {
+    setProficiencias([...proficiencias, { nombre: '' }]);
+  };
+
+  const handleEquipamientoChange = (field, value) => {
+    setEquipamiento((prevEquipamiento) => ({
+      ...prevEquipamiento,
+      [field]: value
+    }));
+  };
+
+  const handleEquipamientoItemChange = (index, value) => {
+    const nuevosItems = [...equipamiento.items];
+    nuevosItems[index] = value;
+    setEquipamiento((prevEquipamiento) => ({
+      ...prevEquipamiento,
+      items: nuevosItems
+    }));
+  };
+
+  const agregarEquipamientoItem = () => {
+    setEquipamiento((prevEquipamiento) => ({
+      ...prevEquipamiento,
+      items: [...prevEquipamiento.items, '']
+    }));
   };
 
   const handleSavingThrowChange = (e) => {
@@ -832,10 +996,116 @@ function BasePage({ children }) {
                 </Grid>
               </Box>
             </Container>
+
+            {/* Nuevo contenedor para Lenguajes y otras proficiencias */}
+            <Container maxWidth={false}>
+              <Box sx={{ bgcolor: '#cfe8fc', borderRadius: '20px', padding: '20px' }}>
+                <h3 style={{ textAlign: 'center' }}>Lenguajes y otras Proficiencias</h3>
+                <button onClick={agregarProficiencia} style={{ marginBottom: '10px' }}>Agregar Proficiencia</button>
+                {proficiencias.map((proficiencia, index) => (
+                  <Grid container spacing={2} key={index} sx={{ marginBottom: '10px' }}>
+                    <Grid item xs={12}>
+                      <input
+                        type="text"
+                        value={proficiencia.nombre}
+                        onChange={(e) => handleProficienciaChange(index, e.target.value)}
+                        placeholder="Proficiencia"
+                        style={{
+                          width: '100%',
+                          padding: '5px',
+                          borderRadius: '5px',
+                          border: '1px solid #ccc',
+                          textAlign: 'center',
+                          fontSize: '14px'
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                ))}
+              </Box>
+            </Container>
+
+            {/* Nuevo contenedor para Equipamiento */}
+            <Container maxWidth={false}>
+              <Box sx={{ bgcolor: '#cfe8fc', borderRadius: '20px', padding: '20px' }}>
+                <h3 style={{ textAlign: 'center' }}>Equipamiento</h3>
+                <Grid container spacing={2}>
+                  {[
+                    { label: 'CP', value: equipamiento.cp, field: 'cp' },
+                    { label: 'SP', value: equipamiento.sp, field: 'sp' },
+                    { label: 'GP', value: equipamiento.gp, field: 'gp' },
+                    { label: 'EP', value: equipamiento.ep, field: 'ep' },
+                    { label: 'PP', value: equipamiento.pp, field: 'pp' },
+                  ].map((item, index) => (
+                    <Grid item xs={2} key={index}>
+                      <div style={{ textAlign: 'center' }}>
+                        <label style={{ fontSize: '16px' }}>{item.label}</label>
+                        <input
+                          type="number"
+                          value={item.value}
+                          onChange={(e) => handleEquipamientoChange(item.field, e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '5px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc',
+                            textAlign: 'center',
+                            fontSize: '14px'
+                          }}
+                        />
+                      </div>
+                    </Grid>
+                  ))}
+                </Grid>
+                <button onClick={agregarEquipamientoItem} style={{ marginTop: '20px', marginBottom: '10px' }}>Agregar Equipamiento</button>
+                {equipamiento.items.map((item, index) => (
+                  <Grid container spacing={2} key={index} sx={{ marginBottom: '10px' }}>
+                    <Grid item xs={12}>
+                      <input
+                        type="text"
+                        value={item}
+                        onChange={(e) => handleEquipamientoItemChange(index, e.target.value)}
+                        placeholder="Item"
+                        style={{
+                          width: '100%',
+                          padding: '5px',
+                          borderRadius: '5px',
+                          border: '1px solid #ccc',
+                          textAlign: 'center',
+                          fontSize: '14px'
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                ))}
+              </Box>
+            </Container>
+
+            {/* Nuevo contenedor para Historia del Personaje */}
+            <Container maxWidth={false}>
+              <Box sx={{ bgcolor: '#cfe8fc', borderRadius: '20px', padding: '20px' }}>
+                <h3 style={{ textAlign: 'center' }}>Historia del Personaje</h3>
+                <textarea
+                  value={historia}
+                  onChange={(e) => setHistoria(e.target.value)}
+                  placeholder="Escribe la historia del personaje aquí..."
+                  style={{
+                    width: '100%',
+                    height: '200px',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    border: '1px solid #ccc',
+                    fontSize: '14px',
+                    resize: 'none'
+                  }}
+                />
+              </Box>
+            </Container>
+
           </Stack>
         </Grid>
       </Grid>
-      
+      <SpellcastingSection />
     </div>
     
   );
