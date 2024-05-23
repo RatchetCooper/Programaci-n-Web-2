@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
+import CookieManager from '../Cookies/Cookies.js';
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +26,9 @@ export default function Login() {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
+        // Set cookie for user ID
+        CookieManager.setCookie('id', data.userId, 365); // Set cookie with user ID that lasts for 365 days
+  
         // Redirect to the landing page on successful login
         window.location.href = '/Landing'; // Redirect using window.location
       } else {

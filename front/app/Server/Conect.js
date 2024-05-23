@@ -49,13 +49,15 @@ app.post('/register', upload.single('image'), async (req, res) => {
     }
 
     console.log('User registered successfully');
-    res.status(201).json({ message: 'User registered successfully', user: { id: result.insertId, username, fullName, image :image.path } });
+    res.status(201).json({ message: 'User registered successfully', user: { id: result.insertId, username, fullName } });
   } catch (error) {
     console.error('Error executing query:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+// Endpoint for user login
+// Endpoint for user login
 // Endpoint for user login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -65,8 +67,8 @@ app.post('/login', async (req, res) => {
     const connection = await pool.getConnection();
     console.log('Database connection established');
 
-    // Query the database to get user details based on username
-    const [rows] = await connection.execute('SELECT * FROM User WHERE Email = ?', [username],' And Contra= ?',[password]);
+    // Query the database to get user details based on username and password
+    const [rows] = await connection.execute('SELECT idUser FROM User WHERE Email = ? AND Contra = ?', [username, password]);
     connection.release();
 
     if (rows.length === 0) {
@@ -77,18 +79,81 @@ app.post('/login', async (req, res) => {
     const user = rows[0];
     console.log('User found in database:', user);
 
+<<<<<<< Updated upstream
     // Compare hashed password from the database with the provided password
     
 
+=======
+>>>>>>> Stashed changes
     // Successful login
     console.log('Login successful');
-    res.status(200).json({ message: 'Login successful', user: { id: user.idUser, username: user.Nombre } });
+    res.status(200).json({ message: 'Login successful', userId: user.idUser });
+ 
   } catch (error) {
     console.error('Error executing query:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+<<<<<<< Updated upstream
+=======
+
+
+//campañas
+app.post('/createcampaigns',upload.single('image'), async (req, res) => {
+  const { nameCampaign,desCampaign, numJugadores, currentPlayer,numEstrellas, linkDiscord, selectedTime, Fecha2 } = req.body;
+  const image = req.file; 
+  console.log('informacion recivida de campaña y son los siguientes:');
+  console.log('titulo:',nameCampaign);
+  console.log('desc: '+desCampaign);
+  console.log('numero de jugadores: '+numJugadores);
+  console.log('currentplayers: '+currentPlayer);
+  console.log('destrellas: '+numEstrellas);
+  console.log('link: '+ linkDiscord);
+  console.log('hora: '+ selectedTime);
+  console.log('fecha:  '+ Fecha2);
+  console.log('imagen: '+ image);
+const fecha = new Date();
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    const imageData = fs.readFileSync(image.path);
+    console.log('Received registration request for image:', image);
+
+    // Query the database to get user details based on username
+    console.log("continuamos antes");
+    const rows = await connection.execute('insert into campaña (Titulo,Descripcion,MaxPlayers,CurrentPlayers,Estrellas,Link,Fecha,Horario,Imagen) Values (?,?,?,?,?,?,?,?,?)',[nameCampaign,desCampaign,numJugadores,numJugadores/*cambiar por nombre de usuario*/,numEstrellas,linkDiscord,Fecha2,selectedTime,imageData]);
+   
+    
+
+    console.log("continuamos");
+
+    if(rows[0].insertId)
+      {
+        res.status(200).json("se logro insertar?");
+      }
+    else{
+      return res.status(401).json({ message: 'Error al insertar' });
+    }
+
+  }
+  catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+ 
+
+});
+
+
+
+
+
+
+
+>>>>>>> Stashed changes
 // Serve images from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
