@@ -3,10 +3,11 @@ import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { useRouter } from 'next/navigation'
+import styles from "../globals.css"
 
 export default function Landing(){
     const router = useRouter()
-    const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
+    const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}, {"username": "Erika",  "campaignName": "Nombre de la campaña 1"}]
     const cambiarPagina = () => {
         //base de datos
         router.push('/CreateCampaigns', { scroll: false })//Poner el URL  de crear personaje
@@ -52,7 +53,7 @@ export default function Landing(){
                
               
           
-            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPaginaBusqueda}>Buscar campañas</Button>            
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPaginaBusqueda} className="global-button">Buscar campañas</Button>            
             </Stack>
 
             <Stack sx={{  display: "flex",  alignItems: "center",}} >
@@ -64,7 +65,7 @@ export default function Landing(){
                
               
           
-            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPagina}>Crear personaje</Button>            
+            <Button variant="contained" sx={{mt: 4}} onClick={cambiarPagina} className="global-button">Crear personaje</Button>            
             </Stack>
                 
         </div>

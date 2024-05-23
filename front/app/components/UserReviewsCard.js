@@ -1,47 +1,41 @@
 "use client"
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme } from '@mui/material/styles';
+
+import { Box, Button, Card, Stack, CardMedia, Avatar, Grid, Typography, TextField, AvatarGroup } from "@mui/material";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
-import { useState } from 'react';
-import { Stack, CardMedia } from "@mui/material";
-import { Rating } from 'react-simple-star-rating'
-import { createReview } from '../services/reviewServices'
-import UserReviewsCard from "../components/UserReviewsCard";
-import {Card} from "@mui/material";
+import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
+import { useRouter } from 'next/navigation'
 
-export default function Reviews({ userCampaignReview }) {
-  const theme = useTheme();
-  const [rating, setRating] = useState(0)
-  const [ReviewUser, setReview] = useState("")
-  const userReviewsData = [{ "username": "Erika", "comentarios": "Test 1" }, { "username": "Juan", "comentarios": "Test 2" }]
 
-  const handleRating = (rate) => {
-    setRating(rate)
-    console.log(rating)
-    // other logic
-  }
+export default function UserReviewsCard() {
+    const theme = useTheme();
+    const router = useRouter();
+    return (
+        <div>
 
-  const UserPostReviewChange = (e) => setReview(e.target.value)
+        {/*     
+      <Box sx={{
+        display: "flex",
+        justifyContent: "center",
 
-  const SubmitReview = () => {
-    console.log("comentario" + ReviewUser)
-    const ReviewData = { rating, ReviewUser }
-    createReview(ReviewData)
-    console.log(ReviewData)
-  }
-  return (
-    <>
+      }}>
+        <Box sx={{
+          width: "50%",
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          <Box sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            mb: 4
+          }}>
+            <Button variant="contained" className="global-button">
+              Crear campaña
+            </Button>
+          </Box>
+          <Typography className="global-text-header">card review</Typography>
+        </Box>
+      </Box> */}
+
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", p: 5, flexDirection: "column" }}>
             <Card sx={{ p: 4, backgroundColor: theme.palette.background.paper, width: '100vh' }}>
                 <Stack spacing={2}>
@@ -76,23 +70,18 @@ export default function Reviews({ userCampaignReview }) {
                                 />
                             </Box>
                         </Box>
-                       <Stack direction="row" spacing={2} sx={{ mt: 2, width: '100%', justifyContent: 'center' }}>
+                        {/* <Stack direction="row" spacing={2} sx={{ mt: 2, width: '100%', justifyContent: 'center' }}>
                             <Button variant="contained" sx={{ background: 'linear-gradient(180deg, #5e5aae 0%, #36c5cd 100%)' }}>
                                 Enviar
                             </Button>
                             <Button variant="contained" sx={{ background: 'linear-gradient(180deg, #5e5aae 0%, #36c5cd 100%)' }}>
                                 Cancelar
                             </Button>
-                        </Stack>
+                        </Stack> */}
                     </Box>
                 </Stack>
             </Card>
         </Box>
-      {
-        userReviewsData.map((usercampaign, index) => (
-          <UserReviewsCard userReviewsData={usercampaign}></UserReviewsCard>
-        ))
-      }
-    </>
-  )
-}
+        </div>
+    );
+ }

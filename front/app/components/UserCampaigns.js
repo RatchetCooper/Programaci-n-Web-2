@@ -6,15 +6,18 @@ export default function UserCampaigns(){
     return(
         <div>
             <Box sx={{ 
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            p: 5,
-            flexDirection: "column"
+             display: "flex",
+             justifyContent: "center",
+             alignItems: "center",
+             p: 5,
+             flexDirection: "column",
+             width: ""
             }}>
                 <Button variant="contained" sx={{mb: 4}}>Crear campaña</Button>     
                 <Typography variant="h4">Tus campañas</Typography>
+                
             </Box>
+            
             
             {
             userCampaignsData.map((usercampaign,index) =>( 

@@ -28,7 +28,26 @@ export default function LandingCampaigns({campaignData}){
                     </div>
                 ))}
                 </div> */}
-               
+                 <Stack direction="row" spacing={2} sx={{ // Utiliza un Stack con dirección "row"
+                    '@media (max-width:600px)': { // Media query para pantallas pequeñas
+                        flexDirection: 'column', // Cambia la dirección a "column" para pantallas pequeñas
+                        marginLeft: '-10px'
+                    },
+                    '@media (max-width: 1280px)': {
+                        flexDirection: 'column', // Cambia a una columna cuando el ancho de la pantalla sea menor a 1280px
+                        '& > *:not(:last-child)': {
+                            marginBottom: '10px', // Añade margen inferior a todos los elementos excepto el último (en columnas)
+                        },
+                    },
+                    
+                }}>
+                    {
+                        campaignData.map((item, index) => (
+                            <CardCampana key={index} item={item}></CardCampana>
+                        ))
+                    }
+                </Stack>
+               {/* 
                <div style={{ display: 'flex', flexDirection: 'row' }}>
                 {
                     campaignData.map((item,index) =>( 
@@ -37,7 +56,7 @@ export default function LandingCampaigns({campaignData}){
                         </div>
                     ))
                 }
-               </div>
+               </div> */}
                 
             </Box>
         </div>

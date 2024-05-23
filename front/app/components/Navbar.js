@@ -16,6 +16,7 @@ import { Stack } from '@mui/material';
 import Link from 'next/link';
 
 const pages = [
+  { name: 'inicio', url: '/Landing' },
   { name: 'Tus campañas', url: '/UserCampaigns' },
   { name: 'Buscar campaña', url: '/SearchCampaign' },
   { name: 'Tus personajes', url: '/Characters' }

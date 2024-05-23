@@ -6,11 +6,12 @@ import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import theme from "../Theme.js";
 import { createTheme } from '@mui/material/styles';
+import styles from "../globals.css";
 
 export default function CardCampana( {item}){
     const theme = useTheme();
     return(
-        <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main}}> 
+        <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main, marginLeft: '10px'}} className="global-card"> 
             <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center", pt: 4, pb: 4}} >
                 <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
                 image="https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg"
@@ -25,7 +26,7 @@ export default function CardCampana( {item}){
             </CardMedia>
 
             <Typography color="textSecondary" variant="h4" sx={{pt: 4}}> { item.campaignName} </Typography>
-            <Button variant="contained" sx={{mb: 4}}>Unirse</Button>
+            <Button variant="contained" className="global-button" sx={{mb: 4}}>Unirse</Button>
             <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
                 <AvatarGroup max={4}>
                     <Avatar alt="Remy Sharp" src="https://randomuser.me/api/portraits/men/60.jpg" />

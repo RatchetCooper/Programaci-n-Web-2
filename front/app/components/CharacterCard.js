@@ -39,7 +39,7 @@ export default function CharacterCard(){
                             image="https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg"
                             title="Card img">
                             </CardMedia>
-                            <Typography color={theme.palette.cardText.main} variant="body">Texto pequeño</Typography>
+                            <Typography color={theme.palette.cardText.main} variant="body" >Texto pequeño</Typography>
                             
                         </Stack>
                         <Typography color={theme.palette.cardText.main} variant="h4">Información</Typography>

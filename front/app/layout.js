@@ -1,6 +1,6 @@
 
 import { Inter } from "next/font/google";
-import "./globals.css";
+
 import { ThemeProvider } from '@mui/material/styles'; //Contexto
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import theme from "../app/Theme.js";

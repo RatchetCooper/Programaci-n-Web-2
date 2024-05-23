@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import FiltersCampaigns from "../components/FiltersCampaigns";
 import { Box, Typography, Button, Stack, Card, Grid, CardMedia, Item, TextField } from "@mui/material";
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
-
+import styles from "../globals.css"
 export default function SearchCampaignsCard({item}){
     const theme = useTheme();
 
@@ -36,55 +36,163 @@ export default function SearchCampaignsCard({item}){
                     </Stack>
                 </Grid>
                 <Grid item xs={6}>
-                <h2>Palabra</h2>
-                <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
+                 <Typography color={theme.palette.cardText.main} variant="h4" sx={{ m: 2 }} className="global-font">Datos de la campaña</Typography>
+                            <Stack>
+
+                            
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Link Discord"
+                                defaultValue="Colocar link"
+                                InputProps={{
+                                    readOnly: true,
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Fecha"
+                                defaultValue="Hello World"
+                                InputProps={{
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Hora"
+                                defaultValue="Hello World"
+                                InputProps={{
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Estrellas necesarias"
+                                defaultValue="Hello World"
+                                InputProps={{
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Tipo de historia"
+                                defaultValue="Hello World"
+                                
+                                InputProps={{
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="outlined-read-only-input"
+                                label="Descripción"
+                                defaultValue="Hello World"
+                                InputProps={{
+                                    style: { color: 'white' },
+                                }}
+                               
+                                InputLabelProps={{
+                                    style: { color: 'white' },
+                                }}
+                                sx={{  mb: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
+                            </Stack>
                 </Grid>
             </Grid>
         </Card>

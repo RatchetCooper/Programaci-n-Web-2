@@ -1,0 +1,109 @@
+.global-button { 
+    border-radius: 50px;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          background: linear-gradient(180deg, #5e5aae 0%, #36c5cd 100%);
+          /* align-self: start; */
+          /* margin-top: 16px;*/
+          color: var(--Light-Level-1, #fefefe);
+          white-space: nowrap;
+          letter-spacing: -0.54px;
+          justify-content: center;
+          padding: 8px 32px;
+          font: 600 18px/32px Inter, -apple-system, Roboto, Helvetica, sans-serif;
+          margin-right: 10px;
+          text-transform: capitalize;
+
+}
+
+.global-font{
+    font: 600 18px/32px Inter, -apple-system, Roboto, Helvetica,
+    sans-serif;
+}
+.global-card{
+    align-self: stretch;
+  border-radius: 24px;
+  background-color: #272640;
+  display: flex;
+  max-width: 628px;
+  flex-direction: column;
+  padding: 40px;
+  @media (max-width: 991px) {
+    padding: 0 20px;
+  }
+}
+
+.campaigns-card{
+    align-self: center;
+          border-radius: 24px 24px 24px 4px;
+          border-color: rgba(52, 56, 57, 1);
+          border-style: solid;
+          border-width: 1px;
+          background-color: var(--Dark-Level-2, #232627);
+          display: flex;
+          margin-top: 32px;
+          width: 100%;
+          /*max-width: 1096px; */
+          flex-direction: column;
+          padding: 32px;
+}
+
+.campaigns-card_part2{
+    justify-content: center;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+}
+.card-tus-campanas{
+    align-self: center;
+  border-radius: 24px 24px 24px 4px;
+  border-color: rgba(52, 56, 57, 1);
+  border-style: solid;
+  border-width: 1px;
+  background-color: var(--Dark-Level-2, #232627);
+  display: flex;
+  margin-top: 32px;
+  width: 100%;
+  max-width: 1096px;
+  flex-direction: column;
+  padding: 32px;
+  @media (max-width: 991px) {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+.global-text-header{
+    color: #272640;
+    letter-spacing: -1.44px;
+    margin-top: 24px;
+    width: 100%;
+    font: 700 48px/117% Inter, -apple-system, Roboto, Helvetica,
+      sans-serif;
+}
+
+.MuiTextField-root {
+  --border-color: white;
+  --text-color: white;
+  --label-color: white;
+}
+
+.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color);
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color);
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color);
+}
+
+.MuiInputBase-input {
+  color: var(--text-color);
+}
+
+.MuiInputLabel-root {
+  color: var(--label-color);
+}
