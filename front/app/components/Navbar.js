@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
+import axios from 'axios';
 
 const pages = [
   { name: 'Tus campañas', url: '/UserCampaigns' },
@@ -29,9 +30,26 @@ const settingsUrls2 = [
   { name: 'Reviews', url: '/Reviews' },
   
 ];
+
+
+
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [session, setSession] = React.useState(null);
+  React.useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/session', { withCredentials: true });
+        setSession(response.data.session);
+      } catch (error) {
+        console.error('Error fetching session:', error);
+      }
+    };
+    fetchSession();
+  }, []);
+
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -158,10 +176,14 @@ export default function Navbar() {
           <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center", pt: 4, pb: 4}} >
           <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                
               </IconButton>
             </Tooltip>
-            <Typography>Nombre de usuario</Typography>
+            {session ? (
+                <Typography>{session.username}</Typography>
+              ) : (
+                <Typography>No active session</Typography>
+              )}
             </Stack>
             
             <Menu
@@ -182,7 +204,7 @@ export default function Navbar() {
             >
              {settingsUrls2.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Button href={setting.url} passHref>
+                  <Button href={setting.url} >
                     <Typography textAlign="center">{setting.name}</Typography>
                   </Button>
                 </MenuItem>
@@ -195,3 +217,4 @@ export default function Navbar() {
     </AppBar>
   );
 }
+

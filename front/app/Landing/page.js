@@ -3,14 +3,11 @@ import { Box, Typography, Button, Stack } from "@mui/material";
 import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { useRouter } from 'next/navigation'
-<<<<<<< Updated upstream
-=======
 import CookieManager from '../Cookies/Cookies.js';
 
 
 
   
->>>>>>> Stashed changes
 
 export default function Landing(){
     const router = useRouter()

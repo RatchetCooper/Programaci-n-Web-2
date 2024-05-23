@@ -4,6 +4,10 @@ const mysql = require('mysql2/promise');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const { Description } = require('@mui/icons-material');
+
+
+
 const path = require('path');
 const fs = require('fs');
 
@@ -12,12 +16,14 @@ const upload = multer({ dest: 'uploads/' });
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: 'Maag201200.',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
+
+
 
 const app = express();
 app.use(express.json());
@@ -62,7 +68,7 @@ app.post('/register', upload.single('image'), async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log('Received login request for username:', username);
-
+  
   try {
     const connection = await pool.getConnection();
     console.log('Database connection established');
@@ -79,12 +85,6 @@ app.post('/login', async (req, res) => {
     const user = rows[0];
     console.log('User found in database:', user);
 
-<<<<<<< Updated upstream
-    // Compare hashed password from the database with the provided password
-    
-
-=======
->>>>>>> Stashed changes
     // Successful login
     console.log('Login successful');
     res.status(200).json({ message: 'Login successful', userId: user.idUser });
@@ -95,8 +95,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
-=======
 
 
 //campañas
@@ -153,7 +151,6 @@ const fecha = new Date();
 
 
 
->>>>>>> Stashed changes
 // Serve images from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -161,3 +158,4 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
 });
+
