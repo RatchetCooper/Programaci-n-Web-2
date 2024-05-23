@@ -7,52 +7,91 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
-import axios from 'axios';
+import CookieManager from '../Cookies/Cookies.js';
 
 const pages = [
   { name: 'Tus campañas', url: '/UserCampaigns' },
   { name: 'Buscar campaña', url: '/SearchCampaign' },
   { name: 'Tus personajes', url: '/Characters' }
 ];
-
-const settings = ['Perfil', 'Account', 'Dashboard', 'Logout'];
-const settingUrls = ['/Profile', '/account', '/dashboard', '/logout']; // URLs correspondientes a cada elemento de configuración
-
 const settingsUrls2 = [
   { name: 'Profile', url: '/Profile' },
   { name: 'Reviews', url: '/Reviews' },
-  
 ];
 
+const GetUser = async () => {
+  try {
+    const userId = CookieManager.getCookie("id");
 
+    if (!userId) {
+      console.error('No UserId found in cookies');
+      return null;
+    }
+
+    const requestBody = {
+      UserId: userId
+    };
+
+    const response = await fetch('http://localhost:8000/GetUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const data = await response.json();
+
+    if (!data.User.Imagen || !data.User.ImageData) {
+      throw new Error('Image data is missing');
+    }
+
+    // Convert LongBlob to base64 string
+    const base64Image = `data:${data.User.ImageData};base64,${Buffer.from(data.User.Imagen).toString('base64')}`;
+
+    const user = {
+      ...data,
+      profileImage: base64Image
+    };
+
+    return user;
+  } catch (error) {
+    console.error('Error fetching user:', error.message);
+    return null;
+  }
+};
 
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [session, setSession] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+
   React.useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/session', { withCredentials: true });
-        setSession(response.data.session);
-      } catch (error) {
-        console.error('Error fetching session:', error);
-      }
+    const fetchUser = async () => {
+      const userData = await GetUser();
+
+      setUser(userData);
     };
-    fetchSession();
+
+    fetchUser();
   }, []);
-
-
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+  };
+
+  const handleSetCookie=(event)=>{
+
+    CookieManager.setCookie("IdP",user?.User?.idUser,365)
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -70,7 +109,6 @@ export default function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -118,11 +156,6 @@ export default function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-             {/*  {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))} */}
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <a href={page.url} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -132,7 +165,6 @@ export default function Navbar() {
               ))}
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
@@ -152,15 +184,6 @@ export default function Navbar() {
             MISSIONBOARD
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
             {pages.map((page) => (
               <Button
                 key={page.name}
@@ -173,19 +196,27 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-          <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center", pt: 4, pb: 4}} >
-          <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                
-              </IconButton>
-            </Tooltip>
-            {session ? (
-                <Typography>{session.username}</Typography>
+            <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", pt: 4, pb: 4 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {user && user.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      style={{ width: 40, height: 40, borderRadius: '50%' }}
+                    />
+                  ) : (
+                    <Typography>No active session</Typography>
+                  )}
+                </IconButton>
+              </Tooltip>
+              {user ? (
+                <Typography>{user.User.Nombre}</Typography>
               ) : (
                 <Typography>No active session</Typography>
               )}
             </Stack>
-            
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -202,14 +233,17 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-             {settingsUrls2.map((setting) => (
+              {settingsUrls2.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Button href={setting.url} >
-                    <Typography textAlign="center">{setting.name}</Typography>
-                  </Button>
+                  <Button onClick={() => {
+  handleSetCookie();
+  console.log("ItHappened");
+  window.location.href = setting.url;
+}}>
+  <Typography textAlign="center">{setting.name}</Typography>
+</Button>
                 </MenuItem>
               ))}
-             
             </Menu>
           </Box>
         </Toolbar>
@@ -217,4 +251,3 @@ export default function Navbar() {
     </AppBar>
   );
 }
-

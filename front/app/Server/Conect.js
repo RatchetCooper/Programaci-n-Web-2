@@ -4,9 +4,6 @@ const mysql = require('mysql2/promise');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const { Description } = require('@mui/icons-material');
-
-
 
 const path = require('path');
 const fs = require('fs');
@@ -40,12 +37,13 @@ app.post('/register', upload.single('image'), async (req, res) => {
     const connection = await pool.getConnection();
     console.log('Database connection established');
 
-    const imageData = fs.readFileSync(image.path);
-    console.log('Received registration request for image:', image);
+    // Read the image data and store it as a buffer
+    const imageBuffer = fs.readFileSync(image.path);
 
+    // Store the image data and its type in the database
     const [result] = await connection.execute(
-      'INSERT INTO User (email, contra, nombre, imagen) VALUES (?, ?, ?, ?)',
-      [username, password, fullName, imageData]
+      'INSERT INTO User (email, contra, nombre, imagen, imageData) VALUES (?, ?, ?, ?, ?)',
+      [username, password, fullName, imageBuffer, image.mimetype]
     );
     connection.release();
 
@@ -62,8 +60,63 @@ app.post('/register', upload.single('image'), async (req, res) => {
   }
 });
 
-// Endpoint for user login
-// Endpoint for user login
+app.post('/updateUser', upload.single('image'), async (req, res) => {
+
+  const { username, password, fullName, Id } = req.body;
+  const image = req.file;
+
+  console.log('Received update request for user:', Id);
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    let query = 'UPDATE User SET ';
+    const params = [];
+
+    if (username) {
+      query += 'email = ?, ';
+      params.push(username);
+    }
+    if (password) {
+      query += 'contra = ?, ';
+      params.push(password);
+    }
+    if (fullName) {
+      query += 'nombre = ?, ';
+      params.push(fullName);
+    }
+    if (image) {
+      const imageBuffer = fs.readFileSync(image.path);
+      query += 'imagen = ?, imageData = ?, ';
+      params.push(imageBuffer, image.mimetype);
+    }
+
+    if (params.length === 0) {
+      console.log('No valid fields to update');
+      return res.status(400).json({ message: 'No valid fields to update' });
+    }
+
+    query = query.slice(0, -2); // Remove the trailing comma and space
+    query += ' WHERE idUser = ?';
+    params.push(Id);
+
+    const [result] = await connection.execute(query, params);
+    connection.release();
+
+    if (result.affectedRows === 0) {
+      console.log('User update failed');
+      return res.status(500).json({ message: 'User update failed' });
+    }
+
+    console.log('User updated successfully');
+    res.status(200).json({ message: 'User updated successfully' });
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Endpoint for user login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -88,6 +141,38 @@ app.post('/login', async (req, res) => {
     // Successful login
     console.log('Login successful');
     res.status(200).json({ message: 'Login successful', userId: user.idUser });
+ 
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+app.post('/GetUser', async (req, res) => {
+  const { UserId } = req.body;
+  console.log('Received login request for username:', UserId);
+  
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get user details based on username and password
+    const [rows] = await connection.execute('SELECT * FROM User WHERE idUser = ?', [UserId]);
+    connection.release();
+
+    if (rows.length === 0) {
+      console.log('User not found in database');
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const user = rows[0];
+    console.log('User found in database:', user);
+
+    // Successful login
+    console.log('Login successful');
+    res.status(200).json({ message: 'Login successful', User: user});
  
   } catch (error) {
     console.error('Error executing query:', error.message);

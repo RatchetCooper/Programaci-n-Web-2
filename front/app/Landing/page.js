@@ -12,7 +12,7 @@ import CookieManager from '../Cookies/Cookies.js';
 export default function Landing(){
     const router = useRouter()
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
-    console.log(CookieManager.getAllCokies());
+
     const cambiarPagina = () => {
         //base de datos
         router.push('/CreateCampaigns', { scroll: false })//Poner el URL  de crear personaje
