@@ -144,7 +144,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`campaña` (
   `idCampaña` INT NOT NULL AUTO_INCREMENT,
   `Titulo` VARCHAR(100) NOT NULL,
-  `Descripcion` VARCHAR(250) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   `MaxPlayers` INT NOT NULL,
   `CurrentPlayers` INT NOT NULL,
   `Estrellas` INT NULL DEFAULT NULL,
@@ -194,7 +194,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`clase` (
   `idClase` INT NOT NULL,
   `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(250) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   `Vida` INT NOT NULL,
   PRIMARY KEY (`idClase`))
 ENGINE = InnoDB
@@ -207,7 +207,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`feat` (
   `idFeat` INT NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` VARCHAR(250) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   PRIMARY KEY (`idFeat`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
@@ -240,7 +240,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`raza` (
   `idRaza` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(50) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   PRIMARY KEY (`idRaza`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
@@ -252,7 +252,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`trasfondo` (
   `idTrasfondo` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(250) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   PRIMARY KEY (`idTrasfondo`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
@@ -337,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`hechizo` (
   `idHechizo` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Nivel` INT NOT NULL,
-  `Descripcion` VARCHAR(500) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   `Stat_idStat` INT NOT NULL,
   `Ataque_idAtaque` INT NOT NULL,
   PRIMARY KEY (`idHechizo`),
@@ -396,7 +396,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `misionboard`.`objeto` (
   `idObjeto` INT NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` VARCHAR(250) NOT NULL,
+  `Descripcion` VARCHAR(3000) NOT NULL,
   `Ataque_idAtaque` INT NOT NULL,
   PRIMARY KEY (`idObjeto`),
   INDEX `fk_Objeto_Ataque1_idx` (`Ataque_idAtaque` ASC) ,
@@ -471,7 +471,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `misionboard`.`review` (
   `idReview` INT NOT NULL AUTO_INCREMENT,
-  `Comentario` VARCHAR(250) NULL DEFAULT NULL,
+  `Comentario` VARCHAR(3000) NULL DEFAULT NULL,
   `Calificacion` INT NULL DEFAULT NULL,
   `ReviwerId` INT NOT NULL,
   `Campaña_idCampaña` INT NOT NULL,
@@ -545,8 +545,6 @@ CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY D
 -- -----------------------------------------------------
 -- View `misionboard`.`campaignusersinfo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `misionboard`.`campaignusersinfo`;
-USE `misionboard`;
 CREATE VIEW `campaignUserInfo` AS 
 SELECT 
   `campaña`.`Titulo` AS `campaign_title`, 
@@ -569,7 +567,7 @@ FROM
   JOIN `misionboard`.`clase` ON `seleccion`.`Clase_idClase` = `clase`.`idClase` 
   JOIN `misionboard`.`raza` ON `seleccion`.`Raza_idRaza` = `raza`.`idRaza` 
   JOIN `misionboard`.`trasfondo` ON `seleccion`.`Trasfondo_idTrasfondo` = `trasfondo`.`idTrasfondo`
-  JOIN `misionboard`.`user` AS `host_user` ON `campaña`.`Host_idUser` = `host_user`.`idUser`;
+  JOIN `misionboard`.`user` AS `host_user` ON `campaña`.`Host` = `host_user`.`idUser`;
 
 -- -----------------------------------------------------
 -- View `misionboard`.`otheruserreviews`
