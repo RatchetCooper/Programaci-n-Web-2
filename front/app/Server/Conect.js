@@ -113,15 +113,15 @@ app.post('/getUserFichas', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
 app.post('/createFicha', async (req, res) => {
   const { userId } = req.body;
 
   console.log('Received request to create Ficha for user ID:', userId);
 
+  let connection;
+
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
     console.log('Database connection established');
 
     // Start a transaction
@@ -132,21 +132,25 @@ app.post('/createFicha', async (req, res) => {
       'INSERT INTO ficha (Vida, VidaMac, VidaTemp, Defensa, Velocidad, Nivel, Owner) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [0, 0, 0, 10, 30, 1, userId]
     );
-
+console.log("Ficha");
     const fichaId = fichaResult.insertId;
 
-    // Insert default stats into FichaStats
-    const statIds = [7, 8, 9, 10, 11, 12]; // Replace with actual stat IDs
-    const fichaStatsQueries = statIds.map(statId =>
-      connection.execute('INSERT INTO fichastats (Numero, Ficha_idFicha, Stat_idStat) VALUES (?, ?, ?)', [10, fichaId, statId])
-    );
+    // Query the first row from the clase table
+    const [claseRow] = await connection.execute('SELECT idClase, Nombre, Descripcion, Vida FROM clase LIMIT 1');
+    const claseId = claseRow[0].idClase;
 
-    await Promise.all(fichaStatsQueries);
+    // Query the first row from the raza table
+    const [razaRow] = await connection.execute('SELECT idRaza, Nombre, Descripcion FROM raza LIMIT 1');
+    const razaId = razaRow[0].idRaza;
+
+    // Query the first row from the trasfondo table
+    const [trasfondoRow] = await connection.execute('SELECT idTrasfondo, Nombre, Descripcion FROM trasfondo LIMIT 1');
+    const trasfondoId = trasfondoRow[0].idTrasfondo;
 
     // Insert into Seleccion with default values
     await connection.execute(
       'INSERT INTO seleccion (Clase_idClase, Raza_idRaza, Trasfondo_idTrasfondo, Ficha_idFicha, IdSeleccion) VALUES (?, ?, ?, ?, ?)',
-      [1, 1, 1, fichaId, null] // Assuming IdSeleccion is auto-incremented
+      [claseId, razaId, trasfondoId, fichaId, null] // Assuming IdSeleccion is auto-incremented
     );
 
     // Commit the transaction
@@ -161,6 +165,7 @@ app.post('/createFicha', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 app.post('/updateUser', upload.single('image'), async (req, res) => {
 
