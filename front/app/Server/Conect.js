@@ -60,6 +60,108 @@ app.post('/register', upload.single('image'), async (req, res) => {
   }
 });
 
+app.post('/deleteFicha', async (req, res) => {
+  const { fichaId } = req.body;
+  console.log('Received request to delete Ficha with ID:', fichaId);
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Start a transaction
+    await connection.beginTransaction();
+
+    // Delete the Ficha from the database
+    const [result] = await connection.execute('DELETE FROM ficha WHERE idFicha = ?', [fichaId]);
+
+    // Commit the transaction
+    await connection.commit();
+    connection.release();
+
+    if (result.affectedRows === 0) {
+      console.log('Ficha deletion failed');
+      return res.status(500).json({ message: 'Ficha deletion failed' });
+    }
+
+    console.log('Ficha deleted successfully');
+    res.status(200).json({ message: 'Ficha deleted successfully' });
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    if (connection) await connection.rollback();
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.post('/getUserFichas', async (req, res) => {
+  const { userId } = req.body;
+  console.log('Received request to get fichas for user ID:', userId);
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get all fichas for the user
+    const [fichas] = await connection.execute('SELECT * FROM ficha WHERE Owner = ?', [userId]);
+    connection.release();
+
+    console.log('Fichas found in database:', fichas);
+
+    res.status(200).json({ message: 'Fichas retrieved successfully', fichas });
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.post('/createFicha', async (req, res) => {
+  const { userId } = req.body;
+
+  console.log('Received request to create Ficha for user ID:', userId);
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Start a transaction
+    await connection.beginTransaction();
+
+    // Insert into Ficha
+    const [fichaResult] = await connection.execute(
+      'INSERT INTO ficha (Vida, VidaMac, VidaTemp, Defensa, Velocidad, Nivel, Owner) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [0, 0, 0, 10, 30, 1, userId]
+    );
+
+    const fichaId = fichaResult.insertId;
+
+    // Insert default stats into FichaStats
+    const statIds = [7, 8, 9, 10, 11, 12]; // Replace with actual stat IDs
+    const fichaStatsQueries = statIds.map(statId =>
+      connection.execute('INSERT INTO fichastats (Numero, Ficha_idFicha, Stat_idStat) VALUES (?, ?, ?)', [10, fichaId, statId])
+    );
+
+    await Promise.all(fichaStatsQueries);
+
+    // Insert into Seleccion with default values
+    await connection.execute(
+      'INSERT INTO seleccion (Clase_idClase, Raza_idRaza, Trasfondo_idTrasfondo, Ficha_idFicha, IdSeleccion) VALUES (?, ?, ?, ?, ?)',
+      [1, 1, 1, fichaId, null] // Assuming IdSeleccion is auto-incremented
+    );
+
+    // Commit the transaction
+    await connection.commit();
+    connection.release();
+
+    console.log('Ficha created successfully');
+    res.status(201).json({ message: 'Ficha created successfully', fichaId });
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    if (connection) await connection.rollback();
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.post('/updateUser', upload.single('image'), async (req, res) => {
 
   const { username, password, fullName, Id } = req.body;

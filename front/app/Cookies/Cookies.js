@@ -6,7 +6,7 @@ class CookieManager {
             let expires = "expires=" + date.toUTCString();
             document.cookie = `${name}=${value}; ${expires}; path=/`;
         }
-        console.log(name);
+        console.log(value);
     }
 
     static deleteCookie(name) {

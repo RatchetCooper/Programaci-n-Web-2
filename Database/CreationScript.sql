@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`dados` (
   `NumeroCaras` INT NOT NULL,
   PRIMARY KEY (`idDados`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`stat` (
   `Codigo` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idStat`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`tipodaño` (
   `Nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTipoDaño`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 14
+AUTO_INCREMENT = 27
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`ataque` (
   `TipoDaño_idTipoDaño` INT NOT NULL,
   `Stat_idStat` INT NOT NULL,
   PRIMARY KEY (`idAtaque`),
-  INDEX `fk_Ataque_Dados1_idx` (`Dados_idDados` ASC) ,
-  INDEX `fk_Ataque_TipoDaño1_idx` (`TipoDaño_idTipoDaño` ASC) ,
-  INDEX `fk_Ataque_Stat1_idx` (`Stat_idStat` ASC) ,
+  INDEX `fk_Ataque_Dados1_idx` (`Dados_idDados` ASC) VISIBLE,
+  INDEX `fk_Ataque_TipoDaño1_idx` (`TipoDaño_idTipoDaño` ASC) VISIBLE,
+  INDEX `fk_Ataque_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
   CONSTRAINT `fk_Ataque_Dados1`
     FOREIGN KEY (`Dados_idDados`)
     REFERENCES `misionboard`.`dados` (`idDados`),
@@ -81,6 +81,25 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`ataque` (
     FOREIGN KEY (`TipoDaño_idTipoDaño`)
     REFERENCES `misionboard`.`tipodaño` (`idTipoDaño`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `misionboard`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `misionboard`.`user` (
+  `idUser` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Contra` VARCHAR(45) NOT NULL,
+  `Email` VARCHAR(250) NOT NULL,
+  `Imagen` LONGBLOB NULL DEFAULT NULL,
+  `ImageData` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`idUser`),
+  UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE,
+  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -95,9 +114,15 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`ficha` (
   `Defensa` INT NOT NULL DEFAULT '10',
   `Velocidad` INT NOT NULL DEFAULT '30',
   `Nivel` INT NOT NULL DEFAULT '1',
-  PRIMARY KEY (`idFicha`))
+  `Owner` INT NOT NULL,
+  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`idFicha`),
+  INDEX `IdUser_idx` (`Owner` ASC) VISIBLE,
+  CONSTRAINT `IdUser`
+    FOREIGN KEY (`Owner`)
+    REFERENCES `misionboard`.`user` (`idUser`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -109,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`ataqueficha` (
   `Ficha_idFicha` INT NOT NULL,
   `Ataque_idAtaque` INT NOT NULL,
   PRIMARY KEY (`idAtaqueFicha`),
-  INDEX `fk_AtaqueFicha_Ficha1_idx` (`Ficha_idFicha` ASC) ,
-  INDEX `fk_AtaqueFicha_Ataque1_idx` (`Ataque_idAtaque` ASC) ,
+  INDEX `fk_AtaqueFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
+  INDEX `fk_AtaqueFicha_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
   CONSTRAINT `fk_AtaqueFicha_Ataque1`
     FOREIGN KEY (`Ataque_idAtaque`)
     REFERENCES `misionboard`.`ataque` (`idAtaque`),
@@ -122,19 +147,16 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `misionboard`.`user`
+-- Table `misionboard`.`campaignusersinfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`user` (
-  `idUser` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Contra` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(250) NOT NULL,
-  `Imagen` LONGBLOB NULL DEFAULT NULL,
-  PRIMARY KEY (`idUser`),
-  UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) ,
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) )
+CREATE TABLE IF NOT EXISTS `misionboard`.`campaignusersinfo` (
+  `idCampañaUserFicha` INT NULL DEFAULT NULL,
+  `Host` INT NULL DEFAULT NULL,
+  `idUser` INT NULL DEFAULT NULL,
+  `Nombre` INT NULL DEFAULT NULL,
+  `Email` INT NULL DEFAULT NULL,
+  `Imagen` INT NULL DEFAULT NULL)
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -154,8 +176,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`campaña` (
   `Imagen` LONGBLOB NULL DEFAULT NULL,
   `Host` INT NOT NULL,
   PRIMARY KEY (`idCampaña`),
-  UNIQUE INDEX `idCampaña_UNIQUE` (`idCampaña` ASC) ,
-  INDEX `Host_idx` (`Host` ASC) ,
+  UNIQUE INDEX `idCampaña_UNIQUE` (`idCampaña` ASC) VISIBLE,
+  INDEX `Host_idx` (`Host` ASC) VISIBLE,
   CONSTRAINT `Host`
     FOREIGN KEY (`Host`)
     REFERENCES `misionboard`.`user` (`idUser`))
@@ -172,9 +194,9 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`campañauserficha` (
   `User_idUser` INT NOT NULL,
   `Ficha_idFicha` INT NOT NULL,
   PRIMARY KEY (`idCampañaUserFicha`),
-  INDEX `fk_CampañaUserFicha_Campaña1_idx` (`Campaña_idCampaña` ASC) ,
-  INDEX `fk_CampañaUserFicha_User1_idx` (`User_idUser` ASC) ,
-  INDEX `fk_CampañaUserFicha_Ficha1_idx` (`Ficha_idFicha` ASC) ,
+  INDEX `fk_CampañaUserFicha_Campaña1_idx` (`Campaña_idCampaña` ASC) VISIBLE,
+  INDEX `fk_CampañaUserFicha_User1_idx` (`User_idUser` ASC) VISIBLE,
+  INDEX `fk_CampañaUserFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
   CONSTRAINT `fk_CampañaUserFicha_Campaña1`
     FOREIGN KEY (`Campaña_idCampaña`)
     REFERENCES `misionboard`.`campaña` (`idCampaña`),
@@ -222,8 +244,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`featclase` (
   `Clase_idClase` INT NOT NULL,
   `Feat_idFeat` INT NOT NULL,
   PRIMARY KEY (`idFeatClase`),
-  INDEX `fk_FeatClase_Clase1_idx` (`Clase_idClase` ASC) ,
-  INDEX `fk_FeatClase_Feat1_idx` (`Feat_idFeat` ASC) ,
+  INDEX `fk_FeatClase_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
+  INDEX `fk_FeatClase_Feat1_idx` (`Feat_idFeat` ASC) VISIBLE,
   CONSTRAINT `fk_FeatClase_Clase1`
     FOREIGN KEY (`Clase_idClase`)
     REFERENCES `misionboard`.`clase` (`idClase`),
@@ -243,6 +265,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`raza` (
   `Descripcion` VARCHAR(3000) NOT NULL,
   PRIMARY KEY (`idRaza`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -255,6 +278,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`trasfondo` (
   `Descripcion` VARCHAR(3000) NOT NULL,
   PRIMARY KEY (`idTrasfondo`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -268,10 +292,10 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`seleccion` (
   `Ficha_idFicha` INT NOT NULL,
   `IdSeleccion` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`IdSeleccion`),
-  INDEX `fk_Seleccion_Clase1_idx` (`Clase_idClase` ASC) ,
-  INDEX `fk_Seleccion_Raza1_idx` (`Raza_idRaza` ASC) ,
-  INDEX `fk_Seleccion_Trasfondo1_idx` (`Trasfondo_idTrasfondo` ASC) ,
-  INDEX `fk_Seleccion_Ficha1_idx` (`Ficha_idFicha` ASC) ,
+  INDEX `fk_Seleccion_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
+  INDEX `fk_Seleccion_Raza1_idx` (`Raza_idRaza` ASC) VISIBLE,
+  INDEX `fk_Seleccion_Trasfondo1_idx` (`Trasfondo_idTrasfondo` ASC) VISIBLE,
+  INDEX `fk_Seleccion_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
   CONSTRAINT `fk_Seleccion_Clase1`
     FOREIGN KEY (`Clase_idClase`)
     REFERENCES `misionboard`.`clase` (`idClase`),
@@ -285,6 +309,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`seleccion` (
     FOREIGN KEY (`Trasfondo_idTrasfondo`)
     REFERENCES `misionboard`.`trasfondo` (`idTrasfondo`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -297,8 +322,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`featselect` (
   `Feat_idFeat` INT NOT NULL,
   `Seleccion_IdSeleccion` INT NOT NULL,
   PRIMARY KEY (`idFeatSelect`),
-  INDEX `fk_FeatSelect_Feat1_idx` (`Feat_idFeat` ASC) ,
-  INDEX `fk_FeatSelect_Seleccion1_idx` (`Seleccion_IdSeleccion` ASC) ,
+  INDEX `fk_FeatSelect_Feat1_idx` (`Feat_idFeat` ASC) VISIBLE,
+  INDEX `fk_FeatSelect_Seleccion1_idx` (`Seleccion_IdSeleccion` ASC) VISIBLE,
   CONSTRAINT `fk_FeatSelect_Feat1`
     FOREIGN KEY (`Feat_idFeat`)
     REFERENCES `misionboard`.`feat` (`idFeat`),
@@ -318,8 +343,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`fichastats` (
   `Ficha_idFicha` INT NOT NULL,
   `Stat_idStat` INT NOT NULL,
   PRIMARY KEY (`idFichaStats`),
-  INDEX `fk_FichaStats_Ficha1_idx` (`Ficha_idFicha` ASC) ,
-  INDEX `fk_FichaStats_Stat1_idx` (`Stat_idStat` ASC) ,
+  INDEX `fk_FichaStats_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
+  INDEX `fk_FichaStats_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
   CONSTRAINT `fk_FichaStats_Ficha1`
     FOREIGN KEY (`Ficha_idFicha`)
     REFERENCES `misionboard`.`ficha` (`idFicha`),
@@ -327,6 +352,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`fichastats` (
     FOREIGN KEY (`Stat_idStat`)
     REFERENCES `misionboard`.`stat` (`idStat`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 39
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -341,8 +367,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`hechizo` (
   `Stat_idStat` INT NOT NULL,
   `Ataque_idAtaque` INT NOT NULL,
   PRIMARY KEY (`idHechizo`),
-  INDEX `fk_Hechizo_Stat1_idx` (`Stat_idStat` ASC) ,
-  INDEX `fk_Hechizo_Ataque1_idx` (`Ataque_idAtaque` ASC) ,
+  INDEX `fk_Hechizo_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
+  INDEX `fk_Hechizo_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
   CONSTRAINT `fk_Hechizo_Ataque1`
     FOREIGN KEY (`Ataque_idAtaque`)
     REFERENCES `misionboard`.`ataque` (`idAtaque`),
@@ -350,6 +376,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`hechizo` (
     FOREIGN KEY (`Stat_idStat`)
     REFERENCES `misionboard`.`stat` (`idStat`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -361,8 +388,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`hechizoficha` (
   `Hechizo_idHechizo` INT NOT NULL,
   `Ficha_idFicha` INT NOT NULL,
   PRIMARY KEY (`idHechizoFicha`),
-  INDEX `fk_HechizoFicha_Hechizo1_idx` (`Hechizo_idHechizo` ASC) ,
-  INDEX `fk_HechizoFicha_Ficha1_idx` (`Ficha_idFicha` ASC) ,
+  INDEX `fk_HechizoFicha_Hechizo1_idx` (`Hechizo_idHechizo` ASC) VISIBLE,
+  INDEX `fk_HechizoFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
   CONSTRAINT `fk_HechizoFicha_Ficha1`
     FOREIGN KEY (`Ficha_idFicha`)
     REFERENCES `misionboard`.`ficha` (`idFicha`),
@@ -382,7 +409,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`imagen` (
   `Imagen` BLOB NOT NULL,
   `Ficha_idFicha` INT NOT NULL,
   PRIMARY KEY (`idImagen`),
-  INDEX `fk_Imagen_Ficha1_idx` (`Ficha_idFicha` ASC) ,
+  INDEX `fk_Imagen_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
   CONSTRAINT `fk_Imagen_Ficha1`
     FOREIGN KEY (`Ficha_idFicha`)
     REFERENCES `misionboard`.`ficha` (`idFicha`))
@@ -399,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`objeto` (
   `Descripcion` VARCHAR(3000) NOT NULL,
   `Ataque_idAtaque` INT NOT NULL,
   PRIMARY KEY (`idObjeto`),
-  INDEX `fk_Objeto_Ataque1_idx` (`Ataque_idAtaque` ASC) ,
+  INDEX `fk_Objeto_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
   CONSTRAINT `fk_Objeto_Ataque1`
     FOREIGN KEY (`Ataque_idAtaque`)
     REFERENCES `misionboard`.`ataque` (`idAtaque`))
@@ -416,8 +443,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`inventario` (
   `Ficha_idFicha` INT NOT NULL,
   `Objeto_idObjeto` INT NOT NULL,
   PRIMARY KEY (`idInventario`),
-  INDEX `fk_Inventario_Ficha1_idx` (`Ficha_idFicha` ASC) ,
-  INDEX `fk_Inventario_Objeto1_idx` (`Objeto_idObjeto` ASC) ,
+  INDEX `fk_Inventario_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
+  INDEX `fk_Inventario_Objeto1_idx` (`Objeto_idObjeto` ASC) VISIBLE,
   CONSTRAINT `fk_Inventario_Ficha1`
     FOREIGN KEY (`Ficha_idFicha`)
     REFERENCES `misionboard`.`ficha` (`idFicha`),
@@ -435,13 +462,14 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`proficiencias` (
   `idProficiencias` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Stat_idStat` INT NOT NULL,
+  `Salvacion` TINYINT NULL DEFAULT NULL,
   PRIMARY KEY (`idProficiencias`),
-  INDEX `fk_Proficiencias_Stat1_idx` (`Stat_idStat` ASC) ,
+  INDEX `fk_Proficiencias_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
   CONSTRAINT `fk_Proficiencias_Stat1`
     FOREIGN KEY (`Stat_idStat`)
     REFERENCES `misionboard`.`stat` (`idStat`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 19
+AUTO_INCREMENT = 45
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -454,8 +482,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`proficienciaficha` (
   `Proficiencias_idProficiencias` INT NOT NULL,
   `Ficha_idFicha` INT NOT NULL,
   PRIMARY KEY (`idProficienciaFicha`),
-  INDEX `fk_ProficienciaFicha_Proficiencias1_idx` (`Proficiencias_idProficiencias` ASC) ,
-  INDEX `fk_ProficienciaFicha_Ficha1_idx` (`Ficha_idFicha` ASC) ,
+  INDEX `fk_ProficienciaFicha_Proficiencias1_idx` (`Proficiencias_idProficiencias` ASC) VISIBLE,
+  INDEX `fk_ProficienciaFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
   CONSTRAINT `fk_ProficienciaFicha_Ficha1`
     FOREIGN KEY (`Ficha_idFicha`)
     REFERENCES `misionboard`.`ficha` (`idFicha`),
@@ -477,9 +505,9 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`review` (
   `Campaña_idCampaña` INT NOT NULL,
   `ReviewedId` INT NOT NULL,
   PRIMARY KEY (`idReview`),
-  INDEX `fk_Review_User_idx` (`ReviwerId` ASC) ,
-  INDEX `fk_Review_Campaña1_idx` (`Campaña_idCampaña` ASC) ,
-  INDEX `fk_Review_User1_idx` (`ReviewedId` ASC) ,
+  INDEX `fk_Review_User_idx` (`ReviwerId` ASC) VISIBLE,
+  INDEX `fk_Review_Campaña1_idx` (`Campaña_idCampaña` ASC) VISIBLE,
+  INDEX `fk_Review_User1_idx` (`ReviewedId` ASC) VISIBLE,
   CONSTRAINT `fk_Review_Campaña1`
     FOREIGN KEY (`Campaña_idCampaña`)
     REFERENCES `misionboard`.`campaña` (`idCampaña`),
@@ -502,8 +530,8 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`subclase` (
   `Clase_idClase` INT NOT NULL,
   `Clase_idClase1` INT NOT NULL,
   PRIMARY KEY (`idSubclase`),
-  INDEX `fk_Subclase_Clase1_idx` (`Clase_idClase` ASC) ,
-  INDEX `fk_Subclase_Clase2_idx` (`Clase_idClase1` ASC) ,
+  INDEX `fk_Subclase_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
+  INDEX `fk_Subclase_Clase2_idx` (`Clase_idClase1` ASC) VISIBLE,
   CONSTRAINT `fk_Subclase_Clase1`
     FOREIGN KEY (`Clase_idClase`)
     REFERENCES `misionboard`.`clase` (`idClase`),
@@ -521,9 +549,9 @@ USE `misionboard` ;
 CREATE TABLE IF NOT EXISTS `misionboard`.`attackdetails` (`idAtaque` INT, `AttackName` INT, `AimMod` INT, `DmgMod` INT, `Porficiencia` INT, `NDados` INT, `DiceType` INT, `DamageType` INT, `StatName` INT);
 
 -- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`campaignusersinfo`
+-- Placeholder table for view `misionboard`.`campaignuserinfo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campaignusersinfo` (`idCampañaUserFicha` INT, `Host` INT, `idUser` INT, `Nombre` INT, `Email` INT, `Imagen` INT);
+CREATE TABLE IF NOT EXISTS `misionboard`.`campaignuserinfo` (`campaign_title` INT, `user_name` INT, `user_email` INT, `character_life` INT, `character_defense` INT, `character_speed` INT, `class_name` INT, `race_name` INT, `background_name` INT, `host_name` INT, `host_email` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `misionboard`.`otheruserreviews`
@@ -543,31 +571,11 @@ USE `misionboard`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`attackdetails` AS select `a`.`idAtaque` AS `idAtaque`,`a`.`Nombre` AS `AttackName`,`a`.`AimMod` AS `AimMod`,`a`.`DmgMod` AS `DmgMod`,`a`.`Porficiencia` AS `Porficiencia`,`a`.`NDados` AS `NDados`,`d`.`NumeroCaras` AS `DiceType`,`td`.`Nombre` AS `DamageType`,`s`.`Nombre` AS `StatName` from (((`misionboard`.`ataque` `a` join `misionboard`.`dados` `d` on((`a`.`Dados_idDados` = `d`.`idDados`))) join `misionboard`.`tipodaño` `td` on((`a`.`TipoDaño_idTipoDaño` = `td`.`idTipoDaño`))) join `misionboard`.`stat` `s` on((`a`.`Stat_idStat` = `s`.`idStat`)));
 
 -- -----------------------------------------------------
--- View `misionboard`.`campaignusersinfo`
+-- View `misionboard`.`campaignuserinfo`
 -- -----------------------------------------------------
-CREATE VIEW `campaignUserInfo` AS 
-SELECT 
-  `campaña`.`Titulo` AS `campaign_title`, 
-  `user`.`Nombre` AS `user_name`, 
-  `user`.`Email` AS `user_email`, 
-  `ficha`.`Vida` AS `character_life`, 
-  `ficha`.`Defensa` AS `character_defense`, 
-  `ficha`.`Velocidad` AS `character_speed`, 
-  `clase`.`Nombre` AS `class_name`, 
-  `raza`.`Nombre` AS `race_name`, 
-  `trasfondo`.`Nombre` AS `background_name`,
-  `host_user`.`Nombre` AS `host_name`,
-  `host_user`.`Email` AS `host_email`
-FROM 
-  `misionboard`.`campaña` 
-  JOIN `misionboard`.`campañauserficha` ON `campaña`.`idCampaña` = `campañauserficha`.`Campaña_idCampaña` 
-  JOIN `misionboard`.`user` ON `campañauserficha`.`User_idUser` = `user`.`idUser` 
-  JOIN `misionboard`.`ficha` ON `campañauserficha`.`Ficha_idFicha` = `ficha`.`idFicha` 
-  JOIN `misionboard`.`seleccion` ON `ficha`.`idFicha` = `seleccion`.`Ficha_idFicha` 
-  JOIN `misionboard`.`clase` ON `seleccion`.`Clase_idClase` = `clase`.`idClase` 
-  JOIN `misionboard`.`raza` ON `seleccion`.`Raza_idRaza` = `raza`.`idRaza` 
-  JOIN `misionboard`.`trasfondo` ON `seleccion`.`Trasfondo_idTrasfondo` = `trasfondo`.`idTrasfondo`
-  JOIN `misionboard`.`user` AS `host_user` ON `campaña`.`Host` = `host_user`.`idUser`;
+DROP TABLE IF EXISTS `misionboard`.`campaignuserinfo`;
+USE `misionboard`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`campaignuserinfo` AS select `misionboard`.`campaña`.`Titulo` AS `campaign_title`,`misionboard`.`user`.`Nombre` AS `user_name`,`misionboard`.`user`.`Email` AS `user_email`,`misionboard`.`ficha`.`Vida` AS `character_life`,`misionboard`.`ficha`.`Defensa` AS `character_defense`,`misionboard`.`ficha`.`Velocidad` AS `character_speed`,`misionboard`.`clase`.`Nombre` AS `class_name`,`misionboard`.`raza`.`Nombre` AS `race_name`,`misionboard`.`trasfondo`.`Nombre` AS `background_name`,`host_user`.`Nombre` AS `host_name`,`host_user`.`Email` AS `host_email` from ((((((((`misionboard`.`campaña` join `misionboard`.`campañauserficha` on((`misionboard`.`campaña`.`idCampaña` = `misionboard`.`campañauserficha`.`Campaña_idCampaña`))) join `misionboard`.`user` on((`misionboard`.`campañauserficha`.`User_idUser` = `misionboard`.`user`.`idUser`))) join `misionboard`.`ficha` on((`misionboard`.`campañauserficha`.`Ficha_idFicha` = `misionboard`.`ficha`.`idFicha`))) join `misionboard`.`seleccion` on((`misionboard`.`ficha`.`idFicha` = `misionboard`.`seleccion`.`Ficha_idFicha`))) join `misionboard`.`clase` on((`misionboard`.`seleccion`.`Clase_idClase` = `misionboard`.`clase`.`idClase`))) join `misionboard`.`raza` on((`misionboard`.`seleccion`.`Raza_idRaza` = `misionboard`.`raza`.`idRaza`))) join `misionboard`.`trasfondo` on((`misionboard`.`seleccion`.`Trasfondo_idTrasfondo` = `misionboard`.`trasfondo`.`idTrasfondo`))) join `misionboard`.`user` `host_user` on((`misionboard`.`campaña`.`Host` = `host_user`.`idUser`)));
 
 -- -----------------------------------------------------
 -- View `misionboard`.`otheruserreviews`
@@ -582,7 +590,6 @@ CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY D
 DROP TABLE IF EXISTS `misionboard`.`userreviews`;
 USE `misionboard`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`userreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`misionboard`.`review` `r` join `misionboard`.`user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `misionboard`.`user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`)));
-
 
 
 INSERT INTO Stat (Nombre, Codigo) VALUES ('Strength', 'STR');
@@ -667,6 +674,7 @@ insert into trasfondo(Nombre,Descripcion) values ("Atleta","<p><strong>proficien
 insert into ataque(nombre,aimmod,dmgmod,porficiencia,NDados,Dados_IdDados,TipoDaño_IdTipoDaño,Stat_idStat)values("Espada Larga",0,0,true,1,1,2,1),("Magia",0,0,true,3,2,3,4);
 insert into hechizo(Nombre,Nivel,Descripcion,Stat_idStat,Ataque_idAtaque)values("Torcion Testicular!!!",2,"EL LEGENDARIO ATAQUE PROHIBIDO causa Xcantidad de daño",1,3);
 insert into objeto (idObjeto,Nombre,Descripcion,Ataque_idAtaque)values(1,"Espada larga","Un arma de 1 mano",1);
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

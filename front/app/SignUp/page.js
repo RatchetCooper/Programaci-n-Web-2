@@ -49,7 +49,7 @@ export default function SignUp() {
       console.log(data);
       if (response.ok) {
         // Redirect to the landing page on successful registration
-        window.location.href = '/Landing'; // Redirect using window.location
+        window.location.href = '/Login'; // Redirect using window.location
       } else {
         // Handle error messages
         console.error(data.message);
