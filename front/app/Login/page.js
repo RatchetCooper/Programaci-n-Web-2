@@ -27,7 +27,7 @@ export default function Login() {
       console.log(data);
       if (response.ok) {
         // Redirect to the landing page on successful login
-        window.location.href = '/Landing?data='+ JSON.stringify(data); // Redirect using window.location
+       // window.location.href = '/Landing?data='+ JSON.stringify(data); // Redirect using window.location
       } else {
         // Handle error messages
         console.error(data.message);

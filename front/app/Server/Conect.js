@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const { Description } = require('@mui/icons-material');
+const { Description, FilterNone } = require('@mui/icons-material');
 
 
 
@@ -145,6 +145,40 @@ const fecha = new Date();
 
 });
 
+// busquedas 
+app.post('/searchcampaign', async (req, res) => {
+  const { filterName,filterRating,filterPlayersMax,Fecha,Hora } = req.body;
+  console.log('nombre busqueda:', Fecha, Hora);
+  
+  
+  
+   
+  console.log('nombre busqueda:', Fecha, Hora);
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get user details based on username
+    const [rows] = await connection.execute('call SP_BusquedaCampañas(?,?,?,?,?)',[filterName,filterRating,filterPlayersMax,Fecha,Hora]);
+    connection.release();
+
+    if (rows.length === 0) {
+      console.log('User not found in database');
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const campaña = rows[0];
+    console.log('User found in database:', campaña);
+
+    // Compare hashed password from the database with the provided password
+    // Successful login
+    console.log('Login successful');
+    res.status(200).json(campaña);
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 
