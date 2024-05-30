@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/';
 import { TimePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import {createCampaign} from '../services/reviewServices'
 import { useRouter } from 'next/navigation'
@@ -33,24 +33,93 @@ export default function CreateCampaigns(){
     const SelectCharacterChange = (e) => setSelectedCharacter(e.target.value)
     const handleRadioChange = (event) => setSelectedHistory(event.target.value)
 
+    
+  
+    const [imageURL, setImageURL] = useState('');
+    var Fecha1 = new Date();
+    var Fecha2 = new Date();
+    var Hora = new Date();
+
     const dateChange = (date) => {
+        
         setSelectedDate(date)
         console.log(date)
+        Fecha1 = date.toDate()
+        Fecha2 = Fecha1.getFullYear()+'-' + (Fecha1.getMonth()+1)+'-' + Fecha1.getDate()
+        
+        console.log(Fecha2)
+        
     }
 
     const timeChange = (time) => {
-        setSelectedTime(time)
-        console.log(time)
+        
+
+        Fecha1 = time.toDate()
+        Hora = Fecha1.getHours()+':'+Fecha1.getMinutes()+':'+Fecha1.getSeconds()
+        setSelectedTime(Hora)
+        console.log(Hora)
     }
 
-    const SubmitCampaign = ()=> {
-        console.log("name campaign" + nameCampaign) 
-          
-        const CreateCampaignData = {nameCampaign, linkDiscord, numJugadores, numEstrellas, image, desCampaign, selectedDate, selectedTime, selectedCharacter, selectedHistory }
-        createCampaign(CreateCampaignData)
-        console.log(CreateCampaignData)
-        router.push('/UserCampaigns', { scroll: false })
-    }
+   
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setImage(file);
+          setImageURL(URL.createObjectURL(file));
+        }
+      };
+      const SubmitCampaign = async ()=>{ 
+        const formData = new FormData();
+        /*
+        nameCampaign: nameCampaign, 
+        nameCampaign: desCampaign, 
+        numJugadores: numJugadores,
+        currentPlayer: setSelectedCharacter, numEstrellas: numEstrellas,
+                    linkDiscord: linkDiscord, selectedTime: selectedTime, selectedDate: Fecha2, imagen: image
+        */
+        formData.append('nameCampaign', nameCampaign);
+        formData.append('desCampaign', desCampaign);
+        formData.append('numJugadores', numJugadores);
+        formData.append('currentPlayer', setSelectedCharacter);
+        formData.append('numEstrellas', numEstrellas);
+        formData.append('linkDiscord', linkDiscord);
+        formData.append('selectedTime', selectedTime);
+        var fecha3 = new Date();
+        fecha3 = Fecha2.getFullYear()+'-' + (Fecha2.getMonth()+1)+'-' + Fecha2.getDate();
+        console.log('informacion de la fechas a mandar:',fecha3);
+        formData.append('Fecha2', fecha3);
+        console.log(selectedTime);
+        console.log(image);
+        if (image) {
+          formData.append('image', image);
+        }
+        try{
+            /*var y = btoa(image);
+            console.log(atob(y));
+            var x = atob(y);*/
+            const response = await fetch('http://localhost:8000/createcampaigns',{
+                method: 'POST',
+                body: formData
+
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+              // Redirect to the landing page on successful login
+              window.location.href = '/Landing'; // Redirect using window.location
+            } else {
+              // Handle error messages
+              console.error(data.message);
+            }
+        }
+        catch(error){
+            console.error('Error crear campaña: ',error.message);
+        }
+      };
+   
+
+
+
     return(
         <div>
             <h1>Crear campaña</h1>
@@ -151,7 +220,7 @@ export default function CreateCampaigns(){
                                 id="raised-button-file"
                                 multiple
                                 type="file"
-                                onChange={imageChange}
+                                onChange={handleImageChange}
                                 />
                                     <label htmlFor="raised-button-file">
                                     <Button variant="raised" component="span">
