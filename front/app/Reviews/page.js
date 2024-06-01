@@ -21,7 +21,7 @@ import {createReview} from '../services/reviewServices'
 
 export default function Login(){
     const theme = useTheme();
-    const [rating, setRating] = useState(0)
+    const [ rating, setRating] = useState(0)
     const [ ReviewUser, setReview] = useState("") 
 
     const handleRating = (rate) => {
@@ -32,11 +32,34 @@ export default function Login(){
 
     const UserPostReviewChange = (e) => setReview(e.target.value)
 
-    const SubmitReview = ()=> {
-      console.log("comentario" + ReviewUser )
-      const ReviewData = { rating, ReviewUser}
-      createReview(ReviewData)
-      console.log(ReviewData)
+    const SubmitReview = async () => {
+
+      try {
+        const response = await fetch('http://localhost:8000/createreview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            ReviewedId: "1",
+            ReviewerId: "10",
+            IdCampaña: "1",
+            rating: rating,
+            Comentario: ReviewUser
+          })
+        });
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+          // Redirect to the landing page on successful registration
+          window.location.href = '/Landing'; // Redirect using window.location
+        } else {
+          // Handle error messages
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error('Error registering:', error.message);
+      }
   }
     return(
       <>

@@ -13,14 +13,12 @@ const upload = multer({ dest: 'uploads/' });
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'Maag201200.',
+  password: '',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
-
-
 
 const app = express();
 app.use(express.json());
@@ -338,10 +336,39 @@ const fecha = new Date();
 });
 
 
+app.post('/createreview', async (req, res) => {
+  const { ReviewedId, ReviewerId, IdCampaña, rating, Comentario } = req.body;
+  console.log(rating);
+  console.log(Comentario);
+  console.log(ReviewedId);
+  console.log(ReviewerId);
+  console.log(IdCampaña);
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
 
+    // Query the database to get user details based on username
+    console.log("continuamos antes");
+    const rows = await connection.execute('insert into review (Comentario,Calificacion,ReviwerId,ReviewedId,Campaña_IdCampaña) Values (?,?,?,?,?)',[ Comentario, rating, ReviewedId, ReviewerId, IdCampaña ]);
 
+    console.log("continuamos");
 
+    if(rows[0].insertId)
+      {
+        res.status(200).json("se logro insertar?");
+      }
+    else{
+      return res.status(401).json({ message: 'Error al insertar' });
+    }
 
+  }
+  catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+ 
+
+});
 
 // Serve images from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
