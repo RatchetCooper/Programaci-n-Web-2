@@ -291,7 +291,7 @@ app.post('/GetUser', async (req, res) => {
 
 //campañas
 app.post('/createcampaigns',upload.single('image'), async (req, res) => {
-  const { nameCampaign,desCampaign, numJugadores, currentPlayer,numEstrellas, linkDiscord, selectedTime, Fecha2 } = req.body;
+  const { nameCampaign,desCampaign, numJugadores, currentPlayer,numEstrellas, linkDiscord, selectedTime, Fecha2,IdHost } = req.body;
   const image = req.file; 
   console.log('informacion recivida de campaña y son los siguientes:');
   console.log('titulo:',nameCampaign);
@@ -302,6 +302,7 @@ app.post('/createcampaigns',upload.single('image'), async (req, res) => {
   console.log('link: '+ linkDiscord);
   console.log('hora: '+ selectedTime);
   console.log('fecha:  '+ Fecha2);
+  console.log('Idcreador'+ IdHost);
   console.log('imagen: '+ image);
 const fecha = new Date();
 
@@ -314,7 +315,7 @@ const fecha = new Date();
 
     // Query the database to get user details based on username
     console.log("continuamos antes");
-    const rows = await connection.execute('insert into campaña (Titulo,Descripcion,MaxPlayers,CurrentPlayers,Estrellas,Link,Fecha,Horario,Imagen,Host) Values (?,?,?,?,?,?,?,?,?,11)',/*hacer que le llege id el usuario*/[nameCampaign,desCampaign,numJugadores,numJugadores/*cambiar por nombre de usuario*/,numEstrellas,linkDiscord,Fecha2,selectedTime,imageData]);
+    const rows = await connection.execute('insert into campaña (Titulo,Descripcion,MaxPlayers,CurrentPlayers,Estrellas,Link,Fecha,Horario,Imagen,Host) Values (?,?,?,?,?,?,?,?,?,?)',/*hacer que le llege id el usuario*/[nameCampaign,desCampaign,numJugadores,0,/*cambiar por nombre de usuario*/,numEstrellas,linkDiscord,Fecha2,selectedTime,imageData,IdHost]);
    
     
 

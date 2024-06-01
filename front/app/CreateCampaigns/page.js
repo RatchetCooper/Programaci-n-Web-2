@@ -10,6 +10,10 @@ import dayjs from 'dayjs';
 import {createCampaign} from '../services/reviewServices'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns';
+import CookieManager from '../Cookies/Cookies';
+
+const cookieId = CookieManager.getCookie('id');
+
 
 export default function CreateCampaigns(){
     const router = useRouter()
@@ -84,6 +88,7 @@ export default function CreateCampaigns(){
         formData.append('numEstrellas', numEstrellas);
         formData.append('linkDiscord', linkDiscord);
         formData.append('selectedTime', selectedTime);
+        formData.append('IdHost',cookieId);
         var fecha3 = new Date();
         fecha3 = Fecha2.getFullYear()+'-' + (Fecha2.getMonth()+1)+'-' + Fecha2.getDate();
         console.log('informacion de la fechas a mandar:',fecha3);
@@ -119,7 +124,7 @@ export default function CreateCampaigns(){
    
 
 
-
+      
     return(
         <div>
             <h1>Crear campaña</h1>
