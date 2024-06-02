@@ -14,6 +14,16 @@ export default function SearchCampaign() {
 
     const handleFilterSubmit = (data) => {
         setFilteredData(data);
+        for(const key in data){
+           
+            const base64Image = `data:${data[key].Imagen};base64,${Buffer.from(data[key].Imagen).toString('base64')}`;
+          
+            data[key].Imagen = base64Image;
+
+            var fecha = new Date(data[key].Fecha);
+            fecha = fecha.getFullYear()+'-' + (fecha.getMonth()+1)+'-' + fecha.getDate();
+            data[key].Fecha = fecha;
+        }
     }
 
     return (
@@ -50,11 +60,7 @@ export default function SearchCampaign() {
                         <Typography variant="body2">
                             Start Time: {campaign.Horario}
                         </Typography>
-                        <img
-                      src={campaign.Imagen}
-                      alt="imagen"
-                      style={{ width: 40, height: 40, borderRadius: '50%' }}
-                    />
+                        <img src={campaign.Imagen} alt="Imagen" style={{ ancho: 40, alto: 40, borderRadius: '50%' }} />
                     </CardContent>
                     <CardActions>
                         <Button size="small" onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button>
