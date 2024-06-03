@@ -62,6 +62,7 @@ export default function Characters() {
 
             const data = await response.json();
             CookieManager.setCookie("FichaId",data.fichaId,365);
+            CookieManager.setCookie("IsOwner",true,365);
             console.log('Ficha created successfully:', data);
             window.location.href = '/Fichas'
             // Handle the response data as needed

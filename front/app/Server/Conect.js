@@ -4,16 +4,18 @@ const mysql = require('mysql2/promise');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-
+const Ficha = require('./FichaModel.js');
+const Imagen = require('./Imagen.js');
 const path = require('path');
 const fs = require('fs');
+const { log } = require('console');
 
 const upload = multer({ dest: 'uploads/' });
 
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'Maag201200.',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,
@@ -57,38 +59,149 @@ app.post('/register', upload.single('image'), async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+app.post('/getCharacterOptions', async (req, res) => {
+  try {
+    const [razas, clases, trasfondos] = await Promise.all([
+      pool.query('SELECT idRaza, Nombre FROM raza'),
+      pool.query('SELECT idClase, Nombre FROM clase'),
+      pool.query('SELECT idTrasfondo, Nombre FROM Trasfondo')
+    ]);
+
+    res.json({ razas: razas[0], clases: clases[0], trasfondos: trasfondos[0] });
+  } catch (error) {
+    console.error('Error fetching character options:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.post('/getFicha', async (req, res) => {
+  const { fichaId } = req.body;
+  console.log('Received request to get ficha with ID:', fichaId);
+
+  try {
+    const ficha = await Ficha.findByPk(fichaId);
+
+    if (!ficha) {
+      console.log('Ficha not found in database');
+      return res.status(404).json({ message: 'Ficha not found' });
+    }
+
+    console.log('Ficha found in database:', ficha);
+
+    const imagen = await Imagen.findByPk(ficha.imagen_idImagen);
+
+    if (!imagen) {
+      console.log('Image not found in database');
+     
+    }
+
+    console.log('Image found in database:', imagen);
+
+    res.status(200).json({ message: 'Ficha and Image retrieved successfully', ficha, imagen });
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 app.post('/deleteFicha', async (req, res) => {
   const { fichaId } = req.body;
   console.log('Received request to delete Ficha with ID:', fichaId);
 
   try {
-    const connection = await pool.getConnection();
-    console.log('Database connection established');
+    const deleted = await Ficha.destroy({
+      where: { idFicha: fichaId }
+    });
 
-    // Start a transaction
-    await connection.beginTransaction();
-
-    // Delete the Ficha from the database
-    const [result] = await connection.execute('DELETE FROM ficha WHERE idFicha = ?', [fichaId]);
-
-    // Commit the transaction
-    await connection.commit();
-    connection.release();
-
-    if (result.affectedRows === 0) {
-      console.log('Ficha deletion failed');
-      return res.status(500).json({ message: 'Ficha deletion failed' });
+    if (deleted) {
+      console.log('Ficha deleted successfully');
+      res.status(200).json({ message: 'Ficha deleted successfully' });
+    } else {
+      console.log('Ficha not found in database');
+      res.status(404).json({ message: 'Ficha not found' });
     }
-
-    console.log('Ficha deleted successfully');
-    res.status(200).json({ message: 'Ficha deleted successfully' });
   } catch (error) {
     console.error('Error executing query:', error.message);
-    if (connection) await connection.rollback();
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+app.post('/updateFicha', upload.single('imagen'), async (req, res) => {
+  const { fichaId, Owner, Nombre, Descripcion, Historia, Trasfondo_idTrasfondo, raza_idRaza, clase_idClase, imagen_idImagen } = req.body;
+  const file = req.file;
+console.log("Imagen_id "+ imagen_idImagen)
+  console.log('Received update request for ficha with ID:', fichaId);
+
+  try {
+    let newImagenId = imagen_idImagen;
+
+    if (file) {
+      const imageBuffer = fs.readFileSync(file.path);
+      const mimetype = file.mimetype;
+console.log("MimeType " + mimetype);
+//console.log("Imagen " + imageBuffer);
+      console.log('Received file:', file.originalname);
+
+      if (imagen_idImagen) {
+        // Update existing image
+        const [updatedImage] = await Imagen.update(
+          {
+            Imagen: imageBuffer,
+            Tipo: mimetype,
+          },
+          {
+            where: { idImagen: imagen_idImagen },
+          }
+        );
+
+        if (!updatedImage) {
+          return res.status(404).json({ message: 'Image not found' });
+        }
+      } else {
+        console.log("NEW IMAGEN");
+        // Create a new image
+        console.log(imageBuffer);
+        console.log(mimetype);
+        const newImage = await Imagen.create({
+          Imagen: imageBuffer,
+          Tipo: mimetype,
+        });
+        newImagenId = newImage.idImagen;
+      }
+    }
+
+    const [updated] = await Ficha.update(
+      {
+        Owner,
+        Nombre,
+        Descripcion,
+        Historia,
+        Trasfondo_idTrasfondo,
+        raza_idRaza,
+        clase_idClase,
+        imagen_idImagen: newImagenId,
+      },
+      {
+        where: { idFicha: fichaId },
+      }
+    );
+
+    if (updated) {
+      console.log('Ficha updated successfully');
+      res.status(200).json({ message: 'Ficha updated successfully' });
+    } else {
+      console.log('Ficha not found in database');
+      res.status(404).json({ message: 'Ficha not found' });
+    }
+  } catch (error) {
+    console.error('Error updating ficha:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+module.exports = app;
 
 
 app.post('/getUserFichas', async (req, res) => {
@@ -100,7 +213,7 @@ app.post('/getUserFichas', async (req, res) => {
     console.log('Database connection established');
 
     // Query the database to get all fichas for the user
-    const [fichas] = await connection.execute('SELECT * FROM ficha WHERE Owner = ?', [userId]);
+    const [fichas] = await connection.execute('SELECT * FROM ficha_info WHERE Owner = ?', [userId]);
     connection.release();
 
     console.log('Fichas found in database:', fichas);
@@ -125,31 +238,30 @@ app.post('/createFicha', async (req, res) => {
     // Start a transaction
     await connection.beginTransaction();
 
-    // Insert into Ficha
-    const [fichaResult] = await connection.execute(
-      'INSERT INTO ficha (Vida, VidaMac, VidaTemp, Defensa, Velocidad, Nivel, Owner) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [0, 0, 0, 10, 30, 1, userId]
-    );
-console.log("Ficha");
-    const fichaId = fichaResult.insertId;
-
     // Query the first row from the clase table
-    const [claseRow] = await connection.execute('SELECT idClase, Nombre, Descripcion, Vida FROM clase LIMIT 1');
+    const [claseRow] = await connection.execute('SELECT idClase FROM clase LIMIT 1');
     const claseId = claseRow[0].idClase;
 
     // Query the first row from the raza table
-    const [razaRow] = await connection.execute('SELECT idRaza, Nombre, Descripcion FROM raza LIMIT 1');
+    const [razaRow] = await connection.execute('SELECT idRaza FROM raza LIMIT 1');
     const razaId = razaRow[0].idRaza;
 
     // Query the first row from the trasfondo table
-    const [trasfondoRow] = await connection.execute('SELECT idTrasfondo, Nombre, Descripcion FROM trasfondo LIMIT 1');
+    const [trasfondoRow] = await connection.execute('SELECT idTrasfondo FROM trasfondo LIMIT 1');
     const trasfondoId = trasfondoRow[0].idTrasfondo;
 
-    // Insert into Seleccion with default values
-    await connection.execute(
-      'INSERT INTO seleccion (Clase_idClase, Raza_idRaza, Trasfondo_idTrasfondo, Ficha_idFicha, IdSeleccion) VALUES (?, ?, ?, ?, ?)',
-      [claseId, razaId, trasfondoId, fichaId, null] // Assuming IdSeleccion is auto-incremented
+    // Insert into ficha
+    const [fichaResult] = await connection.execute(
+      'INSERT INTO ficha (Owner, Nombre, Descripcion, Historia, Trasfondo_idTrasfondo, raza_idRaza, clase_idClase, imagen_idImagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [userId, 'Default Name', 'Default Description', 'Default History', trasfondoId, razaId, claseId, null]
     );
+
+    console.log("Ficha inserted");
+
+    const fichaId = fichaResult.insertId;
+
+    // Insert into seleccion with default values
+    
 
     // Commit the transaction
     await connection.commit();
@@ -163,6 +275,7 @@ console.log("Ficha");
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 app.post('/updateUser', upload.single('image'), async (req, res) => {
