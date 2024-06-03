@@ -18,6 +18,25 @@ CREATE SCHEMA IF NOT EXISTS `misionboard` DEFAULT CHARACTER SET utf8mb3 ;
 USE `misionboard` ;
 
 -- -----------------------------------------------------
+-- Table `misionboard`.`campaignuserinfo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `misionboard`.`campaignuserinfo` (
+  `campaign_title` INT NULL DEFAULT NULL,
+  `user_name` INT NULL DEFAULT NULL,
+  `user_email` INT NULL DEFAULT NULL,
+  `character_life` INT NULL DEFAULT NULL,
+  `character_defense` INT NULL DEFAULT NULL,
+  `character_speed` INT NULL DEFAULT NULL,
+  `class_name` INT NULL DEFAULT NULL,
+  `race_name` INT NULL DEFAULT NULL,
+  `background_name` INT NULL DEFAULT NULL,
+  `host_name` INT NULL DEFAULT NULL,
+  `host_email` INT NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
 -- Table `misionboard`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `misionboard`.`user` (
@@ -31,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`user` (
   UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) ,
   UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
+AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -61,28 +80,6 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `misionboard`.`Trasfondo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`Trasfondo` (
-  `idTrasfondo` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idTrasfondo`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`raza`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`raza` (
-  `idRaza` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`idRaza`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
 -- Table `misionboard`.`clase`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `misionboard`.`clase` (
@@ -98,10 +95,35 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `misionboard`.`imagen` (
   `idImagen` INT NOT NULL AUTO_INCREMENT,
-  `Tipo` VARCHAR(45) NOT NULL,
-  `Imagen` BLOB NOT NULL,
+  `Tipo` VARCHAR(45) NOT NULL DEFAULT 'Imagen/PNG',
+  `Imagen` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`idImagen`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `misionboard`.`raza`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `misionboard`.`raza` (
+  `idRaza` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`idRaza`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `misionboard`.`trasfondo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `misionboard`.`trasfondo` (
+  `idTrasfondo` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idTrasfondo`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -119,36 +141,28 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`ficha` (
   `clase_idClase` INT NULL DEFAULT NULL,
   `imagen_idImagen` INT NULL DEFAULT NULL,
   PRIMARY KEY (`idFicha`),
-  INDEX `IdUser_idx` (`Owner` ASC),
-  INDEX `fk_ficha_Trasfondo1_idx` (`Trasfondo_idTrasfondo` ASC),
-  INDEX `fk_ficha_raza1_idx` (`raza_idRaza` ASC),
-  INDEX `fk_ficha_clase1_idx` (`clase_idClase` ASC),
-  INDEX `fk_ficha_imagen1_idx` (`imagen_idImagen` ASC),
-  CONSTRAINT `IdUser`
-    FOREIGN KEY (`Owner`)
-    REFERENCES `misionboard`.`user` (`idUser`),
-  CONSTRAINT `fk_ficha_Trasfondo1`
-    FOREIGN KEY (`Trasfondo_idTrasfondo`)
-    REFERENCES `misionboard`.`Trasfondo` (`idTrasfondo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ficha_raza1`
-    FOREIGN KEY (`raza_idRaza`)
-    REFERENCES `misionboard`.`raza` (`idRaza`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `IdUser_idx` (`Owner` ASC) ,
+  INDEX `fk_ficha_Trasfondo1_idx` (`Trasfondo_idTrasfondo` ASC) ,
+  INDEX `fk_ficha_raza1_idx` (`raza_idRaza` ASC) ,
+  INDEX `fk_ficha_clase1_idx` (`clase_idClase` ASC) ,
+  INDEX `fk_ficha_imagen1_idx` (`imagen_idImagen` ASC) ,
   CONSTRAINT `fk_ficha_clase1`
     FOREIGN KEY (`clase_idClase`)
-    REFERENCES `misionboard`.`clase` (`idClase`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `misionboard`.`clase` (`idClase`),
   CONSTRAINT `fk_ficha_imagen1`
     FOREIGN KEY (`imagen_idImagen`)
-    REFERENCES `misionboard`.`imagen` (`idImagen`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `misionboard`.`imagen` (`idImagen`),
+  CONSTRAINT `fk_ficha_raza1`
+    FOREIGN KEY (`raza_idRaza`)
+    REFERENCES `misionboard`.`raza` (`idRaza`),
+  CONSTRAINT `fk_ficha_Trasfondo1`
+    FOREIGN KEY (`Trasfondo_idTrasfondo`)
+    REFERENCES `misionboard`.`trasfondo` (`idTrasfondo`),
+  CONSTRAINT `IdUser`
+    FOREIGN KEY (`Owner`)
+    REFERENCES `misionboard`.`user` (`idUser`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 17
+AUTO_INCREMENT = 28
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -206,9 +220,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 USE `misionboard` ;
 
 -- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`campaignuserinfo`
+-- Placeholder table for view `misionboard`.`ficha_info`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campaignuserinfo` (`campaign_title` INT, `user_name` INT, `user_email` INT, `character_life` INT, `character_defense` INT, `character_speed` INT, `class_name` INT, `race_name` INT, `background_name` INT, `host_name` INT, `host_email` INT);
+CREATE TABLE IF NOT EXISTS `misionboard`.`ficha_info` (`idFicha` INT, `Owner` INT, `OwnerName` INT, `Nombre` INT, `Descripcion` INT, `Historia` INT, `Trasfondo` INT, `Raza` INT, `Clase` INT, `Imagen` INT, `Tipo` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `misionboard`.`otheruserreviews`
@@ -221,8 +235,11 @@ CREATE TABLE IF NOT EXISTS `misionboard`.`otheruserreviews` (`idReview` INT, `Co
 CREATE TABLE IF NOT EXISTS `misionboard`.`userreviews` (`idReview` INT, `Comentario` INT, `Calificacion` INT, `ReviwerId` INT, `ReviewerNombre` INT, `ReviewerEmail` INT, `Campaña_idCampaña` INT, `ReviewedId` INT, `ReviewedNombre` INT, `ReviewedEmail` INT);
 
 -- -----------------------------------------------------
--- View `misionboard`.`campaignuserinfo`
+-- View `misionboard`.`ficha_info`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `misionboard`.`ficha_info`;
+USE `misionboard`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`ficha_info` AS select `f`.`idFicha` AS `idFicha`,`f`.`Owner` AS `Owner`,`u`.`Nombre` AS `OwnerName`,`f`.`Nombre` AS `Nombre`,`f`.`Descripcion` AS `Descripcion`,`f`.`Historia` AS `Historia`,`t`.`Nombre` AS `Trasfondo`,`r`.`Nombre` AS `Raza`,`c`.`Nombre` AS `Clase`,`i`.`Imagen` AS `Imagen`,`i`.`Tipo` AS `Tipo` from (((((`misionboard`.`ficha` `f` left join `misionboard`.`user` `u` on((`f`.`Owner` = `u`.`idUser`))) left join `misionboard`.`trasfondo` `t` on((`f`.`Trasfondo_idTrasfondo` = `t`.`idTrasfondo`))) left join `misionboard`.`raza` `r` on((`f`.`raza_idRaza` = `r`.`idRaza`))) left join `misionboard`.`clase` `c` on((`f`.`clase_idClase` = `c`.`idClase`))) left join `misionboard`.`imagen` `i` on((`f`.`imagen_idImagen` = `i`.`idImagen`)));
 
 -- -----------------------------------------------------
 -- View `misionboard`.`otheruserreviews`
@@ -238,7 +255,26 @@ DROP TABLE IF EXISTS `misionboard`.`userreviews`;
 USE `misionboard`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`userreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`misionboard`.`review` `r` join `misionboard`.`user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `misionboard`.`user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`)));
 
-
+CREATE OR REPLACE VIEW `misionboard`.`ficha_info` AS
+SELECT 
+    f.`idFicha`,
+    f.`Owner`,
+    u.`Nombre` AS `OwnerName`,
+    f.`Nombre`,
+    f.`Descripcion`,
+    f.`Historia`,
+    t.`Nombre` AS `Trasfondo`,
+    r.`Nombre` AS `Raza`,
+    c.`Nombre` AS `Clase`,
+    i.`Imagen` AS `Imagen`,
+    i.`Tipo` AS `Tipo`
+FROM 
+    `misionboard`.`ficha` f
+    LEFT JOIN `misionboard`.`user` u ON f.`Owner` = u.`idUser`
+    LEFT JOIN `misionboard`.`Trasfondo` t ON f.`Trasfondo_idTrasfondo` = t.`idTrasfondo`
+    LEFT JOIN `misionboard`.`raza` r ON f.`raza_idRaza` = r.`idRaza`
+    LEFT JOIN `misionboard`.`clase` c ON f.`clase_idClase` = c.`idClase`
+    LEFT JOIN `misionboard`.`imagen` i ON f.`imagen_idImagen` = i.`idImagen`;
 
 
 -- Inserts for raza
