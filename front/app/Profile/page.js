@@ -6,13 +6,15 @@ import Container from '@mui/material/Container';
 import { createTheme } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import axios from 'axios';
-import { Card,Button, Stack, StyledBadge, Badge, Avatar, IconButton, VisuallyHiddenInput} from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {editProfile} from '../services/editProfile'
 import { useParams} from 'react-router-dom'; // Import the useLocation hook
 import CookieManager from '../Cookies/Cookies';
 import React, { useState, useEffect } from 'react';
+import { Card,Button, Stack, StyledBadge, Badge, Avatar, Grid, IconButton, VisuallyHiddenInput} from "@mui/material";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {editProfile} from '../services/editProfile'
+import { Rating } from 'react-simple-star-rating'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Profile(){
     const theme = useTheme();
@@ -23,6 +25,19 @@ export default function Profile(){
     const [profileEmail, setProfileEmail] = useState("")
     const [profilePassword, setProfilePassword] = useState("")
     const [avatarVisible, setAvatarVisible] = useState(false);
+    const [reviews, setReviews] = useState([
+      {
+        reviewerImage: 'https://randomuser.me/api/portraits/women/65.jpg',
+        rating: 4,
+        comment: '¡Excelente perfil! Muy profesional y dedicado.'
+      },
+      {
+        reviewerImage: 'https://randomuser.me/api/portraits/men/70.jpg',
+        rating: 5,
+        comment: 'Muy buena comunicación y resultados impecables.'
+      },
+      // Puedes agregar más reseñas aquí
+    ]);
 
     const UserProfileNameChange = (e) => setProfileName(e.target.value)
     const UserProfileLastNameChange = (e) => setProfileLastName(e.target.value)
@@ -143,7 +158,7 @@ export default function Profile(){
        }}
        noValidate
        autoComplete="off"
-       >
+      >
            <div>
            <Stack>
            <TextField 
@@ -183,10 +198,56 @@ export default function Profile(){
        <Button variant="contained" onClick={ SubmitProfile } sx={{mb: 4}}>Guardar</Button>
        <Button variant="contained" sx={{mb: 4}}>Cancelar</Button>
       
-   </Card>
+        </Card>
+
+        <Card component="main" maxWidth="xs" sx={{ p: 4, backgroundColor: theme.palette.cardBg.main, m: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Reseñas hechas por mi
+          </Typography>
+          <Grid container spacing={2}>
+            {reviews.map((review, index) => (
+              <Grid item xs={12} key={index}>
+                <Card sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+                  <Avatar src={review.reviewerImage} alt="Reviewer" sx={{ mr: 2 }} />
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Rating value={review.rating} readOnly />
+                    <Typography variant="body2">{review.comment}</Typography>
+                  </Box>
+                  <Box>
+                  <IconButton onClick={() => handleEditReview(index)} aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDeleteReview(index)} aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
+
+        <Card component="main" maxWidth="xs" sx={{ p: 4, backgroundColor: theme.palette.cardBg.main, m: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Reseñas de Usuarios
+          </Typography>
+          <Grid container spacing={2}>
+            {reviews.map((review, index) => (
+              <Grid item xs={12} key={index}>
+                <Card sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+                  <Avatar src={review.reviewerImage} alt="Reviewer" sx={{ mr: 2 }} />
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Rating value={review.rating} readOnly />
+                    <Typography variant="body2">{review.comment}</Typography>
+                  </Box>     
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
+
         </Container>
        
-      
         </>
     )
 }
