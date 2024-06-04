@@ -373,8 +373,35 @@ app.post('/searchcampaign', async (req, res) => {
   }
 });
 
+app.post('/tuscampa', async (req, res) => {
+  const { IDu } = req.body;
+  console.log('id al buscar campaña:', IDu);
+  
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
 
+    // Query the database to get user details based on username and password
+    const [rows] = await connection.execute('SELECT * FROM campaña WHERE Host = ?', [IDu]);
+    connection.release();
 
+    if (rows.length === 0) {
+      console.log('User not found in database');
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const info = rows;
+    console.log(info);
+
+    // Successful login
+    console.log('Login successful');
+    res.status(200).json(info);
+ 
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 // Serve images from the uploads directory
