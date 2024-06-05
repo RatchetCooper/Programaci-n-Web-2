@@ -12,7 +12,7 @@
 			$this->host = 'localhost:3306';
 			$this->db = 'MisionBoard';
 			$this->user = 'root';
-			$this->password = '';
+			$this->password = 'Maag201200.';
 
 		}
 

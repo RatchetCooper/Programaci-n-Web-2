@@ -7,35 +7,91 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
+import CookieManager from '../Cookies/Cookies.js';
 
 const pages = [
   { name: 'Tus campañas', url: '/UserCampaigns' },
   { name: 'Buscar campaña', url: '/SearchCampaign' },
   { name: 'Tus personajes', url: '/Characters' }
 ];
-
-const settings = ['Perfil', 'Account', 'Dashboard', 'Logout'];
-const settingUrls = ['/Profile', '/account', '/dashboard', '/logout']; // URLs correspondientes a cada elemento de configuración
-
 const settingsUrls2 = [
   { name: 'Profile', url: '/Profile' },
   { name: 'Reviews', url: '/Reviews' },
-  
 ];
+
+const GetUser = async () => {
+  try {
+    const userId = CookieManager.getCookie("id");
+
+    if (!userId) {
+      console.error('No UserId found in cookies');
+      return null;
+    }
+
+    const requestBody = {
+      UserId: userId
+    };
+
+    const response = await fetch('http://localhost:8000/GetUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const data = await response.json();
+
+    if (!data.User.Imagen || !data.User.ImageData) {
+      throw new Error('Image data is missing');
+    }
+
+    // Convert LongBlob to base64 string
+    const base64Image = `data:${data.User.ImageData};base64,${Buffer.from(data.User.Imagen).toString('base64')}`;
+
+    const user = {
+      ...data,
+      profileImage: base64Image
+    };
+
+    return user;
+  } catch (error) {
+    console.error('Error fetching user:', error.message);
+    return null;
+  }
+};
 
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await GetUser();
+
+      setUser(userData);
+    };
+
+    fetchUser();
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+  };
+
+  const handleSetCookie=(event)=>{
+
+    CookieManager.setCookie("IdP",user?.User?.idUser,365)
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -102,9 +158,9 @@ export default function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link href={page.url} passHref>
+                  <a href={page.url} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Typography textAlign="center">{page.name}</Typography>
-                  </Link>
+                  </a>
                 </MenuItem>
               ))}
             </Menu>
@@ -143,11 +199,24 @@ export default function Navbar() {
             <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", pt: 4, pb: 4 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {user && user.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      style={{ width: 40, height: 40, borderRadius: '50%' }}
+                    />
+                  ) : (
+                    <Typography>No active session</Typography>
+                  )}
                 </IconButton>
               </Tooltip>
-              <Typography>Nombre de usuario</Typography>
+              {user ? (
+                <Typography>{user.User.Nombre}</Typography>
+              ) : (
+                <Typography>No active session</Typography>
+              )}
             </Stack>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -166,9 +235,13 @@ export default function Navbar() {
             >
               {settingsUrls2.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Link href={setting.url} passHref>
-                    <Typography textAlign="center">{setting.name}</Typography>
-                  </Link>
+                  <Button onClick={() => {
+  handleSetCookie();
+  console.log("ItHappened");
+  window.location.href = setting.url;
+}}>
+  <Typography textAlign="center">{setting.name}</Typography>
+</Button>
                 </MenuItem>
               ))}
             </Menu>
