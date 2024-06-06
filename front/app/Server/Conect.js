@@ -382,12 +382,42 @@ app.post('/tuscampa', async (req, res) => {
     console.log('Database connection established');
 
     // Query the database to get user details based on username and password
-    const [rows] = await connection.execute('SELECT * FROM campaña WHERE Host = ?', [IDu]);
+    const [rows] = await connection.execute('SELECT IdCampaña, Titulo, Descripcion, MaxPlayers, CurrentPlayers, Estrellas, Link, fecha, Horario, Imagen FROM campaña WHERE Host = ?', [IDu]);
     connection.release();
 
     if (rows.length === 0) {
       console.log('User not found in database');
       return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const info = rows;
+    console.log(info);
+
+    // Successful login
+    console.log('Login successful');
+    res.status(200).json(info);
+ 
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//traer info para postularse
+app.post('/infoCamp', async (req, res) => {
+  const { Id } = req.body;
+  console.log('id al buscar campaña especifica:', Id);
+  
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get user details based on username and password
+    const [rows] = await connection.execute('SELECT IdCampaña, Titulo, Descripcion, MaxPlayers, CurrentPlayers, Estrellas, Link, fecha, Horario, Imagen FROM campaña WHERE idCampaña = ?', [Id]);
+    connection.release();
+
+    if (rows.length === 0) {
+      
     }
 
     const info = rows;

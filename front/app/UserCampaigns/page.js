@@ -90,6 +90,17 @@ export default function UserCampaigns(){
             const data = await response.json();
             
             if (response.ok) {
+              for(const key in data){
+           
+                const base64Image = `data:${data[key].Imagen};base64,${Buffer.from(data[key].Imagen).toString('base64')}`;
+              
+                data[key].Imagen = base64Image;
+    
+                var fecha = new Date(data[key].Fecha);
+                fecha = fecha.getFullYear()+'-' + (fecha.getMonth()+1)+'-' + fecha.getDate();
+                data[key].Fecha = fecha;
+            }
+
               CampañaUsuario = data;
               setcampaña(data);
               console.log('informacion en la variable CampañaUsuario:',CampañaUsuario);
