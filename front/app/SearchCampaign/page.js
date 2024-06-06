@@ -1,24 +1,35 @@
 "use client"
-import {useRouter} from "next/navigation";
-import {useState} from "react";
-import { Typography, Container, Box, Card, CardContent, Stack, CardActions, Button} from "@mui/material";
+import {Button,Card, CardContent, Box, Typography, Grid, Item, Stack, CardMedia } from "@mui/material";
+import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import FiltersCampaigns from "../components/FiltersCampaigns";
-import { useTheme } from '@mui/material/styles';
+import SearchCampaignsCard from "../components/SearchCampaignsCard";
+import { useRouter } from 'next/navigation'
+import {useState} from "react";
 
-export default function SearchCampaign() {
-    const router = useRouter();
-    const [filteredData, setFilteredData] = useState([]);
+export default function SearchCampaign(){
+    const router = useRouter()
+    const searchCampaignData = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]
     const theme = useTheme();
+    const [filteredData, setFilteredData] = useState([]);
 
-    
+    const cambiarPagina = () => {
+        //base de datos
+        router.push('/CreateCampaigns', { scroll: false })
+        
+      };
 
-    const handleFilterSubmit = (data) => {
+      const handleFilterSubmit = (data) => {
         setFilteredData(data);
         for(const key in data){
            
-            const base64Image = `data:${data[key].Imagen};base64,${Buffer.from(data[key].Imagen).toString('base64')}`;
-          
-            data[key].Imagen = base64Image;
+        var base64Image = `data:${data[key].Imagen};base64,${Buffer.from(data[key].Imagen).toString('base64')}`; //campaña
+
+        data[key].Imagen = base64Image;
+        
+        base64Image = `data:${data[key].ImagenUsuario};base64,${Buffer.from(data[key].ImagenUsuario).toString('base64')}`; //usuario
+        data[key].ImagenUsuario = base64Image;
+
+        
 
             var fecha = new Date(data[key].Fecha);
             fecha = fecha.getFullYear()+'-' + (fecha.getMonth()+1)+'-' + fecha.getDate();
@@ -26,47 +37,38 @@ export default function SearchCampaign() {
         }
     }
 
-    return (
-        <Container sx={{
-            backgroundColor: theme.palette.secondary.main,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            p: 5,
-            m: 5,
-            flexDirection: "column"
-        }}>
-            <FiltersCampaigns onFilterSubmit={handleFilterSubmit} />
-            {filteredData.length > 0 && filteredData.map((campaign, index) => (
-                 
-                <Card key={index} sx={{ width: '100%', maxWidth: 345, mt: 4, backgroundColor: theme.palette.cardFilterColor.main }}>
-                    <CardContent>
-                        <Typography variant="h5" component="div" sx={{ color: theme.palette.cardText.main }}>
-                            {campaign.Titulo}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="textSecondary">
-                            {campaign.description}
-                        </Typography>
+    return(
+    <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+        <FiltersCampaigns onFilterSubmit={handleFilterSubmit} ></FiltersCampaigns>
+        </Grid>
+        <Grid item xs={12} md={8}>
+                <Box sx={{ 
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "left",
+                p: 5,
+                m:5,
+                flexDirection: "column",
+               
+                }}>
+                <Box sx={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        mb: 4
+                    }}>
                         
-                        <Typography variant="body2">
-                            Max Players: {campaign.MaxPlayers}
-                        </Typography>
-                        <Typography variant="body2">
-                            Jugadores Actuales: {campaign.CurrentPlayers}
-                        </Typography>
-                        <Typography variant="body2">
-                            Start Date: {campaign.Fecha}
-                        </Typography>
-                        <Typography variant="body2">
-                            Start Time: {campaign.Horario}
-                        </Typography>
-                        <img src={campaign.Imagen} alt="Imagen" style={{ ancho: 40, alto: 40, borderRadius: '50%' }} />
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button>
-                    </CardActions>
-                </Card>
-            ))}
-        </Container>
-    );
+                        <Button variant="contained" sx={{ mb: 4 }} onClick={cambiarPagina}>Crear campañas</Button>
+                
+                    </Box>
+                    
+                    <Typography color={theme.palette.secondary.main} variant="h4">Buscar campañas</Typography>
+
+            </Box>
+                {filteredData.length > 0 && filteredData.map((campaign, index) => (
+                    <SearchCampaignsCard key={index} campaign={campaign} />
+                ))}
+            </Grid>
+    </Grid>
+    )
 }

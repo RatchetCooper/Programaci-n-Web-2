@@ -1,5 +1,5 @@
 "use client"
-import { Box,Button, Card, Typography } from "@mui/material";
+import { Box,Button, Grid, Card, Typography } from "@mui/material";
 import { useRouter } from 'next/navigation'
 import CookieManager from '../Cookies/Cookies.js';
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
@@ -38,8 +38,15 @@ const GetUser = async () => {
       }
   
       // Convert LongBlob to base64 string
-      const base64Image = `data:${data.User.ImageData};base64,${Buffer.from(data.User.Imagen).toString('base64')}`;
-  
+     // const base64Image = `data:${data.User.ImageData};base64,${Buffer.from(data.User.Imagen).toString('base64')}`;
+      
+      var base64Image = `data:${data[key].Imagen};base64,${Buffer.from(data[key].Imagen).toString('base64')}`; //campaña
+
+        data[key].Imagen = base64Image;
+        
+        base64Image = `data:${data[key].ImagenUsuario};base64,${Buffer.from(data[key].ImagenUsuario).toString('base64')}`; //usuario
+        data[key].ImagenUsuario = base64Image;
+
       const user = {
         ...data,
         profileImage: base64Image
@@ -55,6 +62,7 @@ const GetUser = async () => {
 
 
 import UserCampaignsCard from "../components/UserCampaignsCard";
+
 export default function UserCampaigns(){
     const router = useRouter()
     const [campaña, setcampaña] = useState([]);
@@ -105,17 +113,39 @@ export default function UserCampaigns(){
 
     
         <div>
-            <Button variant="contained" sx={{mb: 4}} onClick={BuscarCampañas}>Crear campaña</Button>     
-            <Typography variant="h4">Tus campañas</Typography>
-            <Typography variant="h4">S</Typography>
+           <Grid item xs={12} md={4}>
+        
+        </Grid>
+        <Grid item xs={12} md={8}>
+                <Box sx={{ 
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "left",
+                p: 5,
+                m:5,
+                flexDirection: "column",
+               
+                }}>
+                <Box sx={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        mb: 4
+                    }}>
+                        
+                        <Button variant="contained" sx={{ mb: 4 }} onClick={cambiarPagina}>Crear campaña</Button>
+                
+                    </Box>
+                    
+                    <Typography color={theme.palette.secondary.main} variant="h4">Tus campañas</Typography>
+
+            </Box>
             {
             campaña.length>0 && campaña.map((camp,index)=>(
-              <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main,  width: '100vh'}}>
-
-              <Typography variant="h4">{camp.Titulo}</Typography>
-              </Card>
-              
+              <UserCampaignsCard  key={index}  camp={camp}></UserCampaignsCard>
+    
               ))}
+            </Grid>
+           
 
 
            

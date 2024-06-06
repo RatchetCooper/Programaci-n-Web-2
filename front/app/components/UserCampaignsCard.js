@@ -1,151 +1,124 @@
 "use client"
-import { Box,Button, Card, Stack, CardMedia, Grid, Typography, TextField } from "@mui/material";
+import { Box, Button, Card, Stack, CardMedia, Avatar, Grid, Typography, TextField, AvatarGroup } from "@mui/material";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import UserCampaignsItemParticipants from "./UserCampaignsItemParticipants";
 import { useRouter } from 'next/navigation'
 
 
-export default function UserCampaignsCard({userCampaignData}){
+export default function UserCampaignsCard({ camp }) {
     const theme = useTheme();
     const router = useRouter();
 
-    const userItemParticipant = [{"username": "Erika",  "campaignName": "Test 1", "ID":"1"}, {"username": "Juan", "campaignName": "Test 2", "ID":"2"}]
-    
+    const userItemParticipant = [{ "username": "Erika", "campaignName": "Test 1", "ID": "1" }, { "username": "Juan", "campaignName": "Test 2", "ID": "2" }]
+
     const editCampaign = () => {
         console.log("Editando campaña")
         router.push('/CreateCampaigns', { scroll: false }); // Cambia la URL a '/Reviews'
-       
+
     };
-    return(
+    return (
 
-        <Box sx={{ 
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            p: 5,
-            flexDirection: "column"
-        }}>
-
-<Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main,  width: '100vh'}}>
-            <Stack>
+        <Card sx={{ p: 4, m: 5, backgroundColor: theme.palette.cardBg.main }}>
             <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center", pt: 4, pb: 4}} >
+                <Grid item xs={6} md={6}>
+                    <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", pt: 4, pb: 4 }}>
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
-                        image="https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg"
-                        title="Card img">
+                            image={camp.ImagenUsuario}
+                            title="Card img">
                         </CardMedia>
-                        <Typography color={theme.palette.cardText.main} variant="body" > {userCampaignData.username} </Typography>
+                        <Typography color={theme.palette.cardText.main} variant="body"> {camp.Nombre} </Typography> 
                     </Stack>
 
-                    <CardMedia sx={{  width: '365px' ,height: '212px' }}
-                        image="https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg"
+                    <CardMedia sx={{ width: '365px', height: '212px' }}
+                        image={camp.Imagen}
                         title="Card img">
                     </CardMedia>
 
-                    <Typography color="textSecondary" variant="h4" sx={{pt: 4}}> { userCampaignData.campaignName} </Typography>
-                    
-                    {/* <Button variant="contained" sx={{mb: 4}}>Unirse</Button>
-                     */}
-                     <Stack  direction="row">
-                        <Button variant="contained" sx={{mb: 4}}>Invitar</Button>
-                        <TextField 
-                        id="outlined-basic" 
-                        //label="Outlined" 
-                        variant="outlined"
-                        InputProps={{
-                            style: {
-                              borderRadius: "30px",
-                              background: theme.palette.inputBackground.main
-                            }
-                          }} 
-                        />
-                    </Stack> 
-                    <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
+                    <Typography color="textSecondary" variant="h4" sx={{ pt: 4 }}> {camp.Titulo} </Typography>
+                    <Button variant="contained" sx={{ mb: 4 }} onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button>
+                    {/* <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center" }}>
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
-                        image="https://as2.ftcdn.net/v2/jpg/04/42/57/73/1000_F_442577398_uetMYujiwcmo5yaZmXCrmvs7YWH7OiC9.jpg"
-                        title="Card img">
+                            image={camp.Imagen}
+                            title="Card img">
                         </CardMedia>
                         <Typography color={theme.palette.cardText.main} variant="body">Texto pequeño</Typography>
                         <PanoramaFishEyeIcon></PanoramaFishEyeIcon>
-                    </Stack>
+                    </Stack> */}
                 </Grid>
-                <Grid item xs={6}>
-                <Button variant="contained" onClick={editCampaign} sx={{mb: 4}}>Editar campaña</Button>
-                <Button variant="contained" sx={{mb: 4}}>Borrar campaña</Button>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Máximo de jugadores"
+                        defaultValue={` ${camp.MaxPlayers}`}
+                        InputProps={{
+                            readOnly: true, 
+                            style: { color: 'white' }
+                        }}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
                     
-                <h2>Palabra</h2>
-                <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-                 <TextField
-                    id="outlined-read-only-input"
-                    label="Read Only"
-                    defaultValue="Hello World"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
+                    
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Jugadores actuales"
+                        defaultValue={` ${camp.CurrentPlayers}`}
+                        InputProps={{
+                            readOnly: true, 
+                            style: { color: 'white' }
+                        }}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                  
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Fecha de inicio"
+                        defaultValue={` ${camp.Fecha}`}
+                        InputProps={{
+                            readOnly: true, 
+                            style: { color: 'white' }
+                        }}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                  
+
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Horario de inicio"
+                        defaultValue={` ${camp.Horario}`}
+                        InputProps={{
+                            readOnly: true, 
+                            style: { color: 'white' }
+                        }}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    {/* 
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Título"
+                        defaultValue={campaign.Titulo}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                    /> */}
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Descripción"
+                        defaultValue={camp.Descripcion}
+                        InputProps={{
+                            readOnly: true,
+                            style: { color: 'white' }
+                        }}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
                 </Grid>
             </Grid>
-            
-            <Card sx={{ p: 4, backgroundColor: theme.palette.cardFilterColor.main}}>
-            <Box sx={{ 
-            pb: 3 
-            }}>
-
-            <Typography color={theme.palette.cardText.main} variant="body"  sx={{  pt: 4, pb: 4}}>Participantes</Typography>
-            </Box>
-
-            
-            {
-            userItemParticipant.map((itemParticipant,index) =>( 
-                <UserCampaignsItemParticipants key={itemParticipant.ID} userItemParticipant={itemParticipant} ></UserCampaignsItemParticipants>
-                
-            ))
-            }
-            </Card>
-            </Stack>
         </Card>
-        </Box>
-        
+
     )
 }

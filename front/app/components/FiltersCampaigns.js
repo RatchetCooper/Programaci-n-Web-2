@@ -104,7 +104,26 @@ export default function FiltersCampaigns({ onFilterSubmit }) {
                             type="search" 
                             helperText="Coloca el nombre de la campaña"
                             fullWidth
-                            sx={{ maxWidth: '100%' }}
+                            InputProps={{
+                                style: { color: 'white' },
+                            }}
+                            InputLabelProps={{
+                                style: { color: 'white' },
+                            }}
+                            sx={{  mb: 2,
+                                maxWidth: '100%',
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'white',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'white',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'white',
+                                    },
+                                },
+                            }}
                         />
                     </Box>
                 </Card>
@@ -202,7 +221,15 @@ export default function FiltersCampaigns({ onFilterSubmit }) {
                                 onChange={dateChange}
                                 label="Fecha de inicio"
                                 fullWidth
-                                sx={{ width: '100%' }}
+                                sx={{ width: '100%',
+                                    '& input': {
+                                        color: 'white' // Cambia el color del texto del input a blanco
+                                    },
+                                    '& .MuiSvgIcon-root': {
+                    color: 'white' // Cambia el color del icono del DatePicker a blanco
+                }
+                                }}
+                                
                             />
                             <Typography color={theme.palette.cardText.main} gutterBottom variant="h5" component="div">
                                 Hora
@@ -211,7 +238,14 @@ export default function FiltersCampaigns({ onFilterSubmit }) {
                                 onChange={timeChange}
                                 label="Hora de inicio"
                                 fullWidth
-                                sx={{ width: '100%' }}
+                                sx={{ width: '100%',
+                                    '& input': {
+                                        color: 'white' // Cambia el color del texto del input a blanco
+                                    },
+                                    '& .MuiSvgIcon-root': {
+                    color: 'white' // Cambia el color del icono del DatePicker a blanco
+                }
+                                }}
                             />
                         </Stack>
                     </Box>
