@@ -13,11 +13,14 @@ import MenuItem from '@mui/material/MenuItem';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
 import CookieManager from '../Cookies/Cookies.js';
+import { useRouter } from 'next/navigation';
 
 const pages = [
+  { name: 'Inicio', url: '/Landing' },
   { name: 'Tus campañas', url: '/UserCampaigns' },
   { name: 'Buscar campaña', url: '/SearchCampaign' },
   { name: 'Tus personajes', url: '/Characters' }
+  
 ];
 const settingsUrls2 = [
   { name: 'Profile', url: '/Profile' },
@@ -74,6 +77,11 @@ export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, setUser] = React.useState(null);
+  const router = useRouter()
+  
+  const cambiarPagina = () => {
+    router.push('/Landing', { scroll: false });
+  };
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -121,8 +129,9 @@ export default function Navbar() {
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
-              textDecoration: 'none',
+              textDecoration: 'none'
             }}
+           
           >
             MISSIONBOARD
           </Typography>

@@ -13,7 +13,7 @@ const upload = multer({ dest: 'uploads/' });
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'Maag201200.',
+  password: 'Lenuaje1!',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,

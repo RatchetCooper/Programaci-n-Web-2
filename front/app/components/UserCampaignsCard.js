@@ -14,7 +14,7 @@ export default function UserCampaignsCard({ camp }) {
 
     const editCampaign = () => {
         console.log("Editando campaña");
-        router.push('/CreateCampaigns', { scroll: false });
+        router.push('/EditCampaigns', { scroll: false });
     };
 
     const BuscarMiembros = async (IdCampaña) => {
@@ -76,9 +76,16 @@ export default function UserCampaignsCard({ camp }) {
 
     return (
         <>
-            <Card sx={{ p: 4, m: 5, backgroundColor: theme.palette.cardBg.main }}>
+         <Box sx={{
+                                
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                           
+            <Card sx={{ p: 4, m: 5, backgroundColor: theme.palette.cardBg.main, width:'50%' }}>
                 <Stack>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} >
                         <Grid item xs={6} md={6}>
                             <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", pt: 4, pb: 4 }}>
                                 {camp.ImagenUsuario && (
@@ -173,7 +180,7 @@ export default function UserCampaignsCard({ camp }) {
                     </Grid>
                 </Stack>
 
-                <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main, width: '100vh' }}>
+               
                     <Stack>
                         <Card sx={{ p: 4, m: '0 auto', backgroundColor: theme.palette.cardFilterColor.main, width: "90%", maxWidth: 600 }} className="campaigns-card">
                             <Box sx={{ pb: 3 }}>
@@ -188,8 +195,10 @@ export default function UserCampaignsCard({ camp }) {
                             )}
                         </Card>
                     </Stack>
-                </Card>
+                
             </Card>
+
+            </Box>
         </>
     );
 }

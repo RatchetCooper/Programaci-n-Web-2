@@ -75,7 +75,7 @@ export default function UserCampaigns() {
       });
 
       const data = await response.json();
-      console.log('antes de modificar datos al recibirlos:',data);
+      console.log('antes de modificar datos al recibirlos:', data);
       if (response.ok) {
         data.forEach(camp => {
           camp.Imagen = `data:image/jpeg;base64,${Buffer.from(camp.Imagen).toString('base64')}`;
@@ -94,14 +94,25 @@ export default function UserCampaigns() {
 
   return (
     <div>
-      <Grid item xs={12} md={4}></Grid>
+
       <Grid item xs={12} md={8}>
-        <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "left", p: 5, m: 5, flexDirection: "column" }}>
-          <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 4 }}>
-            <Button variant="contained" sx={{ mb: 4 }} onClick={cambiarPagina}>Crear campaña</Button>
+        <Box sx={{
+
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+
+          <Box sx={{ p: 4, m: 5, width: '50%' }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 4 }}>
+              <Button variant="contained" sx={{ mb: 4 }} onClick={cambiarPagina}>Crear campaña</Button>
+            </Box>
+            <Typography color={theme.palette.secondary.main} variant="h4">Tus campañas</Typography>
           </Box>
-          <Typography color={theme.palette.secondary.main} variant="h4">Tus campañas</Typography>
         </Box>
+      
+
+
         {campaña.length > 0 && campaña.map((camp, index) => (
           <UserCampaignsCard key={index} camp={camp} />
         ))}
