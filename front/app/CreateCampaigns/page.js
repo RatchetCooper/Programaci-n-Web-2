@@ -131,21 +131,41 @@ export default function CreateCampaigns(){
             <Stack>
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
                             <Grid container spacing={2}>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} md={4}>
                                     <h1>Información</h1>
                                     <Box component="form" noValidate sx={{ mt: 1 }}>
-                                        <TextField
+                                       {/*  <TextField
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="email"
+                                        id="titulocampaign"
                                         label="Nombre de la campaña"
                                         name="nameCampaign"
                                         autoComplete="email"
                                         autoFocus
                                         onChange={ nameCampaignChange }
+                                        
+                                        /> */}
+                                          <TextField
+                                           
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            id="titulocampaign"
+                                            label="Nombre de la campaña"
+                                            name="nameCampaign"
+                                            onChange={nameCampaignChange}
+                                            InputProps={{
+                                            style: { color: 'black' }
+                                            }}
+                                            InputLabelProps={{
+                                            style: { color: 'black' },
+                                            shrink: true,  // Asegura que el label se comporte correctamente
+                                            }}
+                                            fullWidth
+                                            sx={{ mb: 2 }}
                                         />
-                                        <TextField
+                                       {/*  <TextField
                                         margin="normal"
                                         required
                                         fullWidth
@@ -154,8 +174,25 @@ export default function CreateCampaigns(){
                                         name="discord"
                                         onChange={ nameDiscordChange }
                                         autoFocus
-                                        />
-                                    
+                                        /> */}
+                                     <TextField
+                                           
+                                           margin="normal"
+                                            required
+                                            fullWidth
+                                            id="linkDiscord"
+                                            label="Link discord"
+                                            name="discord"
+                                           onChange={ nameDiscordChange }
+                                           InputProps={{
+                                           style: { color: 'black' }
+                                           }}
+                                           InputLabelProps={{
+                                           style: { color: 'black' },
+                                           shrink: true,  // Asegura que el label se comporte correctamente
+                                           }}
+                                           sx={{ mb: 2 }}
+                                       />
                                         <h4>Fecha</h4>
                                         <DatePicker 
                                         value={selectedDate}
@@ -169,9 +206,9 @@ export default function CreateCampaigns(){
                                         label="Basic time picker" />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} md={4}>
                                 <h1>Jugadores</h1>
-                                <TextField
+                             {/*    <TextField
                                         margin="normal"
                                         required
                                         fullWidth
@@ -180,8 +217,27 @@ export default function CreateCampaigns(){
                                         name="discord"
                                         onChange={numJugadoresChange}
                                         autoFocus
-                                        />
+                                        /> */}
                                         <TextField
+                                           
+                                           margin="normal"
+                                           required
+                                           fullWidth
+                                           id="discordLink"
+                                           label="Número de jugadores"
+                                           name="numjuadores"
+                                           onChange={numJugadoresChange}
+                                           InputProps={{
+                                           style: { color: 'black' }
+                                           }}
+                                           InputLabelProps={{
+                                           style: { color: 'black' },
+                                           shrink: true,  // Asegura que el label se comporte correctamente
+                                           }}
+                                          
+                                           sx={{ mb: 2 }}
+                                       />
+                                      {/*   <TextField
                                         margin="normal"
                                         required
                                         fullWidth
@@ -190,7 +246,27 @@ export default function CreateCampaigns(){
                                         name="estrellas"
                                         onChange={ numEstrellasChange}
                                         autoFocus
-                                        />
+                                        /> */}
+
+                                        <TextField
+                                           
+                                           margin="normal"
+                                           required
+                                           fullWidth
+                                           id="MinNumEstrellas"
+                                           label="Mínimo de estrellas"
+                                           name="estrellas"
+                                           onChange={ numEstrellasChange}
+                                           InputProps={{
+                                           style: { color: 'black' }
+                                           }}
+                                           InputLabelProps={{
+                                           style: { color: 'black' },
+                                           shrink: true,  // Asegura que el label se comporte correctamente
+                                           }}
+                                          
+                                           sx={{ mb: 2 }}
+                                       />
                                       {/*   <InputLabel id="demo-simple-select-label">Número de estrellas</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
@@ -206,7 +282,7 @@ export default function CreateCampaigns(){
                                             <MenuItem value={5}>5</MenuItem>
                                         </Select> */}
 
-                                        <RadioGroup
+                                        {/* <RadioGroup
                                             aria-labelledby="demo-radio-buttons-group-label"
                                             defaultValue="female"
                                             name="radio-buttons-group"
@@ -214,7 +290,7 @@ export default function CreateCampaigns(){
                                         >
                                             <FormControlLabel value="Usar modulo" control={<Radio />} label="Usar modulo" />
                                             <FormControlLabel value="Usar historia original" control={<Radio />} label="Usar historia original" />
-                                        </RadioGroup>
+                                        </RadioGroup> */}
                                 </Grid>
                                 <Grid item xs={4}>
                                 <h1>Imagen de campaña</h1>
@@ -243,25 +319,30 @@ export default function CreateCampaigns(){
                         <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
                             <Grid container spacing={2}>
                         
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={4}>
                                     <h1>Descripción de la campaña</h1>
                                     <TextField
                                         id="outlined-multiline-static-desc"
-                                        label="Multiline"
+                                        label=""
                                         multiline
                                         rows={4}
                                         onChange={desCampaignChange}
                                         //defaultValue="Default Value"
+                                        fullWidth
+                                        
+                                        sx={{  mb: 2,
+                                            maxWidth: '100%'
+                                        }}
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={4}>
                                 <h1>Vincula un personaje a esta campaña</h1>
                                 <Select onChange={SelectCharacterChange}
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select-character"
                                             
                                             label="Age"
-                                           
+                                            fullWidth
                                             >
                                             <MenuItem value={10}>Ten</MenuItem>
                                             <MenuItem value={20}>Twenty</MenuItem>
