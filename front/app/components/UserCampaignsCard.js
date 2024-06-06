@@ -42,6 +42,28 @@ export default function UserCampaignsCard({ camp }) {
         }
     };
 
+    const BorrarCampaña = async (IdC) => {
+        console.log('id campaña :', IdC);
+        console.log('info camp:',camp);
+        try {
+            const response = await fetch('http://localhost:8000/BorrarCamp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ IdC:IdC })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                alert('campaña eliminada');
+                window.location.href = '/UserCampaigns';
+            } else {
+                
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Error al eliminar:', error.message);
+        }
+    };
+
     useEffect(() => {
         if (camp && camp.IdCampaña) {
             BuscarMiembros(camp.IdCampaña);
@@ -86,7 +108,7 @@ export default function UserCampaignsCard({ camp }) {
                         <Grid item xs={12} md={6}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', m: 2, p: 2 }} >
                                 <Button variant="contained" onClick={editCampaign} className="global-button">Editar campaña</Button>
-                                <Button variant="contained" className="global-button">Borrar campaña</Button>
+                                <Button variant="contained" className="global-button" onClick={()=>BorrarCampaña(camp.IdCampaña)}>Borrar Campaña</Button>
                             </Box>
                             <TextField
                                 id="outlined-read-only-input"

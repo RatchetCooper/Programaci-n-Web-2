@@ -4,7 +4,7 @@ import LandingCampaigns from "../components/LandingCampaigns";
 import { useTheme } from '@mui/material/styles'; //esta va ligada al provider
 import { useRouter } from 'next/navigation'
 import CookieManager from '../Cookies/Cookies.js';
-
+import React, { useState, useEffect } from "react";
 
 
   
@@ -12,6 +12,12 @@ import CookieManager from '../Cookies/Cookies.js';
 export default function Landing(){
     const router = useRouter()
     const data = [{"username": "Erika",  "campaignName": "Nombre de la campaña 1"}, {"username": "Juan", "campaignName": "Nombre de la campaña 2"}]
+
+    const [campaña, setcampaña] = useState([]);
+
+    useEffect(() => {
+            LandingCampañas();
+      });
 
     const cambiarPagina = () => {
         //base de datos
@@ -23,6 +29,32 @@ export default function Landing(){
         router.push('/SearchCampaign', { scroll: false }) 
         
       };
+      async function LandingCampañas() {
+        try {
+          const response = await fetch('http://localhost:8000/LandCam', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ })
+          });
+    
+          const data = await response.json();
+          console.log('antes de modificar datos al recibirlos:',data);
+          if (response.ok) {
+            data.forEach(camp => {
+              camp.Imagen = `data:image/jpeg;base64,${Buffer.from(camp.Imagen).toString('base64')}`;
+              camp.Fecha = new Date(camp.Fecha).toISOString().split('T')[0];
+            });
+            
+            
+            setcampaña(data);
+            console.log(data);
+          } else {
+            console.error(data.message);
+          }
+        } catch (error) {
+          console.error('Error al buscar:', error.message);
+        }
+      }
     return(
 
 
@@ -49,7 +81,7 @@ export default function Landing(){
                 </Box>
             </Box>
 
-            <LandingCampaigns campaignData={ data } ></LandingCampaigns>
+            <LandingCampaigns campaignData={ campaña } ></LandingCampaigns>
 
             <Stack sx={{  display: "flex",  alignItems: "center",}} >
             <h1>Busca campañas</h1> 
