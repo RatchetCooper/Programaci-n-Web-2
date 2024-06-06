@@ -13,7 +13,7 @@ const upload = multer({ dest: 'uploads/' });
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'Lenuaje1!',
+  password: 'Maag201200.',
   database: 'misionboard',
   waitForConnections: true,
   connectionLimit: 10,
@@ -376,27 +376,22 @@ app.post('/searchcampaign', async (req, res) => {
 app.post('/tuscampa', async (req, res) => {
   const { IDu } = req.body;
   console.log('id al buscar campaña:', IDu);
-  
+
   try {
     const connection = await pool.getConnection();
     console.log('Database connection established');
 
-    // Query the database to get user details based on username and password
-    const [rows] = await connection.execute('SELECT IdCampaña, Titulo, Descripcion, MaxPlayers, CurrentPlayers, Estrellas, Link, fecha, Horario, Imagen FROM campaña WHERE Host = ?', [IDu]);
+    // Query the database to get campaigns based on user ID
+    const [rows] = await connection.execute('SELECT IdCampaña, Titulo, Descripcion, MaxPlayers, CurrentPlayers, Estrellas, Link, Fecha, Horario, Imagen FROM campaña WHERE Host = ?', [IDu]);
     connection.release();
 
     if (rows.length === 0) {
-      console.log('User not found in database');
-      return res.status(401).json({ message: 'Invalid username or password' });
+      console.log('No campaigns found for this user');
+      return res.status(401).json({ message: 'No campaigns found' });
     }
 
-    const info = rows;
-    console.log(info);
-
-    // Successful login
-    console.log('Login successful');
-    res.status(200).json(info);
- 
+    console.log('Campaigns found:', rows);
+    res.status(200).json(rows);
   } catch (error) {
     console.error('Error executing query:', error.message);
     res.status(500).json({ message: 'Internal server error' });
@@ -432,7 +427,93 @@ app.post('/infoCamp', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+//unirse a campaña
+app.post('/UnirseCamp', async (req, res) => {
+  const { IdCampaña,userId } = req.body;
+  console.log('idcamp:',IdCampaña);
+  console.log('iduser:',userId);
 
+
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+    const rows = await connection.execute('insert into CampañaUnirse (Id_Campaña,Id_Usuario,Id_unido) Values (?,?,true)',/*hacer que le llege id el usuario*/[IdCampaña,userId]);
+
+    if(rows[0].insertId)
+      {
+        res.status(200).json("se logro unir?");
+      }
+    else{
+      return res.status(401).json({ message: 'Error al insertar' });
+    }
+
+  }
+  catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+ 
+
+});
+
+//buscar miembros campaña
+app.post('/BuscarMiembros', async (req, res) => {
+  const { IdCampaña } = req.body;
+  
+  console.log('id de la campaña a buscar miembros:', IdCampaña);
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get user details based on IDu
+    const [rows] = await connection.execute('Select U.idUser,U.Nombre,U.Imagen,AU.Id_Campaña from user As U Inner Join CampañaUnirse AS AU on AU.Id_Usuario = U.idUser Inner join Campaña AS C on C.idCampaña = AU.Id_Campaña Where AU.Id_Campaña = ?', [IdCampaña]);
+    connection.release();
+
+    if (rows.length === 0) {
+      console.log('No campaigns found for this user');
+      return res.status(401).json({ message: 'No campaigns found' });
+    }
+
+    const info = rows;
+    console.log('Miembros Encontrados:', info);
+
+    // Successful response
+    res.status(200).json(info);
+ 
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//explusar miembro
+app.post('/ExplusarMiembro', async (req, res) => {
+  const { IdExp,IdC } = req.body;
+  
+  console.log('id del miembro explusado:', IdExp);
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connection established');
+
+    // Query the database to get user details based on IDu
+    const [rows] = await connection.execute('Delete from CampañaUnirse where Id_Usuario = ? and Id_Campaña = ?', [IdExp,IdC]);
+    connection.release();
+
+    if (rows.length === 0) {
+      console.log('No campaigns found for this user');
+      return res.status(401).json({ message: 'No campaigns found' });
+    }
+
+    const info = rows;
+    console.log('Miembros Encontrados:', info);
+
+    // Successful response
+    res.status(200).json(info);
+ 
+  } catch (error) {
+    console.error('Error executing query:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // Serve images from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

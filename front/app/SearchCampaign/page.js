@@ -6,6 +6,7 @@ import SearchCampaignsCard from "../components/SearchCampaignsCard";
 import { useRouter } from 'next/navigation'
 import {useState} from "react";
 
+
 export default function SearchCampaign(){
     const router = useRouter()
     const searchCampaignData = [{"username": "Erika",  "campaignName": "Test 1"}, {"username": "Juan", "campaignName": "Test 2"}]

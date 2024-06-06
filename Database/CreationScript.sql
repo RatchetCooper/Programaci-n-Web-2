@@ -1,682 +1,758 @@
--- MySQL Workbench Forward Engineering
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: misionboard
+-- ------------------------------------------------------
+-- Server version	8.0.37
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema misionboard
--- -----------------------------------------------------
+--
+-- Table structure for table `ataque`
+--
 
--- -----------------------------------------------------
--- Schema misionboard
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `misionboard` DEFAULT CHARACTER SET utf8mb3 ;
-USE `misionboard` ;
-
--- -----------------------------------------------------
--- Table `misionboard`.`dados`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`dados` (
-  `idDados` INT NOT NULL AUTO_INCREMENT,
-  `NumeroCaras` INT NOT NULL,
-  PRIMARY KEY (`idDados`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`stat`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`stat` (
-  `idStat` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Codigo` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idStat`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`tipodaño`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`tipodaño` (
-  `idTipoDaño` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idTipoDaño`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 27
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`ataque`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`ataque` (
-  `idAtaque` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `AimMod` INT NULL DEFAULT NULL,
-  `DmgMod` INT NULL DEFAULT NULL,
-  `Porficiencia` TINYINT NULL DEFAULT NULL,
-  `NDados` INT NOT NULL,
-  `Dados_idDados` INT NOT NULL,
-  `TipoDaño_idTipoDaño` INT NOT NULL,
-  `Stat_idStat` INT NOT NULL,
+DROP TABLE IF EXISTS `ataque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ataque` (
+  `idAtaque` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `AimMod` int DEFAULT NULL,
+  `DmgMod` int DEFAULT NULL,
+  `Porficiencia` tinyint DEFAULT NULL,
+  `NDados` int NOT NULL,
+  `Dados_idDados` int NOT NULL,
+  `TipoDaño_idTipoDaño` int NOT NULL,
+  `Stat_idStat` int NOT NULL,
   PRIMARY KEY (`idAtaque`),
-  INDEX `fk_Ataque_Dados1_idx` (`Dados_idDados` ASC) VISIBLE,
-  INDEX `fk_Ataque_TipoDaño1_idx` (`TipoDaño_idTipoDaño` ASC) VISIBLE,
-  INDEX `fk_Ataque_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
-  CONSTRAINT `fk_Ataque_Dados1`
-    FOREIGN KEY (`Dados_idDados`)
-    REFERENCES `misionboard`.`dados` (`idDados`),
-  CONSTRAINT `fk_Ataque_Stat1`
-    FOREIGN KEY (`Stat_idStat`)
-    REFERENCES `misionboard`.`stat` (`idStat`),
-  CONSTRAINT `fk_Ataque_TipoDaño1`
-    FOREIGN KEY (`TipoDaño_idTipoDaño`)
-    REFERENCES `misionboard`.`tipodaño` (`idTipoDaño`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Ataque_Dados1_idx` (`Dados_idDados`),
+  KEY `fk_Ataque_TipoDaño1_idx` (`TipoDaño_idTipoDaño`),
+  KEY `fk_Ataque_Stat1_idx` (`Stat_idStat`),
+  CONSTRAINT `fk_Ataque_Dados1` FOREIGN KEY (`Dados_idDados`) REFERENCES `dados` (`idDados`),
+  CONSTRAINT `fk_Ataque_Stat1` FOREIGN KEY (`Stat_idStat`) REFERENCES `stat` (`idStat`),
+  CONSTRAINT `fk_Ataque_TipoDaño1` FOREIGN KEY (`TipoDaño_idTipoDaño`) REFERENCES `tipodaño` (`idTipoDaño`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `ataqueficha`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`user` (
-  `idUser` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Contra` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(250) NOT NULL,
-  `Imagen` LONGBLOB NULL DEFAULT NULL,
-  `ImageData` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idUser`),
-  UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE,
-  UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 10
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`ficha`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`ficha` (
-  `idFicha` INT NOT NULL AUTO_INCREMENT,
-  `Vida` INT NOT NULL DEFAULT '0',
-  `VidaMac` INT NOT NULL DEFAULT '0',
-  `VidaTemp` INT NOT NULL DEFAULT '0',
-  `Defensa` INT NOT NULL DEFAULT '10',
-  `Velocidad` INT NOT NULL DEFAULT '30',
-  `Nivel` INT NOT NULL DEFAULT '1',
-  `Owner` INT NOT NULL,
-  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`idFicha`),
-  INDEX `IdUser_idx` (`Owner` ASC) VISIBLE,
-  CONSTRAINT `IdUser`
-    FOREIGN KEY (`Owner`)
-    REFERENCES `misionboard`.`user` (`idUser`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`ataqueficha`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`ataqueficha` (
-  `idAtaqueFicha` INT NOT NULL AUTO_INCREMENT,
-  `Ficha_idFicha` INT NOT NULL,
-  `Ataque_idAtaque` INT NOT NULL,
+DROP TABLE IF EXISTS `ataqueficha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ataqueficha` (
+  `idAtaqueFicha` int NOT NULL AUTO_INCREMENT,
+  `Ficha_idFicha` int NOT NULL,
+  `Ataque_idAtaque` int NOT NULL,
   PRIMARY KEY (`idAtaqueFicha`),
-  INDEX `fk_AtaqueFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  INDEX `fk_AtaqueFicha_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
-  CONSTRAINT `fk_AtaqueFicha_Ataque1`
-    FOREIGN KEY (`Ataque_idAtaque`)
-    REFERENCES `misionboard`.`ataque` (`idAtaque`),
-  CONSTRAINT `fk_AtaqueFicha_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_AtaqueFicha_Ficha1_idx` (`Ficha_idFicha`),
+  KEY `fk_AtaqueFicha_Ataque1_idx` (`Ataque_idAtaque`),
+  CONSTRAINT `fk_AtaqueFicha_Ataque1` FOREIGN KEY (`Ataque_idAtaque`) REFERENCES `ataque` (`idAtaque`),
+  CONSTRAINT `fk_AtaqueFicha_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Temporary view structure for view `attackdetails`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`campaignusersinfo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campaignusersinfo` (
-  `idCampañaUserFicha` INT NULL DEFAULT NULL,
-  `Host` INT NULL DEFAULT NULL,
-  `idUser` INT NULL DEFAULT NULL,
-  `Nombre` INT NULL DEFAULT NULL,
-  `Email` INT NULL DEFAULT NULL,
-  `Imagen` INT NULL DEFAULT NULL)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DROP TABLE IF EXISTS `attackdetails`;
+/*!50001 DROP VIEW IF EXISTS `attackdetails`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `attackdetails` AS SELECT 
+ 1 AS `idAtaque`,
+ 1 AS `AttackName`,
+ 1 AS `AimMod`,
+ 1 AS `DmgMod`,
+ 1 AS `Porficiencia`,
+ 1 AS `NDados`,
+ 1 AS `DiceType`,
+ 1 AS `DamageType`,
+ 1 AS `StatName`*/;
+SET character_set_client = @saved_cs_client;
 
+--
+-- Temporary view structure for view `campaignuserinfo`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`campaña`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campaña` (
-  `idCampaña` INT NOT NULL AUTO_INCREMENT,
-  `Titulo` VARCHAR(100) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  `MaxPlayers` INT NOT NULL,
-  `CurrentPlayers` INT NOT NULL,
-  `Estrellas` INT NULL DEFAULT NULL,
-  `Link` VARCHAR(200) NULL DEFAULT NULL,
-  `Fecha` DATE NOT NULL,
-  `Horario` TIME NOT NULL,
-  `Imagen` LONGBLOB NULL DEFAULT NULL,
-  `Host` INT NOT NULL,
+DROP TABLE IF EXISTS `campaignuserinfo`;
+/*!50001 DROP VIEW IF EXISTS `campaignuserinfo`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `campaignuserinfo` AS SELECT 
+ 1 AS `campaign_title`,
+ 1 AS `user_name`,
+ 1 AS `user_email`,
+ 1 AS `character_life`,
+ 1 AS `character_defense`,
+ 1 AS `character_speed`,
+ 1 AS `class_name`,
+ 1 AS `race_name`,
+ 1 AS `background_name`,
+ 1 AS `host_name`,
+ 1 AS `host_email`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `campaignusersinfo`
+--
+
+DROP TABLE IF EXISTS `campaignusersinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `campaignusersinfo` (
+  `idCampañaUserFicha` int DEFAULT NULL,
+  `Host` int DEFAULT NULL,
+  `idUser` int DEFAULT NULL,
+  `Nombre` int DEFAULT NULL,
+  `Email` int DEFAULT NULL,
+  `Imagen` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `campaña`
+--
+
+DROP TABLE IF EXISTS `campaña`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `campaña` (
+  `idCampaña` int NOT NULL AUTO_INCREMENT,
+  `Titulo` varchar(100) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  `MaxPlayers` int NOT NULL,
+  `CurrentPlayers` int NOT NULL,
+  `Estrellas` int DEFAULT NULL,
+  `Link` varchar(200) DEFAULT NULL,
+  `Fecha` date NOT NULL,
+  `Horario` time NOT NULL,
+  `Imagen` longblob,
+  `Host` int NOT NULL,
   PRIMARY KEY (`idCampaña`),
-  UNIQUE INDEX `idCampaña_UNIQUE` (`idCampaña` ASC) VISIBLE,
-  INDEX `Host_idx` (`Host` ASC) VISIBLE,
-  CONSTRAINT `Host`
-    FOREIGN KEY (`Host`)
-    REFERENCES `misionboard`.`user` (`idUser`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  UNIQUE KEY `idCampaña_UNIQUE` (`idCampaña`),
+  KEY `Host_idx` (`Host`),
+  CONSTRAINT `Host` FOREIGN KEY (`Host`) REFERENCES `user` (`idUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `campañaunirse`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`campañauserficha`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campañauserficha` (
-  `idCampañaUserFicha` INT NOT NULL AUTO_INCREMENT,
-  `Campaña_idCampaña` INT NOT NULL,
-  `User_idUser` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
+DROP TABLE IF EXISTS `campañaunirse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `campañaunirse` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `Id_Campaña` int DEFAULT NULL,
+  `Id_Usuario` int DEFAULT NULL,
+  `Id_unido` tinyint(1) DEFAULT (false),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `campañauserficha`
+--
+
+DROP TABLE IF EXISTS `campañauserficha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `campañauserficha` (
+  `idCampañaUserFicha` int NOT NULL AUTO_INCREMENT,
+  `Campaña_idCampaña` int NOT NULL,
+  `User_idUser` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
   PRIMARY KEY (`idCampañaUserFicha`),
-  INDEX `fk_CampañaUserFicha_Campaña1_idx` (`Campaña_idCampaña` ASC) VISIBLE,
-  INDEX `fk_CampañaUserFicha_User1_idx` (`User_idUser` ASC) VISIBLE,
-  INDEX `fk_CampañaUserFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  CONSTRAINT `fk_CampañaUserFicha_Campaña1`
-    FOREIGN KEY (`Campaña_idCampaña`)
-    REFERENCES `misionboard`.`campaña` (`idCampaña`),
-  CONSTRAINT `fk_CampañaUserFicha_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_CampañaUserFicha_User1`
-    FOREIGN KEY (`User_idUser`)
-    REFERENCES `misionboard`.`user` (`idUser`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_CampañaUserFicha_Campaña1_idx` (`Campaña_idCampaña`),
+  KEY `fk_CampañaUserFicha_User1_idx` (`User_idUser`),
+  KEY `fk_CampañaUserFicha_Ficha1_idx` (`Ficha_idFicha`),
+  CONSTRAINT `fk_CampañaUserFicha_Campaña1` FOREIGN KEY (`Campaña_idCampaña`) REFERENCES `campaña` (`idCampaña`),
+  CONSTRAINT `fk_CampañaUserFicha_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_CampañaUserFicha_User1` FOREIGN KEY (`User_idUser`) REFERENCES `user` (`idUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `clase`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`clase`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`clase` (
-  `idClase` INT NOT NULL,
-  `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  `Vida` INT NOT NULL,
-  PRIMARY KEY (`idClase`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DROP TABLE IF EXISTS `clase`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `clase` (
+  `idClase` int NOT NULL,
+  `Nombre` varchar(50) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  `Vida` int NOT NULL,
+  PRIMARY KEY (`idClase`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `dados`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`feat`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`feat` (
-  `idFeat` INT NOT NULL,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  PRIMARY KEY (`idFeat`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DROP TABLE IF EXISTS `dados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dados` (
+  `idDados` int NOT NULL AUTO_INCREMENT,
+  `NumeroCaras` int NOT NULL,
+  PRIMARY KEY (`idDados`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `feat`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`featclase`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`featclase` (
-  `idFeatClase` INT NOT NULL,
-  `Nivel` INT NOT NULL,
-  `Clase_idClase` INT NOT NULL,
-  `Feat_idFeat` INT NOT NULL,
+DROP TABLE IF EXISTS `feat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `feat` (
+  `idFeat` int NOT NULL,
+  `Nombre` varchar(45) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  PRIMARY KEY (`idFeat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `featclase`
+--
+
+DROP TABLE IF EXISTS `featclase`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `featclase` (
+  `idFeatClase` int NOT NULL,
+  `Nivel` int NOT NULL,
+  `Clase_idClase` int NOT NULL,
+  `Feat_idFeat` int NOT NULL,
   PRIMARY KEY (`idFeatClase`),
-  INDEX `fk_FeatClase_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
-  INDEX `fk_FeatClase_Feat1_idx` (`Feat_idFeat` ASC) VISIBLE,
-  CONSTRAINT `fk_FeatClase_Clase1`
-    FOREIGN KEY (`Clase_idClase`)
-    REFERENCES `misionboard`.`clase` (`idClase`),
-  CONSTRAINT `fk_FeatClase_Feat1`
-    FOREIGN KEY (`Feat_idFeat`)
-    REFERENCES `misionboard`.`feat` (`idFeat`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_FeatClase_Clase1_idx` (`Clase_idClase`),
+  KEY `fk_FeatClase_Feat1_idx` (`Feat_idFeat`),
+  CONSTRAINT `fk_FeatClase_Clase1` FOREIGN KEY (`Clase_idClase`) REFERENCES `clase` (`idClase`),
+  CONSTRAINT `fk_FeatClase_Feat1` FOREIGN KEY (`Feat_idFeat`) REFERENCES `feat` (`idFeat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `featselect`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`raza`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`raza` (
-  `idRaza` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  PRIMARY KEY (`idRaza`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`trasfondo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`trasfondo` (
-  `idTrasfondo` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(50) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  PRIMARY KEY (`idTrasfondo`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`seleccion`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`seleccion` (
-  `Clase_idClase` INT NOT NULL,
-  `Raza_idRaza` INT NOT NULL,
-  `Trasfondo_idTrasfondo` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
-  `IdSeleccion` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`IdSeleccion`),
-  INDEX `fk_Seleccion_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
-  INDEX `fk_Seleccion_Raza1_idx` (`Raza_idRaza` ASC) VISIBLE,
-  INDEX `fk_Seleccion_Trasfondo1_idx` (`Trasfondo_idTrasfondo` ASC) VISIBLE,
-  INDEX `fk_Seleccion_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  CONSTRAINT `fk_Seleccion_Clase1`
-    FOREIGN KEY (`Clase_idClase`)
-    REFERENCES `misionboard`.`clase` (`idClase`),
-  CONSTRAINT `fk_Seleccion_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_Seleccion_Raza1`
-    FOREIGN KEY (`Raza_idRaza`)
-    REFERENCES `misionboard`.`raza` (`idRaza`),
-  CONSTRAINT `fk_Seleccion_Trasfondo1`
-    FOREIGN KEY (`Trasfondo_idTrasfondo`)
-    REFERENCES `misionboard`.`trasfondo` (`idTrasfondo`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 7
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`featselect`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`featselect` (
-  `idFeatSelect` INT NOT NULL,
-  `Nivel` INT NOT NULL,
-  `Feat_idFeat` INT NOT NULL,
-  `Seleccion_IdSeleccion` INT NOT NULL,
+DROP TABLE IF EXISTS `featselect`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `featselect` (
+  `idFeatSelect` int NOT NULL,
+  `Nivel` int NOT NULL,
+  `Feat_idFeat` int NOT NULL,
+  `Seleccion_IdSeleccion` int NOT NULL,
   PRIMARY KEY (`idFeatSelect`),
-  INDEX `fk_FeatSelect_Feat1_idx` (`Feat_idFeat` ASC) VISIBLE,
-  INDEX `fk_FeatSelect_Seleccion1_idx` (`Seleccion_IdSeleccion` ASC) VISIBLE,
-  CONSTRAINT `fk_FeatSelect_Feat1`
-    FOREIGN KEY (`Feat_idFeat`)
-    REFERENCES `misionboard`.`feat` (`idFeat`),
-  CONSTRAINT `fk_FeatSelect_Seleccion1`
-    FOREIGN KEY (`Seleccion_IdSeleccion`)
-    REFERENCES `misionboard`.`seleccion` (`IdSeleccion`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_FeatSelect_Feat1_idx` (`Feat_idFeat`),
+  KEY `fk_FeatSelect_Seleccion1_idx` (`Seleccion_IdSeleccion`),
+  CONSTRAINT `fk_FeatSelect_Feat1` FOREIGN KEY (`Feat_idFeat`) REFERENCES `feat` (`idFeat`),
+  CONSTRAINT `fk_FeatSelect_Seleccion1` FOREIGN KEY (`Seleccion_IdSeleccion`) REFERENCES `seleccion` (`IdSeleccion`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `ficha`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`fichastats`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`fichastats` (
-  `idFichaStats` INT NOT NULL AUTO_INCREMENT,
-  `Numero` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
-  `Stat_idStat` INT NOT NULL,
+DROP TABLE IF EXISTS `ficha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ficha` (
+  `idFicha` int NOT NULL AUTO_INCREMENT,
+  `Vida` int NOT NULL DEFAULT '0',
+  `VidaMac` int NOT NULL DEFAULT '0',
+  `VidaTemp` int NOT NULL DEFAULT '0',
+  `Defensa` int NOT NULL DEFAULT '10',
+  `Velocidad` int NOT NULL DEFAULT '30',
+  `Nivel` int NOT NULL DEFAULT '1',
+  `Owner` int NOT NULL,
+  `Nombre` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idFicha`),
+  KEY `IdUser_idx` (`Owner`),
+  CONSTRAINT `IdUser` FOREIGN KEY (`Owner`) REFERENCES `user` (`idUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `fichastats`
+--
+
+DROP TABLE IF EXISTS `fichastats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fichastats` (
+  `idFichaStats` int NOT NULL AUTO_INCREMENT,
+  `Numero` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
+  `Stat_idStat` int NOT NULL,
   PRIMARY KEY (`idFichaStats`),
-  INDEX `fk_FichaStats_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  INDEX `fk_FichaStats_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
-  CONSTRAINT `fk_FichaStats_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_FichaStats_Stat1`
-    FOREIGN KEY (`Stat_idStat`)
-    REFERENCES `misionboard`.`stat` (`idStat`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 39
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_FichaStats_Ficha1_idx` (`Ficha_idFicha`),
+  KEY `fk_FichaStats_Stat1_idx` (`Stat_idStat`),
+  CONSTRAINT `fk_FichaStats_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_FichaStats_Stat1` FOREIGN KEY (`Stat_idStat`) REFERENCES `stat` (`idStat`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `hechizo`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`hechizo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`hechizo` (
-  `idHechizo` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Nivel` INT NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  `Stat_idStat` INT NOT NULL,
-  `Ataque_idAtaque` INT NOT NULL,
+DROP TABLE IF EXISTS `hechizo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hechizo` (
+  `idHechizo` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Nivel` int NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  `Stat_idStat` int NOT NULL,
+  `Ataque_idAtaque` int NOT NULL,
   PRIMARY KEY (`idHechizo`),
-  INDEX `fk_Hechizo_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
-  INDEX `fk_Hechizo_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
-  CONSTRAINT `fk_Hechizo_Ataque1`
-    FOREIGN KEY (`Ataque_idAtaque`)
-    REFERENCES `misionboard`.`ataque` (`idAtaque`),
-  CONSTRAINT `fk_Hechizo_Stat1`
-    FOREIGN KEY (`Stat_idStat`)
-    REFERENCES `misionboard`.`stat` (`idStat`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Hechizo_Stat1_idx` (`Stat_idStat`),
+  KEY `fk_Hechizo_Ataque1_idx` (`Ataque_idAtaque`),
+  CONSTRAINT `fk_Hechizo_Ataque1` FOREIGN KEY (`Ataque_idAtaque`) REFERENCES `ataque` (`idAtaque`),
+  CONSTRAINT `fk_Hechizo_Stat1` FOREIGN KEY (`Stat_idStat`) REFERENCES `stat` (`idStat`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `hechizoficha`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`hechizoficha`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`hechizoficha` (
-  `idHechizoFicha` INT NOT NULL AUTO_INCREMENT,
-  `Hechizo_idHechizo` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
+DROP TABLE IF EXISTS `hechizoficha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hechizoficha` (
+  `idHechizoFicha` int NOT NULL AUTO_INCREMENT,
+  `Hechizo_idHechizo` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
   PRIMARY KEY (`idHechizoFicha`),
-  INDEX `fk_HechizoFicha_Hechizo1_idx` (`Hechizo_idHechizo` ASC) VISIBLE,
-  INDEX `fk_HechizoFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  CONSTRAINT `fk_HechizoFicha_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_HechizoFicha_Hechizo1`
-    FOREIGN KEY (`Hechizo_idHechizo`)
-    REFERENCES `misionboard`.`hechizo` (`idHechizo`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_HechizoFicha_Hechizo1_idx` (`Hechizo_idHechizo`),
+  KEY `fk_HechizoFicha_Ficha1_idx` (`Ficha_idFicha`),
+  CONSTRAINT `fk_HechizoFicha_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_HechizoFicha_Hechizo1` FOREIGN KEY (`Hechizo_idHechizo`) REFERENCES `hechizo` (`idHechizo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `imagen`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`imagen`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`imagen` (
-  `idImagen` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Imagen` BLOB NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
+DROP TABLE IF EXISTS `imagen`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `imagen` (
+  `idImagen` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Imagen` blob NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
   PRIMARY KEY (`idImagen`),
-  INDEX `fk_Imagen_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  CONSTRAINT `fk_Imagen_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Imagen_Ficha1_idx` (`Ficha_idFicha`),
+  CONSTRAINT `fk_Imagen_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `inventario`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`objeto`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`objeto` (
-  `idObjeto` INT NOT NULL,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` VARCHAR(3000) NOT NULL,
-  `Ataque_idAtaque` INT NOT NULL,
-  PRIMARY KEY (`idObjeto`),
-  INDEX `fk_Objeto_Ataque1_idx` (`Ataque_idAtaque` ASC) VISIBLE,
-  CONSTRAINT `fk_Objeto_Ataque1`
-    FOREIGN KEY (`Ataque_idAtaque`)
-    REFERENCES `misionboard`.`ataque` (`idAtaque`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `misionboard`.`inventario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`inventario` (
-  `idInventario` INT NOT NULL AUTO_INCREMENT,
-  `Cantidad` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
-  `Objeto_idObjeto` INT NOT NULL,
+DROP TABLE IF EXISTS `inventario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inventario` (
+  `idInventario` int NOT NULL AUTO_INCREMENT,
+  `Cantidad` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
+  `Objeto_idObjeto` int NOT NULL,
   PRIMARY KEY (`idInventario`),
-  INDEX `fk_Inventario_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  INDEX `fk_Inventario_Objeto1_idx` (`Objeto_idObjeto` ASC) VISIBLE,
-  CONSTRAINT `fk_Inventario_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_Inventario_Objeto1`
-    FOREIGN KEY (`Objeto_idObjeto`)
-    REFERENCES `misionboard`.`objeto` (`idObjeto`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Inventario_Ficha1_idx` (`Ficha_idFicha`),
+  KEY `fk_Inventario_Objeto1_idx` (`Objeto_idObjeto`),
+  CONSTRAINT `fk_Inventario_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_Inventario_Objeto1` FOREIGN KEY (`Objeto_idObjeto`) REFERENCES `objeto` (`idObjeto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `objeto`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`proficiencias`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`proficiencias` (
-  `idProficiencias` INT NOT NULL AUTO_INCREMENT,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Stat_idStat` INT NOT NULL,
-  `Salvacion` TINYINT NULL DEFAULT NULL,
-  PRIMARY KEY (`idProficiencias`),
-  INDEX `fk_Proficiencias_Stat1_idx` (`Stat_idStat` ASC) VISIBLE,
-  CONSTRAINT `fk_Proficiencias_Stat1`
-    FOREIGN KEY (`Stat_idStat`)
-    REFERENCES `misionboard`.`stat` (`idStat`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 45
-DEFAULT CHARACTER SET = utf8mb3;
+DROP TABLE IF EXISTS `objeto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `objeto` (
+  `idObjeto` int NOT NULL,
+  `Nombre` varchar(45) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  `Ataque_idAtaque` int NOT NULL,
+  PRIMARY KEY (`idObjeto`),
+  KEY `fk_Objeto_Ataque1_idx` (`Ataque_idAtaque`),
+  CONSTRAINT `fk_Objeto_Ataque1` FOREIGN KEY (`Ataque_idAtaque`) REFERENCES `ataque` (`idAtaque`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Temporary view structure for view `otheruserreviews`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`proficienciaficha`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`proficienciaficha` (
-  `idProficienciaFicha` INT NOT NULL AUTO_INCREMENT,
-  `Maestro` TINYINT NOT NULL,
-  `Proficiencias_idProficiencias` INT NOT NULL,
-  `Ficha_idFicha` INT NOT NULL,
+DROP TABLE IF EXISTS `otheruserreviews`;
+/*!50001 DROP VIEW IF EXISTS `otheruserreviews`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `otheruserreviews` AS SELECT 
+ 1 AS `idReview`,
+ 1 AS `Comentario`,
+ 1 AS `Calificacion`,
+ 1 AS `ReviwerId`,
+ 1 AS `ReviewerNombre`,
+ 1 AS `ReviewerEmail`,
+ 1 AS `Campaña_idCampaña`,
+ 1 AS `ReviewedId`,
+ 1 AS `ReviewedNombre`,
+ 1 AS `ReviewedEmail`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `proficienciaficha`
+--
+
+DROP TABLE IF EXISTS `proficienciaficha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `proficienciaficha` (
+  `idProficienciaFicha` int NOT NULL AUTO_INCREMENT,
+  `Maestro` tinyint NOT NULL,
+  `Proficiencias_idProficiencias` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
   PRIMARY KEY (`idProficienciaFicha`),
-  INDEX `fk_ProficienciaFicha_Proficiencias1_idx` (`Proficiencias_idProficiencias` ASC) VISIBLE,
-  INDEX `fk_ProficienciaFicha_Ficha1_idx` (`Ficha_idFicha` ASC) VISIBLE,
-  CONSTRAINT `fk_ProficienciaFicha_Ficha1`
-    FOREIGN KEY (`Ficha_idFicha`)
-    REFERENCES `misionboard`.`ficha` (`idFicha`),
-  CONSTRAINT `fk_ProficienciaFicha_Proficiencias1`
-    FOREIGN KEY (`Proficiencias_idProficiencias`)
-    REFERENCES `misionboard`.`proficiencias` (`idProficiencias`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_ProficienciaFicha_Proficiencias1_idx` (`Proficiencias_idProficiencias`),
+  KEY `fk_ProficienciaFicha_Ficha1_idx` (`Ficha_idFicha`),
+  CONSTRAINT `fk_ProficienciaFicha_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_ProficienciaFicha_Proficiencias1` FOREIGN KEY (`Proficiencias_idProficiencias`) REFERENCES `proficiencias` (`idProficiencias`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `proficiencias`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`review`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`review` (
-  `idReview` INT NOT NULL AUTO_INCREMENT,
-  `Comentario` VARCHAR(3000) NULL DEFAULT NULL,
-  `Calificacion` INT NULL DEFAULT NULL,
-  `ReviwerId` INT NOT NULL,
-  `Campaña_idCampaña` INT NOT NULL,
-  `ReviewedId` INT NOT NULL,
+DROP TABLE IF EXISTS `proficiencias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `proficiencias` (
+  `idProficiencias` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Stat_idStat` int NOT NULL,
+  `Salvacion` tinyint DEFAULT NULL,
+  PRIMARY KEY (`idProficiencias`),
+  KEY `fk_Proficiencias_Stat1_idx` (`Stat_idStat`),
+  CONSTRAINT `fk_Proficiencias_Stat1` FOREIGN KEY (`Stat_idStat`) REFERENCES `stat` (`idStat`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `raza`
+--
+
+DROP TABLE IF EXISTS `raza`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `raza` (
+  `idRaza` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(50) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  PRIMARY KEY (`idRaza`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review`
+--
+
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `review` (
+  `idReview` int NOT NULL AUTO_INCREMENT,
+  `Comentario` varchar(3000) DEFAULT NULL,
+  `Calificacion` int DEFAULT NULL,
+  `ReviwerId` int NOT NULL,
+  `Campaña_idCampaña` int NOT NULL,
+  `ReviewedId` int NOT NULL,
   PRIMARY KEY (`idReview`),
-  INDEX `fk_Review_User_idx` (`ReviwerId` ASC) VISIBLE,
-  INDEX `fk_Review_Campaña1_idx` (`Campaña_idCampaña` ASC) VISIBLE,
-  INDEX `fk_Review_User1_idx` (`ReviewedId` ASC) VISIBLE,
-  CONSTRAINT `fk_Review_Campaña1`
-    FOREIGN KEY (`Campaña_idCampaña`)
-    REFERENCES `misionboard`.`campaña` (`idCampaña`),
-  CONSTRAINT `fk_Review_User`
-    FOREIGN KEY (`ReviwerId`)
-    REFERENCES `misionboard`.`user` (`idUser`),
-  CONSTRAINT `fk_Review_User1`
-    FOREIGN KEY (`ReviewedId`)
-    REFERENCES `misionboard`.`user` (`idUser`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Review_User_idx` (`ReviwerId`),
+  KEY `fk_Review_Campaña1_idx` (`Campaña_idCampaña`),
+  KEY `fk_Review_User1_idx` (`ReviewedId`),
+  CONSTRAINT `fk_Review_Campaña1` FOREIGN KEY (`Campaña_idCampaña`) REFERENCES `campaña` (`idCampaña`),
+  CONSTRAINT `fk_Review_User` FOREIGN KEY (`ReviwerId`) REFERENCES `user` (`idUser`),
+  CONSTRAINT `fk_Review_User1` FOREIGN KEY (`ReviewedId`) REFERENCES `user` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `seleccion`
+--
 
--- -----------------------------------------------------
--- Table `misionboard`.`subclase`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`subclase` (
-  `idSubclase` INT NOT NULL,
-  `Nivel` INT NOT NULL,
-  `Clase_idClase` INT NOT NULL,
-  `Clase_idClase1` INT NOT NULL,
+DROP TABLE IF EXISTS `seleccion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `seleccion` (
+  `Clase_idClase` int NOT NULL,
+  `Raza_idRaza` int NOT NULL,
+  `Trasfondo_idTrasfondo` int NOT NULL,
+  `Ficha_idFicha` int NOT NULL,
+  `IdSeleccion` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`IdSeleccion`),
+  KEY `fk_Seleccion_Clase1_idx` (`Clase_idClase`),
+  KEY `fk_Seleccion_Raza1_idx` (`Raza_idRaza`),
+  KEY `fk_Seleccion_Trasfondo1_idx` (`Trasfondo_idTrasfondo`),
+  KEY `fk_Seleccion_Ficha1_idx` (`Ficha_idFicha`),
+  CONSTRAINT `fk_Seleccion_Clase1` FOREIGN KEY (`Clase_idClase`) REFERENCES `clase` (`idClase`),
+  CONSTRAINT `fk_Seleccion_Ficha1` FOREIGN KEY (`Ficha_idFicha`) REFERENCES `ficha` (`idFicha`),
+  CONSTRAINT `fk_Seleccion_Raza1` FOREIGN KEY (`Raza_idRaza`) REFERENCES `raza` (`idRaza`),
+  CONSTRAINT `fk_Seleccion_Trasfondo1` FOREIGN KEY (`Trasfondo_idTrasfondo`) REFERENCES `trasfondo` (`idTrasfondo`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `stat`
+--
+
+DROP TABLE IF EXISTS `stat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stat` (
+  `idStat` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Codigo` varchar(45) NOT NULL,
+  PRIMARY KEY (`idStat`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `subclase`
+--
+
+DROP TABLE IF EXISTS `subclase`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subclase` (
+  `idSubclase` int NOT NULL,
+  `Nivel` int NOT NULL,
+  `Clase_idClase` int NOT NULL,
+  `Clase_idClase1` int NOT NULL,
   PRIMARY KEY (`idSubclase`),
-  INDEX `fk_Subclase_Clase1_idx` (`Clase_idClase` ASC) VISIBLE,
-  INDEX `fk_Subclase_Clase2_idx` (`Clase_idClase1` ASC) VISIBLE,
-  CONSTRAINT `fk_Subclase_Clase1`
-    FOREIGN KEY (`Clase_idClase`)
-    REFERENCES `misionboard`.`clase` (`idClase`),
-  CONSTRAINT `fk_Subclase_Clase2`
-    FOREIGN KEY (`Clase_idClase1`)
-    REFERENCES `misionboard`.`clase` (`idClase`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_Subclase_Clase1_idx` (`Clase_idClase`),
+  KEY `fk_Subclase_Clase2_idx` (`Clase_idClase1`),
+  CONSTRAINT `fk_Subclase_Clase1` FOREIGN KEY (`Clase_idClase`) REFERENCES `clase` (`idClase`),
+  CONSTRAINT `fk_Subclase_Clase2` FOREIGN KEY (`Clase_idClase1`) REFERENCES `clase` (`idClase`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-USE `misionboard` ;
+--
+-- Table structure for table `tipodaño`
+--
 
--- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`attackdetails`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`attackdetails` (`idAtaque` INT, `AttackName` INT, `AimMod` INT, `DmgMod` INT, `Porficiencia` INT, `NDados` INT, `DiceType` INT, `DamageType` INT, `StatName` INT);
+DROP TABLE IF EXISTS `tipodaño`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipodaño` (
+  `idTipoDaño` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  PRIMARY KEY (`idTipoDaño`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`campaignuserinfo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`campaignuserinfo` (`campaign_title` INT, `user_name` INT, `user_email` INT, `character_life` INT, `character_defense` INT, `character_speed` INT, `class_name` INT, `race_name` INT, `background_name` INT, `host_name` INT, `host_email` INT);
+--
+-- Table structure for table `trasfondo`
+--
 
--- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`otheruserreviews`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`otheruserreviews` (`idReview` INT, `Comentario` INT, `Calificacion` INT, `ReviwerId` INT, `ReviewerNombre` INT, `ReviewerEmail` INT, `Campaña_idCampaña` INT, `ReviewedId` INT, `ReviewedNombre` INT, `ReviewedEmail` INT);
+DROP TABLE IF EXISTS `trasfondo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trasfondo` (
+  `idTrasfondo` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(50) NOT NULL,
+  `Descripcion` varchar(3000) NOT NULL,
+  PRIMARY KEY (`idTrasfondo`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Placeholder table for view `misionboard`.`userreviews`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `misionboard`.`userreviews` (`idReview` INT, `Comentario` INT, `Calificacion` INT, `ReviwerId` INT, `ReviewerNombre` INT, `ReviewerEmail` INT, `Campaña_idCampaña` INT, `ReviewedId` INT, `ReviewedNombre` INT, `ReviewedEmail` INT);
+--
+-- Table structure for table `user`
+--
 
--- -----------------------------------------------------
--- View `misionboard`.`attackdetails`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `misionboard`.`attackdetails`;
-USE `misionboard`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`attackdetails` AS select `a`.`idAtaque` AS `idAtaque`,`a`.`Nombre` AS `AttackName`,`a`.`AimMod` AS `AimMod`,`a`.`DmgMod` AS `DmgMod`,`a`.`Porficiencia` AS `Porficiencia`,`a`.`NDados` AS `NDados`,`d`.`NumeroCaras` AS `DiceType`,`td`.`Nombre` AS `DamageType`,`s`.`Nombre` AS `StatName` from (((`misionboard`.`ataque` `a` join `misionboard`.`dados` `d` on((`a`.`Dados_idDados` = `d`.`idDados`))) join `misionboard`.`tipodaño` `td` on((`a`.`TipoDaño_idTipoDaño` = `td`.`idTipoDaño`))) join `misionboard`.`stat` `s` on((`a`.`Stat_idStat` = `s`.`idStat`)));
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `idUser` int NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Contra` varchar(45) NOT NULL,
+  `Email` varchar(250) NOT NULL,
+  `Imagen` longblob,
+  `ImageData` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idUser`),
+  UNIQUE KEY `Nombre_UNIQUE` (`Nombre`),
+  UNIQUE KEY `Email_UNIQUE` (`Email`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- View `misionboard`.`campaignuserinfo`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `misionboard`.`campaignuserinfo`;
-USE `misionboard`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`campaignuserinfo` AS select `misionboard`.`campaña`.`Titulo` AS `campaign_title`,`misionboard`.`user`.`Nombre` AS `user_name`,`misionboard`.`user`.`Email` AS `user_email`,`misionboard`.`ficha`.`Vida` AS `character_life`,`misionboard`.`ficha`.`Defensa` AS `character_defense`,`misionboard`.`ficha`.`Velocidad` AS `character_speed`,`misionboard`.`clase`.`Nombre` AS `class_name`,`misionboard`.`raza`.`Nombre` AS `race_name`,`misionboard`.`trasfondo`.`Nombre` AS `background_name`,`host_user`.`Nombre` AS `host_name`,`host_user`.`Email` AS `host_email` from ((((((((`misionboard`.`campaña` join `misionboard`.`campañauserficha` on((`misionboard`.`campaña`.`idCampaña` = `misionboard`.`campañauserficha`.`Campaña_idCampaña`))) join `misionboard`.`user` on((`misionboard`.`campañauserficha`.`User_idUser` = `misionboard`.`user`.`idUser`))) join `misionboard`.`ficha` on((`misionboard`.`campañauserficha`.`Ficha_idFicha` = `misionboard`.`ficha`.`idFicha`))) join `misionboard`.`seleccion` on((`misionboard`.`ficha`.`idFicha` = `misionboard`.`seleccion`.`Ficha_idFicha`))) join `misionboard`.`clase` on((`misionboard`.`seleccion`.`Clase_idClase` = `misionboard`.`clase`.`idClase`))) join `misionboard`.`raza` on((`misionboard`.`seleccion`.`Raza_idRaza` = `misionboard`.`raza`.`idRaza`))) join `misionboard`.`trasfondo` on((`misionboard`.`seleccion`.`Trasfondo_idTrasfondo` = `misionboard`.`trasfondo`.`idTrasfondo`))) join `misionboard`.`user` `host_user` on((`misionboard`.`campaña`.`Host` = `host_user`.`idUser`)));
+--
+-- Temporary view structure for view `userreviews`
+--
 
--- -----------------------------------------------------
--- View `misionboard`.`otheruserreviews`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `misionboard`.`otheruserreviews`;
-USE `misionboard`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`otheruserreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`misionboard`.`review` `r` join `misionboard`.`user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `misionboard`.`user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`)));
+DROP TABLE IF EXISTS `userreviews`;
+/*!50001 DROP VIEW IF EXISTS `userreviews`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `userreviews` AS SELECT 
+ 1 AS `idReview`,
+ 1 AS `Comentario`,
+ 1 AS `Calificacion`,
+ 1 AS `ReviwerId`,
+ 1 AS `ReviewerNombre`,
+ 1 AS `ReviewerEmail`,
+ 1 AS `Campaña_idCampaña`,
+ 1 AS `ReviewedId`,
+ 1 AS `ReviewedNombre`,
+ 1 AS `ReviewedEmail`*/;
+SET character_set_client = @saved_cs_client;
 
--- -----------------------------------------------------
--- View `misionboard`.`userreviews`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `misionboard`.`userreviews`;
-USE `misionboard`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `misionboard`.`userreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`misionboard`.`review` `r` join `misionboard`.`user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `misionboard`.`user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`)));
-
-
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Strength', 'STR');
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Dexterity', 'DEX');
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Constitution', 'CON');
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Intelligence', 'INT');
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Wisdom', 'WIS');
-INSERT INTO Stat (Nombre, Codigo) VALUES ('Charisma', 'CHA');
-
-
-
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Acrobatics', 2); -- Dexterity
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Animal Handling', 5); -- Wisdom
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Arcana', 4); -- Intelligence
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Athletics', 1); -- Strength
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Deception', 6); -- Charisma
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('History', 4); -- Intelligence
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Insight', 5); -- Wisdom
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Intimidation', 6); -- Charisma
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Investigation', 4); -- Intelligence
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Medicine', 5); -- Wisdom
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Nature', 4); -- Intelligence
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Perception', 5); -- Wisdom
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Performance', 6); -- Charisma
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Persuasion', 6); -- Charisma
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Religion', 4); -- Intelligence
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Sleight of Hand', 2); -- Dexterity
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Stealth', 2); -- Dexterity
-INSERT INTO Proficiencias (Nombre, Stat_idStat) VALUES ('Survival', 5); -- Wisdom
-
-
--- Damage Types
-INSERT INTO TipoDaño (Nombre) VALUES
-('Acid'),
-('Bludgeoning'),
-('Cold'),
-('Fire'),
-('Force'),
-('Lightning'),
-('Necrotic'),
-('Piercing'),
-('Poison'),
-('Psychic'),
-('Radiant'),
-('Slashing'),
-('Thunder');
-
--- Dice
-INSERT INTO Dados (NumeroCaras) VALUES
-(4),
-(6),
-(8),
-(10),
-(12),
-(20);
-
--- clases
-insert into Clase (idClase,Nombre, descripcion,Vida) values
-(1,"Pelador","Un capaz guerrero maestro de todo tipo de arma con la habilidad de empujarse fuera de los limites de lo posible",6),
-(2,"Mago","Un genio de lo arcano, un mago es aquel que estudia la tela de la magia y logra cosas imposibles con ella",4);
--- raza
-insert into raza (Nombre,Descripcion) values("Humano","<p><strong>Aumento de puntuación de habilidad.</strong> Dos puntuaciones de habilidad distintas de tu elección aumentan en 1.</p>
-<p><strong>Proficiencias.</strong> Obtienes proficiencia en una habilidad de tu elección.</p>
-<p><strong>Feat.</strong> Obtienes un Feat de tu elección.</p>
-<p><strong>Edad.</strong> Los humanos alcanzan la adultez a finales de la adolescencia y viven menos de un siglo.</p>
-<p><strong>Alineamiento.</strong> Los humanos tienden a no tener un alineamiento particular. Lo mejor y lo peor se encuentran entre ellos.</p>
-<p><strong>Tamaño.</strong> Los humanos varían ampliamente en altura y constitución, desde apenas 5 pies hasta más de 6 pies de altura. Independientemente de tu posición en ese rango, tu tamaño es Mediano.</p>
-<p><strong>Velocidad.</strong> Tu velocidad base de movimiento es de 30 pies.</p>
-<p><strong>Idiomas.</strong> Puedes hablar, leer y escribir Común y un idioma adicional de tu elección. </p>
-")
-,("Elfo","<strong>Aumento de puntuación de habilidad:</strong> Tu puntuación de Destreza aumenta en 2. <strong>Edad:</strong>  100 años y pueden vivir hasta los 750 años. <strong>Alineamiento:</strong>tienden hacia los aspectos más suaves del caos. <strong>Tamaño:</strong> Van desde menos de 5 hasta más de 6 pies de altura, tamaño Mediano. <strong>Velocidad:</strong> Su velocidad base de movimiento es de 30 pies. <strong>Visión en la oscuridad:</strong> Pueden ver en penumbra en un radio de 60 pies como si fuera luz brillante, y en oscuridad como si fuera penumbra, sin poder discernir colores en la oscuridad, <strong>Linaje feérico:</strong> Tienen ventaja en las tiradas de salvación contra estar encantados, y la magia no puede hacerlos dormir. <strong>Trance:</strong> No duermen, en su lugar meditan profundamente, descansando solo 4 horas. <strong>Sentidos agudos:</strong> Tienen competencia en la habilidad de Percepción. <strong>Idiomas:</strong> Pueden hablar, leer y escribir Común y Élfico.
-");
-
-insert into trasfondo(Nombre,Descripcion) values ("Atleta","<p><strong>proficiencias:</strong> Acrobacias, Atletismo</p>
-<p><strong>Idiomas:</strong> Uno de tu elección</p>
-<p><strong>Proficiencia en herramientas:</strong> Vehículos (Terrestres)</p>
-<p><strong>Equipo:</strong> Un disco de bronce o una bola de cuero, un amuleto de la suerte o un trofeo pasado, un conjunto de ropa de viajero y una bolsa que contiene 10 piezas de oro</p>"),("Heroe del pueblo"," <p><strong>Competencias de habilidad:</strong> Trato con animales, Supervivencia</p>
-<p><strong>Competencias con herramientas:</strong> Un tipo de herramientas de artesano, vehículos (terrestres)</p>
-<p><strong>Idiomas:</strong> Ninguno</p>
-<p><strong>Equipo:</strong> Un juego de herramientas de artesano (uno de tu elección), una pala, una olla de hierro, un conjunto de ropa común y una bolsa que contiene 10 piezas de oro</p>
-");
-insert into ataque(nombre,aimmod,dmgmod,porficiencia,NDados,Dados_IdDados,TipoDaño_IdTipoDaño,Stat_idStat)values("Espada Larga",0,0,true,1,1,2,1),("Magia",0,0,true,3,2,3,4);
-insert into hechizo(Nombre,Nivel,Descripcion,Stat_idStat,Ataque_idAtaque)values("Torcion Testicular!!!",2,"EL LEGENDARIO ATAQUE PROHIBIDO causa Xcantidad de daño",1,3);
-insert into objeto (idObjeto,Nombre,Descripcion,Ataque_idAtaque)values(1,"Espada larga","Un arma de 1 mano",1);
+--
+-- Dumping routines for database 'misionboard'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `SP_BusquedaCampañas` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_BusquedaCampañas`(
+In B_Titulo Varchar(100),
+ B_Estrellas int,
+ B_MaxPlayers int,
+ B_Fecha date,
+ B_Horario time
+)
+BEGIN
+Select C.idCampaña,C.Titulo,C.Descripcion,C.MaxPlayers,C.CurrentPlayers,C.Estrellas,C.Link,C.Fecha,C.Horario,C.Imagen,U.Nombre,U.Imagen as ImagenUsuario From campaña AS C
+Inner Join user As U on C.Host = U.idUser
+Where C.Titulo Like if(B_Titulo = "","%%",Concat('%',B_Titulo,'%'))
+And (B_Estrellas is null or C.Estrellas = B_Estrellas)
+And (B_MaxPlayers is null or C.MaxPlayers = B_MaxPlayers)
+And (B_Fecha is null or C.Fecha between B_Fecha and '9999-12-20')
+And (B_Horario is null or C.Horario between B_Horario and '22:59:00');
 
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+--
+-- Final view structure for view `attackdetails`
+--
+
+/*!50001 DROP VIEW IF EXISTS `attackdetails`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `attackdetails` AS select `a`.`idAtaque` AS `idAtaque`,`a`.`Nombre` AS `AttackName`,`a`.`AimMod` AS `AimMod`,`a`.`DmgMod` AS `DmgMod`,`a`.`Porficiencia` AS `Porficiencia`,`a`.`NDados` AS `NDados`,`d`.`NumeroCaras` AS `DiceType`,`td`.`Nombre` AS `DamageType`,`s`.`Nombre` AS `StatName` from (((`ataque` `a` join `dados` `d` on((`a`.`Dados_idDados` = `d`.`idDados`))) join `tipodaño` `td` on((`a`.`TipoDaño_idTipoDaño` = `td`.`idTipoDaño`))) join `stat` `s` on((`a`.`Stat_idStat` = `s`.`idStat`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `campaignuserinfo`
+--
+
+/*!50001 DROP VIEW IF EXISTS `campaignuserinfo`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `campaignuserinfo` AS select `campaña`.`Titulo` AS `campaign_title`,`user`.`Nombre` AS `user_name`,`user`.`Email` AS `user_email`,`ficha`.`Vida` AS `character_life`,`ficha`.`Defensa` AS `character_defense`,`ficha`.`Velocidad` AS `character_speed`,`clase`.`Nombre` AS `class_name`,`raza`.`Nombre` AS `race_name`,`trasfondo`.`Nombre` AS `background_name`,`host_user`.`Nombre` AS `host_name`,`host_user`.`Email` AS `host_email` from ((((((((`campaña` join `campañauserficha` on((`campaña`.`idCampaña` = `campañauserficha`.`Campaña_idCampaña`))) join `user` on((`campañauserficha`.`User_idUser` = `user`.`idUser`))) join `ficha` on((`campañauserficha`.`Ficha_idFicha` = `ficha`.`idFicha`))) join `seleccion` on((`ficha`.`idFicha` = `seleccion`.`Ficha_idFicha`))) join `clase` on((`seleccion`.`Clase_idClase` = `clase`.`idClase`))) join `raza` on((`seleccion`.`Raza_idRaza` = `raza`.`idRaza`))) join `trasfondo` on((`seleccion`.`Trasfondo_idTrasfondo` = `trasfondo`.`idTrasfondo`))) join `user` `host_user` on((`campaña`.`Host` = `host_user`.`idUser`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `otheruserreviews`
+--
+
+/*!50001 DROP VIEW IF EXISTS `otheruserreviews`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `otheruserreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`review` `r` join `user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `userreviews`
+--
+
+/*!50001 DROP VIEW IF EXISTS `userreviews`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `userreviews` AS select `r`.`idReview` AS `idReview`,`r`.`Comentario` AS `Comentario`,`r`.`Calificacion` AS `Calificacion`,`r`.`ReviwerId` AS `ReviwerId`,`u1`.`Nombre` AS `ReviewerNombre`,`u1`.`Email` AS `ReviewerEmail`,`r`.`Campaña_idCampaña` AS `Campaña_idCampaña`,`r`.`ReviewedId` AS `ReviewedId`,`u2`.`Nombre` AS `ReviewedNombre`,`u2`.`Email` AS `ReviewedEmail` from ((`review` `r` join `user` `u1` on((`r`.`ReviwerId` = `u1`.`idUser`))) join `user` `u2` on((`r`.`ReviewedId` = `u2`.`idUser`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-06-06  6:55:15
