@@ -14,7 +14,7 @@ export default function UserCampaignsCard({ camp }) {
 
     const editCampaign = () => {
         console.log("Editando campaña");
-        router.push('/CreateCampaigns', { scroll: false });
+        router.push('/EditCampaigns', { scroll: false });
     };
 
     const BuscarMiembros = async (IdCampaña) => {

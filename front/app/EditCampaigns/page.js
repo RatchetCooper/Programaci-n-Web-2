@@ -15,7 +15,7 @@ import CookieManager from '../Cookies/Cookies';
 const cookieId = CookieManager.getCookie('id');
 
 
-export default function CreateCampaigns() {
+export default function EditCampaigns() {
   const router = useRouter()
   const [nameCampaign, setNameCampaign] = useState("")
   const [linkDiscord, setLinkDiscord] = useState("")
@@ -127,7 +127,7 @@ export default function CreateCampaigns() {
 
   return (
     <div>
-      <h1>Crear campaña</h1>
+      <h1>Editar campaña</h1>
       <Stack>
         <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", }} >
           <Grid container spacing={2}>
