@@ -27,14 +27,14 @@ export default function SearchCampaignsCard({ campaign }) {
 
                     <Typography color="textSecondary" variant="h4" sx={{ pt: 4 }}> {campaign.Titulo} </Typography>
                     <Button variant="contained" sx={{ mb: 4 }} onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button>
-                    <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+                    {/* <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center" }}>
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
                             image={campaign.Imagen}
                             title="Card img">
                         </CardMedia>
                         <Typography color={theme.palette.cardText.main} variant="body">Texto pequeño</Typography>
                         <PanoramaFishEyeIcon></PanoramaFishEyeIcon>
-                    </Stack>
+                    </Stack> */}
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField

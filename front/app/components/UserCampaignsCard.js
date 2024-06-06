@@ -18,10 +18,12 @@ export default function UserCampaignsCard({ camp }) {
 
     };
     return (
-
+<>
         <Card sx={{ p: 4, m: 5, backgroundColor: theme.palette.cardBg.main }}>
+            <Stack>
             <Grid container spacing={2}>
                 <Grid item xs={6} md={6}>
+                    
                     <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center", pt: 4, pb: 4 }}>
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
                             image={camp.ImagenUsuario}
@@ -36,7 +38,22 @@ export default function UserCampaignsCard({ camp }) {
                     </CardMedia>
 
                     <Typography color="textSecondary" variant="h4" sx={{ pt: 4 }}> {camp.Titulo} </Typography>
-                    <Button variant="contained" sx={{ mb: 4 }} onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button>
+
+                    <Stack direction="row">
+                                <Button variant="contained" sx={{ mb: 4 }} className="global-button">Invitar</Button>
+                                <TextField
+                                    id="outlined-basic"
+                                    //label="Outlined" 
+                                    variant="outlined"
+                                    InputProps={{
+                                        style: {
+                                            borderRadius: "30px",
+                                            background: theme.palette.inputBackground.main
+                                        }
+                                    }}
+                                />
+                            </Stack>
+                    {/* <Button variant="contained" sx={{ mb: 4 }} onClick={() => router.push(`/campaign/${campaign.id}`)}>Learn More</Button> */}
                     {/* <Stack direction="row" spacing={2} sx={{ display: "flex", alignItems: "center" }}>
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
                             image={camp.Imagen}
@@ -47,6 +64,10 @@ export default function UserCampaignsCard({ camp }) {
                     </Stack> */}
                 </Grid>
                 <Grid item xs={12} md={6}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', m: 2, p: 2 }} >
+                                <Button variant="contained" onClick={editCampaign} className="global-button">Editar campaña</Button>
+                                <Button variant="contained" className="global-button">Borrar campaña</Button>
+                            </Box>
                     <TextField
                         id="outlined-read-only-input"
                         label="Máximo de jugadores"
@@ -118,7 +139,34 @@ export default function UserCampaignsCard({ camp }) {
                     />
                 </Grid>
             </Grid>
+            </Stack>
+            
+            <Card sx={{ p: 4, backgroundColor: theme.palette.cardBg.main, width: '100vh' }}>
+                
+                <Stack>
+                    <Card sx={{ p: 4, m: '0 auto', backgroundColor: theme.palette.cardFilterColor.main, width: "90%", maxWidth: 600 }} className="campaigns-card">
+
+                        <Box sx={{
+                            pb: 3
+                        }}>
+
+                            <Typography color={theme.palette.cardText.main} variant="body" sx={{ pt: 4, pb: 4 }}>Participantes</Typography>
+                        </Box>
+
+
+                        {
+                            userItemParticipant.map((itemParticipant, index) => (
+                                <UserCampaignsItemParticipants key={itemParticipant.ID} userItemParticipant={itemParticipant} ></UserCampaignsItemParticipants>
+
+                            ))
+                        }
+                    </Card>
+                </Stack>
+            </Card>
         </Card>
 
-    )
+       
+
+   </> 
+   )
 }
