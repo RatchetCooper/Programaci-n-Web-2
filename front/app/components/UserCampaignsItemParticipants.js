@@ -39,9 +39,9 @@ export default function UserCampaignsItemParticipants({userItemParticipant} ){
     return(
         <>
         
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
        
-                <Grid item xs={6}>
+                <Grid item xs={6} md={12}>
                     <Stack direction="row" spacing={2} sx={{  display: "flex",  alignItems: "center",}} >
                         <CardMedia sx={{ borderRadius: '50%', width: '50px', height: '50px' }}
                             image={userItemParticipant.Imagen}

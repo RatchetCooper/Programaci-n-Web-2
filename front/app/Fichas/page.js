@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Colapsable from './Colapsable';
-
+import { Button } from "@mui/material";
 
 const SpellcastingSection = () => {
   const [spellcastingInfo, setSpellcastingInfo] = useState({
@@ -953,6 +953,8 @@ function BasePage({ children }) {
         </Grid>
       </Grid>
       <SpellcastingSection />
+
+      <Button variant="contained" sx={{mb: 4}}>Crear personaje</Button>
     </div>
     
   );

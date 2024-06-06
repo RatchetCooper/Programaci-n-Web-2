@@ -15,7 +15,7 @@ export default function Landing(){
 
     const cambiarPagina = () => {
         //base de datos
-        router.push('/CreateCampaigns', { scroll: false })//Poner el URL  de crear personaje
+        router.push('/Fichas', { scroll: false })//Poner el URL  de crear personaje
         
       };
       const cambiarPaginaBusqueda = () => {
